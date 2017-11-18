@@ -1,4 +1,3 @@
-''' Organise and costruct FFXII PDF manga volumes from jpeg pages.'''
 from fpdf import FPDF
 from PIL import Image
 import itertools
