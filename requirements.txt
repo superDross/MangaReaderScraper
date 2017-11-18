@@ -1,0 +1,6 @@
+bs4>=0.0.1
+fpdf>=1.7.2
+pandas>=0.21.0
+requests>=2.18.4
+requests-cache>=0.4.12
+tabulate>=0.8.1

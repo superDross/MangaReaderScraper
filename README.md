@@ -5,6 +5,7 @@ Download specific volumes of a manga series from MangaReader and store as a PDF.
 To install:
 ```bash
 git clone https://github.com/superDross/MangaReaderScraper
+pip3 install -r MangaReaderScraper/requirements.txt
 export PYTHONPATH=$PYTHONPATH:/path/to/MangaReaderScraper/
 ```
 
