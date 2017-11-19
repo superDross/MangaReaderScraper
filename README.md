@@ -1,7 +1,7 @@
 # MangaReaderScraper
-Download specific volumes of a manga series from MangaReader and store as a PDF.
+Search and download specific volumes of a manga series from MangaReader and store as a PDF.
 
-## install 
+## Install 
 To install:
 ```bash
 git clone https://github.com/superDross/MangaReaderScraper
@@ -9,13 +9,16 @@ pip3 install -r MangaReaderScraper/requirements.txt
 export PYTHONPATH=$PYTHONPATH:/path/to/MangaReaderScraper/
 ```
 
+## Options
+```--search''' Search mangareader.net for a given query and select to download one of the mangas from the parsed searched results. <br />
+```--manga``` Manga series name to download. <br />
+```--volume``` Manga series volume number to download. <br />
+
 ## Example Usage
-To search mangareader.net for a query:
+After using the search function, a table will appear and you will be asked to select a specific manga (type a number in the first column). You will subsequently be asked to download a specific volume. In the example below, Dragon Ball Super volume 1 has been selected for download.
 ```
-python3 MangaReaderScraper --search dragon ball
-```
-A table will appear and you will be asked to select a specific manga (type a number in the first column). You will subsequently be asked to download a specific volume. In the example below, Dragon Ball Super volume 1 has been selected for download.
-```
+$ python3 MangaReaderScraper --search dragon ball
+
 +----+---------------------------------+-----------+--------+
 |    | Title                           |   Volumes | Type   |
 |----+---------------------------------+-----------+--------|

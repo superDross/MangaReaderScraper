@@ -42,7 +42,7 @@ def select_manga(df):
     print(pretty_table)
     manga_num = input('Select manga number\n')
     selected_manga = df.iloc[[manga_num]]
-    print('{} has been selected for download.'.format(selected_manga['Title'].to_string(index=False)))
+    print('\n{} has been selected for download\n.'.format(selected_manga['Title'].to_string(index=False)))
     selected_manga_link = selected_manga['Link'].to_string(index=False)
     return selected_manga_link
 

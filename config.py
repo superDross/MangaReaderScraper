@@ -1,4 +1,4 @@
-''' Stores global variables.'''
+''' Stores global variables used across multiple modules.'''
 import os
 
 HERE = os.path.dirname(os.path.realpath(__file__))

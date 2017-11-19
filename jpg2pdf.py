@@ -1,3 +1,4 @@
+''' Concatenates jpgs that correspond to mangas volume and outputs as a PDF file.'''
 from config import HERE
 from fpdf import FPDF
 from PIL import Image
