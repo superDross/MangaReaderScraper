@@ -10,7 +10,7 @@ export PYTHONPATH=$PYTHONPATH:/path/to/MangaReaderScraper/
 ```
 
 ## Options
-```--search''' Search mangareader.net for a given query and select to download one of the mangas from the parsed searched results. <br />
+```--search``` Search mangareader.net for a given query and select to download one of the mangas from the parsed searched results. <br />
 ```--manga``` Manga series name to download. <br />
 ```--volume``` Manga series volume number to download. <br />
 
