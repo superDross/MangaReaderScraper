@@ -1,4 +1,6 @@
-from download import get_url_text, MANGA_URL
+''' Search MangaReader.net for a given query and allows the user to select from the results.'''
+from download import get_url_text
+from config import MANGA_URL
 from tabulate import tabulate
 import pandas as pd
 import re

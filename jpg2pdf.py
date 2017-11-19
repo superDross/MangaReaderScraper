@@ -1,10 +1,15 @@
+from config import HERE
 from fpdf import FPDF
 from PIL import Image
-import itertools
 import os
 import re
 
-HERE = os.path.dirname(os.path.realpath(__file__))
+
+def find_volume(filename):
+    ''' Find and return the volume number of a given manga filename.'''
+    for index, split_file in enumerate(filename.split("_")):
+        if split_file.isdigit():
+            return split_file, index
 
 
 def get_volume_pages(desired_volume, directory=None):
@@ -23,13 +28,6 @@ def get_volume_pages(desired_volume, directory=None):
     return fully_sorted_volume
 
 
-def find_volume(filename):
-    ''' Find and return the volume number of a given manga filename.'''
-    for index, split_file in enumerate(filename.split("_")):
-        if split_file.isdigit():
-            return split_file, index
-
-
 def make_pdf(pdf_filename, list_pages):
     ''' Construct a PDF from a list of sorted images.'''
     cover = Image.open(list_pages[0])
@@ -42,16 +40,26 @@ def make_pdf(pdf_filename, list_pages):
     print('Created {}'.format(pdf_filename))
 
 
-def create_all_volumes(manga, out_dir):
-    ''' Construct a PDF for every volume '''
-    out_dir = HERE+'/mangas/'
-    volumes = set([x.split("_")[1] for x in os.listdir(HERE+'/jpgs/')])
-    for volume in sorted(volumes):
-        create_volume(manga, volume, out_dir)
-
-
 def create_volume(manga, volume, out_dir):
     ''' Construct a PDF for a given volume.'''
     sorted_volume_pages = get_volume_pages(volume)
     volume_name = out_dir+manga+'_volume_'+str(volume)
     make_pdf(volume_name+".pdf", sorted_volume_pages)
+
+
+def create_all_volumes(manga, out_dir):
+    ''' Construct a PDF for every volume '''
+    volumes = set([x.split("_")[1] for x in os.listdir(HERE+'/jpgs/')])
+    for volume in sorted(volumes):
+        create_volume(manga, volume, out_dir)
+
+
+def create_manga_pdf(manga, volume=None, out_dir=HERE+"/mangas/"):
+    ''' Create a PDF for a single or all manga volumes.'''
+    out_dir = out_dir+"/"+manga.split("_")[0]+"/"
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
+    if not volume:
+        create_all_volumes(manga, out_dir)
+    else:
+        create_volume(manga, volume, out_dir)

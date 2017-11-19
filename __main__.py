@@ -1,10 +1,9 @@
+from config import HERE
 import download
 import jpg2pdf
 import search
 import argparse
 import os
-
-HERE = os.path.dirname(os.path.realpath(__file__))
 
 
 def cli():
@@ -17,14 +16,8 @@ def cli():
         args['volume'] = input(msg)
         args['volume'] = None if args['volume'] == '' else args['volume']
 
-    if args['volume']:
-        download.download_volume(args['manga'], args['volume'])
-        jpg2pdf.create_volume(args['manga'], args['volume'], args['output'])
-
-    else:
-        download.download_all_volumes(args['manga'])
-        jpg2pdf.create_all_volumes(args['manga'], args['output'])
-
+    download.download_manga(args['manga'], args['volume'])
+    jpg2pdf.create_manga_pdf(args['manga'], args['volume'], args['output'])
     clean_up()
 
 

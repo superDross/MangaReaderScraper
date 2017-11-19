@@ -1,10 +1,17 @@
+''' Scrapes a given mangas volume(s) page images from MangaReader.net.'''
+from config import HERE, MANGA_URL
 import custom_exceptions
 import requests
 import bs4
 import os
 
-MANGA_URL = 'http://mangareader.net'
-HERE = os.path.dirname(os.path.realpath(__file__))
+
+def get_url_text(link):
+    ''' Download the text from a given link.'''
+    req = requests.get(link)
+    req.raise_for_status()
+    url = bs4.BeautifulSoup(req.text, features='lxml')
+    return url
 
 
 def check_manga_exists(link, manga):
@@ -22,18 +29,6 @@ def check_volume_exists(url, manga, volume):
             raise custom_exceptions.VolumeDoesntExist(manga, volume)
 
 
-def get_manga_volume_links(manga, volume):
-    ''' Get HTML urls of a given manga volumes pages.'''
-    link = "{}/{}/{}".format(MANGA_URL, manga, volume)
-    url = get_url_text(link)
-    check_volume_exists(url, manga, volume)
-    all_volume_links = url.find_all('option')
-    all_page_links = [MANGA_URL+page.get('value') for page in all_volume_links]
-    print('Preparing to download {} pages of {} volume {}'.format(
-          len(all_page_links), manga, volume))
-    return all_page_links
-
-
 def get_total_volumes(manga):
     ''' Get HTML urls for all manga volumes.'''
     link = '{}/{}'.format(MANGA_URL, manga)
@@ -45,12 +40,16 @@ def get_total_volumes(manga):
     return volume_links
 
 
-def get_url_text(link):
-    ''' Download the text from a given link.'''
-    req = requests.get(link)
-    req.raise_for_status()
-    url = bs4.BeautifulSoup(req.text, features='lxml')
-    return url
+def get_manga_volume_links(manga, volume):
+    ''' Get HTML urls of a given manga volumes pages.'''
+    link = "{}/{}/{}".format(MANGA_URL, manga, volume)
+    url = get_url_text(link)
+    check_volume_exists(url, manga, volume)
+    all_volume_links = url.find_all('option')
+    all_page_links = [MANGA_URL+page.get('value') for page in all_volume_links]
+    print('Preparing to download {} pages of {} volume {}'.format(
+          len(all_page_links), manga, volume))
+    return all_page_links
 
 
 def download_page(url, page_title):
@@ -80,4 +79,16 @@ def download_all_volumes(manga):
     all_volumes = get_total_volumes(manga)
     all_volume_numbers = [vol.split("/")[-1] for vol in all_volumes]
     for volume in all_volume_numbers:
+        download_volume(manga, volume)
+
+
+def download_manga(manga, volume=None):
+    ''' Determine whether to download a single
+        volume or all volumes of a given manga.
+    '''
+    if not os.path.exists(HERE+'/jpgs/'):
+        os.makedirs(HERE+'/jpgs/')
+    if not volume:
+        download_all_volumes(manga)
+    else:
         download_volume(manga, volume)
