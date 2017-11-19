@@ -1,5 +1,5 @@
 ''' Scrapes a given mangas volume(s) page images from MangaReader.net.'''
-from config import HERE, MANGA_URL
+from config import MANGA_URL, JPG_DIR
 import custom_exceptions
 import requests
 import bs4
@@ -66,8 +66,9 @@ def download_volume(manga, volume):
     manga_volume_links = get_manga_volume_links(manga, volume)
     page_num = 1
     for page_link in manga_volume_links:
-        jpg_filename = '{}{}_{}_{}.jpg'.format(
-                        HERE+'/jpgs/', manga, volume, page_num, '.jpg')
+        jpg_filename = '{}_{}_{}.jpg'.format(
+                        manga, volume, page_num)
+        jpg_filename = os.path.join(JPG_DIR, jpg_filename)
         if not os.path.isfile(jpg_filename):
             page_url = get_url_text(page_link)
             download_page(page_url, jpg_filename)
@@ -86,8 +87,8 @@ def download_manga(manga, volume=None):
     ''' Determine whether to download a single
         volume or all volumes of a given manga.
     '''
-    if not os.path.exists(HERE+'/jpgs/'):
-        os.makedirs(HERE+'/jpgs/')
+    if not os.path.exists(JPG_DIR):
+        os.makedirs(JPG_DIR)
     if not volume:
         download_all_volumes(manga)
     else:
