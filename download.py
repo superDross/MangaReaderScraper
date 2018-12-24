@@ -1,5 +1,6 @@
 ''' Scrapes a given mangas volume(s) page images from MangaReader.net.'''
 from config import MANGA_URL, JPG_DIR
+from time import time
 import custom_exceptions
 import requests
 import bs4
@@ -63,6 +64,7 @@ def download_page(url, page_title):
 
 def download_volume(manga, volume):
     ''' Download all pages of a given volume.'''
+    ts = time()
     manga_volume_links = get_manga_volume_links(manga, volume)
     page_num = 1
     for page_link in manga_volume_links:
@@ -73,6 +75,8 @@ def download_volume(manga, volume):
             page_url = get_url_text(page_link)
             download_page(page_url, jpg_filename)
             page_num += 1
+    download_time = round(time() - ts, 1)
+    print(f'Volume downloaded in {download_time}s')
 
 
 def download_all_volumes(manga):
