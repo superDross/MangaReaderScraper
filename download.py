@@ -1,6 +1,9 @@
 ''' Scrapes a given mangas volume(s) page images from MangaReader.net.'''
 from config import MANGA_URL, JPG_DIR
 from time import time
+from functools import partial
+from multiprocessing.pool import Pool
+import multiprocessing
 import custom_exceptions
 import requests
 import bs4
@@ -53,28 +56,30 @@ def get_manga_volume_links(manga, volume):
     return all_page_links
 
 
-def download_page(url, page_title):
+def download_page(manga, volume, page_link):
     ''' Download jpg from the given url.'''
-    img_url = url.find('img').get('src')
-    img_data = requests.get(img_url).content
-    print('Saving {}'.format(page_title))
-    with open(page_title, 'wb') as handler:
-        handler.write(img_data)
+    url = get_url_text(page_link)
+    page_num = page_link.split("/")[-1]
+    jpg_filename = '{}_{}_{}.jpg'.format(
+        manga, volume, page_num
+    )
+    page_title = os.path.join(JPG_DIR, jpg_filename)
+    if not os.path.isfile(page_title):
+        img_url = url.find('img').get('src')
+        img_data = requests.get(img_url).content
+        print('Saving {}'.format(page_title))
+        with open(page_title, 'wb') as handler:
+            handler.write(img_data)
 
 
 def download_volume(manga, volume):
     ''' Download all pages of a given volume.'''
     ts = time()
     manga_volume_links = get_manga_volume_links(manga, volume)
-    page_num = 1
-    for page_link in manga_volume_links:
-        jpg_filename = '{}_{}_{}.jpg'.format(
-                        manga, volume, page_num)
-        jpg_filename = os.path.join(JPG_DIR, jpg_filename)
-        if not os.path.isfile(jpg_filename):
-            page_url = get_url_text(page_link)
-            download_page(page_url, jpg_filename)
-            page_num += 1
+    download_it = partial(download_page, manga, volume)
+    cpu_num = multiprocessing.cpu_count()
+    with Pool(cpu_num) as p:
+        p.map(download_it, manga_volume_links)
     download_time = round(time() - ts, 1)
     print(f'Volume downloaded in {download_time}s')
 
