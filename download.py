@@ -1,7 +1,6 @@
 ''' Scrapes a given mangas volume(s) page images from MangaReader.net.'''
 import os
 import re
-import multiprocessing
 from multiprocessing.pool import ThreadPool, Pool
 import logging
 
@@ -77,13 +76,12 @@ class DownloadManga:
         volume_html = self._get_volume_html_text()
         self._check_volume_exists(volume_html)
         volume_page_urls = self._get_all_volume_pages_urls(volume_html)
-        cpu_num = multiprocessing.cpu_count()
         logging.info(
             f'Downloading {self.manga.replace("-", " ").title()} '
             f'Volume {self.volume}'
         )
         # Threading as it is a matter of IO.
-        with ThreadPool(processes=cpu_num) as pool:
+        with ThreadPool() as pool:
             pool.map(self.download_page, volume_page_urls)
 
     @download_timer
@@ -91,5 +89,5 @@ class DownloadManga:
         ''' Download all pages and volumes.'''
         all_volumes = self._get_all_volume_urls()
         all_volume_numbers = [vol.split("/")[-1] for vol in all_volumes]
-        with Pool(processes=4) as pool:
+        with Pool() as pool:
             pool.map(self.download_volume, all_volume_numbers)
