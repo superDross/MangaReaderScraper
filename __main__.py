@@ -33,7 +33,7 @@ def cli():
     args = vars(parser.parse_args())
 
     if args['search']:
-        args['manga'] = search.search_and_get_link(args['search'])
+        args['manga'] = search.search_and_get_url(args['search'])
         msg = 'Which volume do you want to download (Enter alone to download all volumes)?\n'
         args['volume'] = input(msg)
         args['volume'] = None if args['volume'] == '' else args['volume']

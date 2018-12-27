@@ -1,17 +1,16 @@
 ''' Search MangaReader.net for a given query and allows the user to select from the results.'''
+import re
+from tabulate import tabulate
 from utils import get_html_from_url
 from config import MANGA_URL
-from tabulate import tabulate
-import pandas as pd
-import re
 
 
 def get_search_url(query, manga_type=0, manga_status=0, order=0,
                    genre='0000000000000000000000000000000000000'):
     ''' Scrape and return HTML page with search results.'''
-    link = '{}/search/?w={}&rd={}&status={}&order=0&genre={}&p=0'.format(
-          MANGA_URL, query, manga_type, manga_status, order, genre)
-    url = get_html_from_url(link)
+    url = f'''{MANGA_URL}/search/?w={query}&rd={manga_type}
+               &status={manga_status}&order=0&genre={genre}&p=0'''
+    url = get_html_from_url(url)
     return url
 
 
@@ -21,37 +20,37 @@ def to_dataframe(url):
     '''
     url_list = url.find_all('div', {'class': 'mangaresultitem'})
     manga_info = []
+    key = 1
     for result in url_list:
         # split is required as some mangas have multiple titles
-        title = result.find('h3').text.split(',')[0]
-        manga_link = result.find('h3').find('a').get('href').replace('/', '')
+        title = result.find('div', {'class': 'manga_name'}).text
+        manga_url = result.find('div', {'class': 'manga_name'}).find('a').get('href')
         chapters = result.find('div', {'class': 'chapter_count'}).text
-        genre = result.find('div', {'class': 'manga_genre'}).text
         manga_type = result.find('div', {'class': 'manga_type'}).text.split("(")[0]
-        manga_info.append([title, re.sub("\D", "", chapters),
-                           genre, manga_type, manga_link])
-    columns = ['Title', 'Volumes', 'Genre', 'Type', 'Link']
-    df = pd.DataFrame(manga_info, columns=columns)
-    return df
+        manga_info.append([str(key), title.replace('\n', ''), re.sub("\D", "", chapters),
+                           manga_type, manga_url.replace('/', '')])
+        key += 1
+    return manga_info
 
 
-def select_manga(df):
+def select_manga(table_data):
     ''' Ask user which manga in the search results they wish to download.'''
-    pretty_table = tabulate(df[['Title', 'Volumes', 'Type']],
-                            headers='keys', tablefmt='psql')
-    print(pretty_table)
+    columns = ['', 'Title', 'Volumes','Type']
+    table = tabulate([x[:-1] for x in table_data],
+                     headers=columns,
+                     tablefmt='psql')
+    print(table)
     manga_num = input('Select manga number\n')
-    selected_manga = df.iloc[[manga_num]]
-    print('\n{} has been selected for download.\n'.format(selected_manga['Title'].to_string(index=False)))
-    selected_manga_link = selected_manga['Link'].to_string(index=False)
-    return selected_manga_link
+    key, title, volumes, mtype, url = table_data[int(manga_num)-1]
+    print(f'\n{title} has been selected for download.\n')
+    return url
 
 
-def search_and_get_link(query):
-    ''' Search MangaReader for a given query and return the web link
+def search_and_get_url(query):
+    ''' Search MangaReader for a given query and return the web url
         for the user selected manga.
     '''
     url = get_search_url(query)
-    df = to_dataframe(url)
-    selected_manga_link = select_manga(df)
-    return selected_manga_link
+    table_data = to_dataframe(url)
+    selected_manga_url = select_manga(table_data)
+    return selected_manga_url
