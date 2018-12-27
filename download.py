@@ -1,104 +1,95 @@
 ''' Scrapes a given mangas volume(s) page images from MangaReader.net.'''
-from config import MANGA_URL, JPG_DIR
-from time import time
-from functools import partial
-from multiprocessing.pool import Pool
-import multiprocessing
-import custom_exceptions
-import requests
-import bs4
 import os
+import re
+import multiprocessing
+from multiprocessing.pool import ThreadPool, Pool
+import logging
+
+import requests
+
+import custom_exceptions
+from config import MANGA_URL, JPG_DIR
+from utils import download_timer, get_html_from_url
+
+logger = logging.getLogger(__name__)
 
 
-def get_url_text(link):
-    ''' Download the text from a given link.'''
-    req = requests.get(link)
-    req.raise_for_status()
-    url = bs4.BeautifulSoup(req.text, features='lxml')
-    return url
+class DownloadManga:
+    def __init__(self, manga):
+        self.manga = manga
+        self.volume = None
 
+    def _get_all_volume_urls(self):
+        ''' Return a list of urls for all manga volumes.'''
+        link = f'{MANGA_URL}/{self.manga}'
+        manga_html = get_html_from_url(link)
+        volume_tags = manga_html.find('div', id='chapterlist').find_all('a')
+        volume_links = [MANGA_URL+vol.get('href') for vol in volume_tags]
+        return volume_links
 
-def check_manga_exists(link, manga):
-    try:
-        get_url_text(manga)
-    except requests.exceptions.HTTPError as e:
-        raise custom_exceptions.MangaDoesntExist(manga)
+    def _get_volume_html_text(self):
+        ''' Retrieve HTML for a given manga volume number.'''
+        volume_html = get_html_from_url(
+            f'{MANGA_URL}/{self.manga}/{self.volume}'
+        )
+        return volume_html
 
+    def _get_all_volume_pages_urls(self, volume_html):
+        ''' Return a list of urls for every page in a given volume.'''
+        all_volume_links = volume_html.find_all('option')
+        all_page_urls = [MANGA_URL+page.get('value')
+                         for page in all_volume_links]
+        return all_page_urls
 
-def check_volume_exists(url, manga, volume):
-    ''' Raise an exception if a given manga volume doesn't exist.'''
-    error_msg = url.find('div', id='relatedheader')
-    if error_msg:
-        if error_msg.text.find('not published'):
-            raise custom_exceptions.VolumeDoesntExist(manga, volume)
+    def _check_volume_exists(self, volume_html):
+        ''' Raise an exception if a given manga volume doesn't exist.'''
+        string = re.compile('.*not published.*')
+        matches = volume_html.find_all(string=string, recursive=True)
+        if matches:
+            raise custom_exceptions.VolumeDoesntExist(
+                self.manga, self.volume
+            )
 
+    def _get_page_filename(self, page_url):
+        ''' Constructs a volume page filename from a given volume page url.'''
+        page_num = page_url.split("/")[-1]
+        jpg_filename = '{}_{}_{}.jpg'.format(
+            self.manga, self.volume, page_num
+        )
+        page_filename = os.path.join(JPG_DIR, jpg_filename)
+        return page_filename
 
-def get_total_volumes(manga):
-    ''' Get HTML urls for all manga volumes.'''
-    link = '{}/{}'.format(MANGA_URL, manga)
-    manga_url = get_url_text(link)
-    volume_tags = manga_url.find('div', id='chapterlist').find_all('a')
-    volume_links = [MANGA_URL+vol.get('href') for vol in volume_tags]
-    print('Preparing to download {} voumes of {}'.format(
-          len(volume_links), manga))
-    return volume_links
+    def download_page(self, page_url):
+        ''' Download volume page image from the given volume page url.'''
+        page_html = get_html_from_url(page_url)
+        page_filename = self._get_page_filename(page_url)
+        if not os.path.isfile(page_filename):
+            img_url = page_html.find('img').get('src')
+            img_data = requests.get(img_url).content
+            with open(page_filename, 'wb') as handler:
+                # print(f'Saving {page_filename}')
+                handler.write(img_data)
 
+    @download_timer
+    def download_volume(self, volume):
+        ''' Download all pages of a given volume number.'''
+        self.volume = volume
+        volume_html = self._get_volume_html_text()
+        self._check_volume_exists(volume_html)
+        volume_page_urls = self._get_all_volume_pages_urls(volume_html)
+        cpu_num = multiprocessing.cpu_count()
+        logging.info(
+            f'Downloading {self.manga.replace("-", " ").title()} '
+            f'Volume {self.volume}'
+        )
+        # Threading as it is a matter of IO.
+        with ThreadPool(processes=cpu_num) as pool:
+            pool.map(self.download_page, volume_page_urls)
 
-def get_manga_volume_links(manga, volume):
-    ''' Get HTML urls of a given manga volumes pages.'''
-    link = "{}/{}/{}".format(MANGA_URL, manga, volume)
-    url = get_url_text(link)
-    check_volume_exists(url, manga, volume)
-    all_volume_links = url.find_all('option')
-    all_page_links = [MANGA_URL+page.get('value') for page in all_volume_links]
-    print('Preparing to download {} pages of {} volume {}'.format(
-          len(all_page_links), manga, volume))
-    return all_page_links
-
-
-def download_page(manga, volume, page_link):
-    ''' Download jpg from the given url.'''
-    url = get_url_text(page_link)
-    page_num = page_link.split("/")[-1]
-    jpg_filename = '{}_{}_{}.jpg'.format(
-        manga, volume, page_num
-    )
-    page_title = os.path.join(JPG_DIR, jpg_filename)
-    if not os.path.isfile(page_title):
-        img_url = url.find('img').get('src')
-        img_data = requests.get(img_url).content
-        print('Saving {}'.format(page_title))
-        with open(page_title, 'wb') as handler:
-            handler.write(img_data)
-
-
-def download_volume(manga, volume):
-    ''' Download all pages of a given volume.'''
-    ts = time()
-    manga_volume_links = get_manga_volume_links(manga, volume)
-    download_it = partial(download_page, manga, volume)
-    cpu_num = multiprocessing.cpu_count()
-    with Pool(cpu_num) as p:
-        p.map(download_it, manga_volume_links)
-    download_time = round(time() - ts, 1)
-    print(f'Volume downloaded in {download_time}s')
-
-
-def download_all_volumes(manga):
-    ''' Download all pages and volumes.'''
-    all_volumes = get_total_volumes(manga)
-    all_volume_numbers = [vol.split("/")[-1] for vol in all_volumes]
-    for volume in all_volume_numbers:
-        download_volume(manga, volume)
-
-
-def download_manga(manga, volume=None):
-    ''' Determine whether to download a single
-        volume or all volumes of a given manga.
-    '''
-    if not os.path.exists(JPG_DIR):
-        os.makedirs(JPG_DIR)
-    if not volume:
-        download_all_volumes(manga)
-    else:
-        download_volume(manga, volume)
+    @download_timer
+    def download_all_volumes(self):
+        ''' Download all pages and volumes.'''
+        all_volumes = self._get_all_volume_urls()
+        all_volume_numbers = [vol.split("/")[-1] for vol in all_volumes]
+        with Pool(processes=4) as pool:
+            pool.map(self.download_volume, all_volume_numbers)

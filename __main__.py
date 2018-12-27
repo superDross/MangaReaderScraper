@@ -1,10 +1,31 @@
-from config import JPG_DIR, MANGA_DIR
+import argparse
+import logging
+import os
+
 import download
 import jpg2pdf
 import jpg2cbz
 import search
-import argparse
-import os
+from config import JPG_DIR, MANGA_DIR
+
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+
+
+logger = logging.getLogger(__name__)
+
+
+def download_manga(manga, volume):
+    downloader = download.DownloadManga(manga)
+    if not os.path.exists(JPG_DIR):
+        os.makedirs(JPG_DIR)
+    if volume:
+        downloader.download_volume(volume)
+    else:
+        downloader.download_all_volumes()
 
 
 def cli():
@@ -17,7 +38,7 @@ def cli():
         args['volume'] = input(msg)
         args['volume'] = None if args['volume'] == '' else args['volume']
 
-    download.download_manga(args['manga'], args['volume'])
+    download_manga(args['manga'], args['volume'])
 
     if args['cbz']:
         jpg2cbz.create_manga_cbz(args['manga'], args['volume'], args['output'])
@@ -28,12 +49,16 @@ def cli():
 
 
 def get_parser():
-    parser = argparse.ArgumentParser(description='downloads and converts manga volumes to pdf or cbz format')
+    parser = argparse.ArgumentParser(
+        description='downloads and converts manga volumes to pdf or cbz format')
     parser.add_argument('--manga', '-m', type=str, help='manga series name')
-    parser.add_argument('--search', '-s', type=str, help='search manga reader', nargs='*')
-    parser.add_argument('--volume', '-v', type=int, help='manga volume to download')
+    parser.add_argument('--search', '-s', type=str,
+                        help='search manga reader', nargs='*')
+    parser.add_argument('--volume', '-v', type=int,
+                        help='manga volume to download')
     parser.add_argument('--output', '-o', default=MANGA_DIR)
-    parser.add_argument('--cbz', action='store_true', help='output in cbz format instead of pdf')
+    parser.add_argument('--cbz', action='store_true',
+                        help='output in cbz format instead of pdf')
     return parser
 
 

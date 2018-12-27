@@ -1,5 +1,5 @@
 ''' Search MangaReader.net for a given query and allows the user to select from the results.'''
-from download import get_url_text
+from utils import get_html_from_url
 from config import MANGA_URL
 from tabulate import tabulate
 import pandas as pd
@@ -11,7 +11,7 @@ def get_search_url(query, manga_type=0, manga_status=0, order=0,
     ''' Scrape and return HTML page with search results.'''
     link = '{}/search/?w={}&rd={}&status={}&order=0&genre={}&p=0'.format(
           MANGA_URL, query, manga_type, manga_status, order, genre)
-    url = get_url_text(link)
+    url = get_html_from_url(link)
     return url
 
 

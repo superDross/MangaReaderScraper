@@ -2,6 +2,7 @@
 *.jpg
 *.pdf
 *.json
+tags
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
