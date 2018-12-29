@@ -51,10 +51,10 @@ class DownloadManga:
 
     def _get_page_filename(self, page_url):
         ''' Constructs a volume page filename from a given volume page url.'''
-        page_num = page_url.split("/")[-1]
-        jpg_filename = '{}_{}_{}.jpg'.format(
-            self.manga, self.volume, page_num
-        )
+        volume_num, page_num = page_url.split("/")[-2:]
+        if not volume_num.isdigit():
+            page_num = 1
+        jpg_filename = f'{self.manga}_{self.volume}_{page_num}.jpg'
         page_filename = os.path.join(JPG_DIR, jpg_filename)
         return page_filename
 
@@ -66,7 +66,6 @@ class DownloadManga:
             img_url = page_html.find('img').get('src')
             img_data = requests.get(img_url).content
             with open(page_filename, 'wb') as handler:
-                # print(f'Saving {page_filename}')
                 handler.write(img_data)
 
     @download_timer
