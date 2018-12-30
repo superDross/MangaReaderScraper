@@ -1,56 +1,58 @@
-''' Search MangaReader.net for a given query and allows the user to select from the results.'''
 import re
 from tabulate import tabulate
 from utils import get_html_from_url
 from config import MANGA_URL
 
 
-def get_search_url(query, manga_type=0, manga_status=0, order=0,
-                   genre='0000000000000000000000000000000000000'):
-    ''' Scrape and return HTML page with search results.'''
-    url = f'''{MANGA_URL}/search/?w={query}&rd={manga_type}
-               &status={manga_status}&order=0&genre={genre}&p=0'''
-    url = get_html_from_url(url)
-    return url
+class Search:
+    def __init__(self):
+        self.dict = {}
+        self.table = None
 
+    def _get_search_results(self, query, manga_type=0, manga_status=0, order=0,
+                            genre='0000000000000000000000000000000000000'):
+        ''' Scrape and return HTML dict with search results.'''
+        url = f'''{MANGA_URL}/search/?w={query}&rd={manga_type}
+                   &status={manga_status}&order=0&genre={genre}&p=0'''
+        html_response = get_html_from_url(url)
+        search_results = html_response.find_all(
+            'div', {'class': 'mangaresultitem'}
+        )
+        return search_results
 
-def to_dataframe(url):
-    ''' Select information for each manga in the search results
-        and return as a DataFrame.
-    '''
-    url_list = url.find_all('div', {'class': 'mangaresultitem'})
-    manga_info = []
-    key = 1
-    for result in url_list:
-        # split is required as some mangas have multiple titles
-        title = result.find('div', {'class': 'manga_name'}).text
-        manga_url = result.find('div', {'class': 'manga_name'}).find('a').get('href')
+    def _extract_text(self, result):
+        ''' Extract the desired text from a HTML search result.'''
+        manga_name = result.find('div', {'class': 'manga_name'})
+        title = manga_name.text
+        manga_url = manga_name.find('a').get('href')
         chapters = result.find('div', {'class': 'chapter_count'}).text
-        manga_type = result.find('div', {'class': 'manga_type'}).text.split("(")[0]
-        manga_info.append([str(key), title.replace('\n', ''), re.sub("\D", "", chapters),
-                           manga_type, manga_url.replace('/', '')])
-        key += 1
-    return manga_info
+        manga_type = result.find('div', {'class': 'manga_type'}).text
+        return {'title': title.replace('\n', ''),
+                'manga_url': manga_url[1:],
+                'chapters': re.sub('\D', '', chapters),
+                'type': manga_type.split('(')[0]}
 
+    def _extract_metadata(self, search_results):
+        ''' Extract all the desired text from the HTML search
+            results and set as a dict.
+        '''
+        key = 1
+        for result in search_results:
+            manga_metadata = self._extract_text(result)
+            self.dict[str(key)] = manga_metadata
+            key += 1
 
-def select_manga(table_data):
-    ''' Ask user which manga in the search results they wish to download.'''
-    columns = ['', 'Title', 'Volumes','Type']
-    table = tabulate([x[:-1] for x in table_data],
-                     headers=columns,
-                     tablefmt='psql')
-    print(table)
-    manga_num = input('Select manga number\n')
-    key, title, volumes, mtype, url = table_data[int(manga_num)-1]
-    print(f'\n{title} has been selected for download.\n')
-    return url
+    def _to_table(self):
+        ''' Transform the dictionary into a table.'''
+        columns = ['', 'Title', 'Volumes', 'Type']
+        data = [[k, x['title'], x['chapters'], x['type']]
+                for k, x in self.dict.items()]
+        table = tabulate(data,
+                         headers=columns,
+                         tablefmt='psql')
+        self.table = table
 
-
-def search_and_get_url(query):
-    ''' Search MangaReader for a given query and return the web url
-        for the user selected manga.
-    '''
-    url = get_search_url(query)
-    table_data = to_dataframe(url)
-    selected_manga_url = select_manga(table_data)
-    return selected_manga_url
+    def search(self, query):
+        results = self._get_search_results(query)
+        self._extract_metadata(results)
+        self._to_table()

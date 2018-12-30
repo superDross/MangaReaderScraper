@@ -5,12 +5,14 @@ import os
 import download
 import converter
 import search
+from menu import SearchMenu
 from config import JPG_DIR, MANGA_DIR
 
 
 logging.basicConfig(
     level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    # format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format='%(message)s'
 )
 
 
@@ -41,7 +43,8 @@ def cli():
     args = vars(parser.parse_args())
 
     if args['search']:
-        args['manga'] = search.search_and_get_url(args['search'])
+        menu = SearchMenu(args['search'])
+        args['manga'] = menu.handle_options()
         msg = 'Which volume do you want to download (Enter alone to download all volumes)?\n'
         args['volume'] = input(msg)
         args['volume'] = None if args['volume'] == '' else args['volume']
