@@ -5,20 +5,15 @@ import time
 import requests
 import bs4
 
-import custom_exceptions
-
 logger = logging.getLogger(__name__)
 
 
 def get_html_from_url(url):
     ''' Download the HTML text from a given url.'''
-    try:
-        req = requests.get(url)
-        req.raise_for_status()
-        url = bs4.BeautifulSoup(req.text, features='lxml')
-        return url
-    except requests.exceptions.HTTPError as e:
-        raise custom_exceptions.MangaDoesntExist(url)
+    req = requests.get(url)
+    req.raise_for_status()
+    url = bs4.BeautifulSoup(req.text, features='lxml')
+    return url
 
 
 def download_timer(func):
