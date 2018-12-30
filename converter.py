@@ -1,65 +1,105 @@
-''' Concatenates jpgs that correspond to mangas volume and outputs as a PDF file.'''
-from config import JPG_DIR, MANGA_DIR
-from fpdf import FPDF
-from PIL import Image
+''' Converts manga volume(s) images to a pdf or cbz file.'''
 import os
 import re
+import zipfile
+import logging
+
+from fpdf import FPDF
+from PIL import Image
+
+from config import JPG_DIR, MANGA_DIR
+
+logger = logging.getLogger(__name__)
 
 
-def find_volume(filename):
-    ''' Find and return the volume number of a given manga filename.'''
-    for index, split_file in enumerate(filename.split("_")):
-        if split_file.isdigit():
-            return split_file, index
+class Conversion:
+    def __init__(self, manga):
+        self.manga = manga
+        self.volume = None
+        self.images = []
+        self._type = 'pdf'
+        self.filename = None
 
+    @property
+    def type(self):
+        ''' Describes file type to convert to.'''
+        return self._type
 
-def get_volume_pages(desired_volume, directory=JPG_DIR):
-    ''' Sort and return a list of all jpgs of a specfic manga volume.'''
-    files = [x for x in os.listdir(directory) if x.endswith('jpg')]
-    volume_jpgs = []
-    for jpg in files:
-        volume, index = find_volume(jpg)
-        if int(volume) == int(desired_volume):
-            volume_jpgs.append(jpg)
-    sort_by_volume = lambda x: int(re.split(r'[_.]', x)[index+1])
-    sorted_volume = sorted(volume_jpgs, key=sort_by_volume)
-    fully_sorted_volume = [os.path.join(directory, x) for x in sorted_volume]
-    return fully_sorted_volume
+    @type.setter
+    def type(self, file_type):
+        accepted = ['pdf', 'cbz']
+        if file_type not in accepted:
+            raise ValueError(f'{file_type} not accepted. '
+                             f'Must be in {accepted}')
+        self._type = file_type
 
+    def _get_volume_images(self):
+        ''' Sort and return a list of all images of a specfic manga volume.'''
+        for jpg in os.listdir(JPG_DIR):
+            if jpg.endswith('jpg') and self.manga in jpg:
+                volume = jpg.split('_')[1]
+                if int(volume) == int(self.volume):
+                    self.images.append(jpg)
 
-def make_pdf(pdf_filename, list_pages):
-    ''' Construct a PDF from a list of sorted images.'''
-    cover = Image.open(list_pages[0])
-    width, height = cover.size
-    pdf = FPDF(unit='pt', format=[width, height])
-    for page in list_pages:
-        pdf.add_page()
-        pdf.image(str(page), 0, 0)
-    pdf.output(pdf_filename, 'F')
-    print('Created {}'.format(pdf_filename))
+    def _get_page_number(self, page):
+        ''' Extract the page number from a given page url.'''
+        return int(re.split(r'[_.]', page)[-2])
 
+    def _sort_images(self):
+        ''' Sort all images by page number.'''
+        sorted_volume = sorted(self.images,
+                               key=self._get_page_number)
+        fully_sorted_volume = [os.path.join(JPG_DIR, x) for x in sorted_volume]
+        self.images = fully_sorted_volume
 
-def create_volume(manga, volume, out_dir):
-    ''' Construct a PDF for a given volume.'''
-    sorted_volume_pages = get_volume_pages(volume)
-    volume_name = manga+'_volume_'+str(volume)
-    volume_filename = os.path.join(out_dir, volume_name+'.pdf')
-    make_pdf(volume_filename, sorted_volume_pages)
+    def _set_filename(self):
+        ''' Set filename for converted pdf/cbz file.'''
+        basename = f'{self.manga}_volume_{self.volume}.{self.type}'
+        self.filename = os.path.join(MANGA_DIR, self.manga, basename)
 
+    def _create_manga_dir(self):
+        ''' Create a manga directory if it does not exist.'''
+        manga_dir = os.path.join(MANGA_DIR, self.manga)
+        if not os.path.exists(manga_dir):
+            os.makedirs(manga_dir)
 
-def create_all_volumes(manga, out_dir):
-    ''' Construct a PDF for every volume '''
-    volumes = set([x.split("_")[1] for x in os.listdir(JPG_DIR)])
-    for volume in sorted(volumes):
-        create_volume(manga, volume, out_dir)
+    def _convert_to_pdf(self):
+        ''' Convert all images to a PDF file.'''
+        cover = Image.open(self.images[0])
+        width, height = cover.size
+        pdf = FPDF(unit='pt', format=[width, height])
+        for page in self.images:
+            pdf.add_page()
+            pdf.image(str(page), 0, 0)
+        pdf.output(self.filename, 'F')
 
+    def _convert_to_cbz(self):
+        ''' Convert all images to a CBZ file.'''
+        with zipfile.ZipFile(self.filename, 'w') as cbz:
+            for page in self.images:
+                cbz.write(page, page)
 
-def create_manga_pdf(manga, volume=None, out_dir=MANGA_DIR):
-    ''' Create a PDF for a single or all manga volumes.'''
-    out_dir = os.path.join(out_dir, manga.split("_")[0])
-    if not os.path.exists(out_dir):
-        os.makedirs(out_dir)
-    if not volume:
-        create_all_volumes(manga, out_dir)
-    else:
-        create_volume(manga, volume, out_dir)
+    def _get_conversion_method(self):
+        ''' Returns the appropriate image conversion method.'''
+        conversion_method = {'pdf': self._convert_to_pdf,
+                             'cbz': self._convert_to_cbz}
+        return conversion_method.get(self.type)
+
+    def convert_volume(self, volume):
+        ''' Convert images of a specific volume number to a pdf/cbz file.'''
+        self.volume = volume
+        self._get_volume_images()
+        self._sort_images()
+        self._set_filename()
+        self._create_manga_dir()
+        converter = self._get_conversion_method()
+        converter()
+        logging.info(f'Created {self.filename}')
+
+    def convert_all_volumes(self):
+        ''' Convert all images to their respective volume pdf/cbz files.'''
+        volumes = set(x.split("_")[1] for x in os.listdir(JPG_DIR)
+                      if self.manga in x)
+        for volume in sorted(volumes):
+            self.convert_volume(volume)
+            self.images = []

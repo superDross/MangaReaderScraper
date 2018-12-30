@@ -3,8 +3,7 @@ import logging
 import os
 
 import download
-import jpg2pdf
-import jpg2cbz
+import converter
 import search
 from config import JPG_DIR, MANGA_DIR
 
@@ -27,6 +26,15 @@ def download_manga(manga, volume):
     else:
         downloader.download_all_volumes()
 
+def convert(manga, volume, cbz):
+    conversion = converter.Conversion(manga)
+    conversion.type = 'cbz' if cbz else 'pdf'
+    if not os.path.exists(MANGA_DIR):
+        os.makedirs(MANGA_DIR)
+    if volume:
+        conversion.convert_volume(volume)
+    else:
+        conversion.convert_all_volumes()
 
 def cli():
     parser = get_parser()
@@ -39,12 +47,7 @@ def cli():
         args['volume'] = None if args['volume'] == '' else args['volume']
 
     download_manga(args['manga'], args['volume'])
-
-    if args['cbz']:
-        jpg2cbz.create_manga_cbz(args['manga'], args['volume'], args['output'])
-    else:
-        jpg2pdf.create_manga_pdf(args['manga'], args['volume'], args['output'])
-
+    convert(args['manga'], args['volume'], args['cbz'])
     clean_up()
 
 
