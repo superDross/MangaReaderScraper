@@ -29,7 +29,7 @@ class Conversion:
     def type(self, file_type):
         accepted = ["pdf", "cbz"]
         if file_type not in accepted:
-            raise ValueError(f"{file_type} not accepted. " f"Must be in {accepted}")
+            raise ValueError(f"{file_type} not accepted. Must be in {accepted}")
         self._type = file_type
 
     def _get_volume_images(self):
