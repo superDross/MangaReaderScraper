@@ -1,5 +1,5 @@
 bs4>=0.0.1
-fpdf>=1.7.2
+reportlab>=3.5.23
 Pillow>=3.1.2
 requests>=2.18.4
 tabulate>=0.8.1
