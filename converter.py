@@ -4,7 +4,7 @@ import os
 import re
 import zipfile
 
-from fpdf import FPDF
+from reportlab.pdfgen import canvas
 from PIL import Image
 
 from config import JPG_DIR, MANGA_DIR
@@ -63,13 +63,14 @@ class Conversion:
 
     def _convert_to_pdf(self):
         """ Convert all images to a PDF file."""
-        cover = Image.open(self.images[0])
-        width, height = cover.size
-        pdf = FPDF(unit="pt", format=[width, height])
+        c = canvas.Canvas(self.filename)
         for page in self.images:
-            pdf.add_page()
-            pdf.image(str(page), 0, 0)
-        pdf.output(self.filename, "F")
+            cover = Image.open(page)
+            width, height = cover.size
+            c.setPageSize((width, height))
+            c.drawImage(page, x = 0, y = 0)
+            c.showPage()
+        c.save()
 
     def _convert_to_cbz(self):
         """ Convert all images to a CBZ file."""
