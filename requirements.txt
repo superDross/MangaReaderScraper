@@ -4,3 +4,4 @@ Pillow>=3.1.2
 requests>=2.18.4
 tabulate>=0.8.1
 lxml>=4.2.5
+PyQt5>=5.13.0
