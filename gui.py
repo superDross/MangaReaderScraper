@@ -26,7 +26,7 @@ def download_manga(manga, volume):
         downloader.download_all_volumes()
 
 
-class ResultsTable(qtw.QTabsWidget):
+class ResultsTable(qtw.QTableWidget):
     """ Search results in a tabeled format. """
 
     def __init__(self):
@@ -50,10 +50,10 @@ class ResultsTable(qtw.QTabsWidget):
 
     def _add_row(self, row_num, name, url, chapters, _type):
         """ Search result row with chapter selection and download button."""
-        self.setItem(row_num, 0, qtw.QTabsWidgetItem(name))
+        self.setItem(row_num, 0, qtw.QTableWidgetItem(name))
         combo = self.create_combo_widget(chapters)
         self.setCellWidget(row_num, 1, combo)
-        self.setItem(row_num, 2, qtw.QTabsWidgetItem(_type))
+        self.setItem(row_num, 2, qtw.QTableWidgetItem(_type))
         download_button = qtw.QPushButton("Download")
         download_button.clicked.connect(partial(self.on_click, url, combo))
         self.setCellWidget(row_num, 3, download_button)
