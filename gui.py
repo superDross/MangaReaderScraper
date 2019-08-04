@@ -4,12 +4,18 @@ from functools import partial
 import PyQt5.QtCore as qtc
 import PyQt5.QtWidgets as qtw
 
-from download import download_manga
 from converter import convert
+from download import download_manga
 from search import Search
 
 # https://pythonspot.com/pyqt5-tabs/
 # https://build-system.fman.io/pyqt5-tutorial
+
+# TODO:
+# - free movement instead of gridbox layout
+# - complete the other tabs
+# - progress bar
+# - move to thread so doesn't block gui interaction
 
 
 class ResultsTable(qtw.QTableWidget):
@@ -21,9 +27,12 @@ class ResultsTable(qtw.QTableWidget):
         self.msg = qtw.QMessageBox()
 
     def _configure_headers(self):
-        self.setColumnCount(4)
-        self.setHorizontalHeaderLabels(["Title", "Chapter", "Type", ""])
-        self.horizontalHeader().setSectionResizeMode(0, qtw.QHeaderView.Stretch)
+        self.setColumnCount(5)
+        self.setHorizontalHeaderLabels(["Title", "Chapter", "Type", "CBZ", ""])
+        header = self.horizontalHeader()
+        header.setDefaultAlignment(qtc.Qt.AlignCenter)
+        header.setSectionResizeMode(0, qtw.QHeaderView.Stretch)
+        header.setSectionResizeMode(3, qtw.QHeaderView.ResizeToContents)
         self.verticalHeader().setVisible(False)
 
     @staticmethod
@@ -41,9 +50,12 @@ class ResultsTable(qtw.QTableWidget):
         combo = self.create_combo_widget(chapters)
         self.setCellWidget(row_num, 1, combo)
         self.setItem(row_num, 2, qtw.QTableWidgetItem(_type))
+        checkbox = qtw.QCheckBox()
+        self.setCellWidget(row_num, 3, checkbox)
         download_button = qtw.QPushButton("Download")
-        download_button.clicked.connect(partial(self.on_click, url, combo))
-        self.setCellWidget(row_num, 3, download_button)
+        # connect state of row widgets to click function
+        download_button.clicked.connect(partial(self.on_click, url, combo, checkbox))
+        self.setCellWidget(row_num, 4, download_button)
 
     def _add_rows(self):
         """ Transforms the search results into rows."""
@@ -67,11 +79,13 @@ class ResultsTable(qtw.QTableWidget):
         self.msg.show()
 
     @qtc.pyqtSlot()
-    def on_click(self, url, combo):
+    def on_click(self, url, combo, checkbox):
         """ Downloads the selected manga."""
+        checked = checkbox.isChecked()
+        print(checked)
         volume = combo.currentText() if combo.currentText() != "all" else None
         download_manga(url, volume)
-        convert(url, volume, False)
+        convert(url, volume, checked)
         self._completion_msg()
 
 
@@ -135,6 +149,14 @@ class SelectionTab(qtw.QWidget):
         self.name = "Selection"
 
 
+class HelpTab(qtw.QWidget):
+    """ Tab showing application instructions."""
+
+    def __init__(self):
+        super().__init__()
+        self.name = "Help"
+
+
 class TabsWidget(qtw.QWidget):
     """ All tabs in the main window."""
 
@@ -144,17 +166,19 @@ class TabsWidget(qtw.QWidget):
         self.tabs = qtw.QTabWidget()
         self.tab1 = SearchTab()
         self.tab2 = SelectionTab()
+        self.tab3 = HelpTab()
         self._configure(width, height)
 
     def _configure(self, width, height):
         self.tabs.resize(width, height)
         self.tabs.addTab(self.tab1, self.tab1.name)
-        self.tabs.addTab(self.tab2, self.tab2.name)
+        # self.tabs.addTab(self.tab2, self.tab2.name)
+        # self.tabs.addTab(self.tab3, self.tab3.name)
         self.layout.addWidget(self.tabs)
         self.setLayout(self.layout)
 
 
-class App(qtw.QMainWindow):
+class AppGui(qtw.QMainWindow):
     """ Primary GUI window."""
 
     def __init__(self):
@@ -162,7 +186,7 @@ class App(qtw.QMainWindow):
         self.title = "MangaReaderScraper"
         self.left = 480
         self.top = 480
-        self.width = 656
+        self.width = 756
         self.height = 591
         self._configure()
 
@@ -173,9 +197,3 @@ class App(qtw.QMainWindow):
         self.statusBar().showMessage("In progress")
         self.setCentralWidget(TabsWidget(self, self.height, self.width))
         self.show()
-
-
-if __name__ == "__main__":
-    app = qtw.QApplication(sys.argv)
-    ex = App()
-    sys.exit(app.exec_())

@@ -4,6 +4,8 @@
 *.json
 tags
 venv/
+core
+mangas/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

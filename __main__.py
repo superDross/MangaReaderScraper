@@ -1,11 +1,14 @@
 import argparse
 import logging
 import os
+import sys
 
-from download import download_manga
-from converter import convert
-import search
+from PyQt5.QtWidgets import QApplication
+
 from config import JPG_DIR, MANGA_DIR
+from converter import convert
+from download import download_manga
+from gui import AppGui
 from menu import SearchMenu
 
 logging.basicConfig(
@@ -16,6 +19,12 @@ logging.basicConfig(
 
 
 logger = logging.getLogger(__name__)
+
+
+def gui():
+    app = QApplication(sys.argv)
+    ex = AppGui()
+    sys.exit(app.exec_())
 
 
 def cli():
@@ -58,4 +67,7 @@ def clean_up():
 
 
 if __name__ == "__main__":
-    cli()
+    if len(sys.argv) > 1:
+        cli()
+    else:
+        gui()
