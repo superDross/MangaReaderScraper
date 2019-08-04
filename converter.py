@@ -109,3 +109,18 @@ class Conversion:
         for volume in sorted(volumes):
             self.convert_volume(volume)
             self.images = []
+
+
+def convert(manga, volume, cbz):
+    conversion = Conversion(manga)
+    conversion.type = "cbz" if cbz else "pdf"
+    if not os.path.exists(MANGA_DIR):
+        os.makedirs(MANGA_DIR)
+    if not volume:
+        conversion.convert_all_volumes()
+    elif volume.isdigit() or isinstance(volume, int):
+        conversion.convert_volume(volume)
+    elif isinstance(volume, str):
+        conversion.convert_volumes(volume)
+    else:
+        raise ValueError(f'Unknown volume: {volume}')

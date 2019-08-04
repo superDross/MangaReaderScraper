@@ -1,11 +1,14 @@
 import argparse
 import logging
 import os
+import sys
 
-import converter
-import download
-import search
+from PyQt5.QtWidgets import QApplication
+
 from config import JPG_DIR, MANGA_DIR
+from converter import convert
+from download import download_manga
+from gui import AppGui
 from menu import SearchMenu
 
 logging.basicConfig(
@@ -18,29 +21,10 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def download_manga(manga, volume):
-    downloader = download.DownloadManga(manga)
-    if not os.path.exists(JPG_DIR):
-        os.makedirs(JPG_DIR)
-    if volume.isdigit() or isinstance(volume, int):
-        downloader.download_volume(volume)
-    elif isinstance(volume, str):
-        downloader.download_volumes(volume)
-    else:
-        downloader.download_all_volumes()
-
-
-def convert(manga, volume, cbz):
-    conversion = converter.Conversion(manga)
-    conversion.type = "cbz" if cbz else "pdf"
-    if not os.path.exists(MANGA_DIR):
-        os.makedirs(MANGA_DIR)
-    if volume.isdigit() or isinstance(volume, int):
-        conversion.convert_volume(volume)
-    elif isinstance(volume, str):
-        conversion.convert_volumes(volume)
-    else:
-        conversion.convert_all_volumes()
+def gui():
+    app = QApplication(sys.argv)
+    ex = AppGui()
+    sys.exit(app.exec_())
 
 
 def cli():
@@ -83,4 +67,7 @@ def clean_up():
 
 
 if __name__ == "__main__":
-    cli()
+    if len(sys.argv) > 1:
+        cli()
+    else:
+        gui()
