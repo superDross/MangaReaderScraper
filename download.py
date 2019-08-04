@@ -80,9 +80,9 @@ class DownloadManga:
 
     @download_timer
     def download_volumes(self, volumes):
-        start, end = volumes.replace(' ', '').split("-")
+        start, end = volumes.replace(" ", "").split("-")
         if not start.isdigit() and not end.isdigit():
-            raise TypeError('Must be thing')
+            raise TypeError("Must be thing")
         all_vols = [vol for vol in range(int(start), int(end) + 1)]
         with Pool() as pool:
             pool.map(self.download_volume, all_vols)
@@ -94,3 +94,17 @@ class DownloadManga:
         all_volume_numbers = [vol.split("/")[-1] for vol in all_volumes]
         with Pool() as pool:
             pool.map(self.download_volume, all_volume_numbers)
+
+
+def download_manga(manga, volume):
+    downloader = DownloadManga(manga)
+    if not os.path.exists(JPG_DIR):
+        os.makedirs(JPG_DIR)
+    if not volume:
+        downloader.download_all_volumes()
+    elif volume.isdigit() or isinstance(volume, int):
+        downloader.download_volume(volume)
+    elif isinstance(volume, str):
+        downloader.download_volumes(volume)
+    else:
+        raise ValueError(f"Unknown volume: {volume}")
