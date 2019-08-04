@@ -8,7 +8,7 @@ from utils import get_html_from_url
 
 class Search:
     def __init__(self):
-        self.dict = {}
+        self.results = {}
         self.table = None
 
     def _get_search_results(
@@ -47,13 +47,13 @@ class Search:
         key = 1
         for result in search_results:
             manga_metadata = self._extract_text(result)
-            self.dict[str(key)] = manga_metadata
+            self.results[str(key)] = manga_metadata
             key += 1
 
     def _to_table(self):
         """ Transform the dictionary into a table."""
         columns = ["", "Title", "Volumes", "Type"]
-        data = [[k, x["title"], x["chapters"], x["type"]] for k, x in self.dict.items()]
+        data = [[k, x["title"], x["chapters"], x["type"]] for k, x in self.results.items()]
         table = tabulate(data, headers=columns, tablefmt="psql")
         self.table = table
 
