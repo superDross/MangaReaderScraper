@@ -1,29 +1,15 @@
-import os
 import sys
 from functools import partial
 
 import PyQt5.QtCore as qtc
 import PyQt5.QtWidgets as qtw
-from PyQt5.QtGui import QIcon, QTextCursor
 
-import download
-from config import JPG_DIR
+from download import download_manga
+from converter import convert
 from search import Search
 
 # https://pythonspot.com/pyqt5-tabs/
 # https://build-system.fman.io/pyqt5-tutorial
-
-
-def download_manga(manga, volume):
-    downloader = download.DownloadManga(manga)
-    if not os.path.exists(JPG_DIR):
-        os.makedirs(JPG_DIR)
-    if volume.isdigit() or isinstance(volume, int):
-        downloader.download_volume(volume)
-    elif isinstance(volume, str):
-        downloader.download_volumes(volume)
-    else:
-        downloader.download_all_volumes()
 
 
 class ResultsTable(qtw.QTableWidget):
@@ -32,6 +18,7 @@ class ResultsTable(qtw.QTableWidget):
     def __init__(self):
         super().__init__()
         self.results = None
+        self.msg = qtw.QMessageBox()
 
     def _configure_headers(self):
         self.setColumnCount(4)
@@ -73,12 +60,19 @@ class ResultsTable(qtw.QTableWidget):
         self._configure_headers()
         self._add_rows()
 
+    def _completion_msg(self):
+        self.msg.setIcon(qtw.QMessageBox.Information)
+        self.msg.setText("Download Complete!")
+        self.msg.setWindowTitle("message")
+        self.msg.show()
+
     @qtc.pyqtSlot()
     def on_click(self, url, combo):
         """ Downloads the selected manga."""
-        volume = combo.currentText() if combo.currentText() != "any" else None
-        print(f"selected {url} volume {volume}")
+        volume = combo.currentText() if combo.currentText() != "all" else None
         download_manga(url, volume)
+        convert(url, volume, False)
+        self._completion_msg()
 
 
 class SearchTab(qtw.QWidget):
@@ -103,8 +97,7 @@ class SearchTab(qtw.QWidget):
     def _search_line(self):
         """ Configures search box."""
         self.search_line.setMaximumSize(200, 25)
-        self.search_line.resize(20, 20)
-        self.search_line.move(15, 1)
+        self.search_line.returnPressed.connect(self.submit_button.click)
         self.layout.addWidget(self.search_line, 1, 0)
 
     def _submit_button(self):
