@@ -10,9 +10,12 @@ from search import Search
 
 # https://pythonspot.com/pyqt5-tabs/
 # https://build-system.fman.io/pyqt5-tutorial
+# https://www.riverbankcomputing.com/static/Docs/PyQt4/classes.html
 
 # TODO:
-# - free movement instead of gridbox layout
+# - turn download buttons into checkboxes with a single download button for all
+# - select volume ranges
+# - chapter selection box goes to high
 # - complete the other tabs
 # - progress bar
 # - move to thread so doesn't block gui interaction
@@ -82,7 +85,6 @@ class ResultsTable(qtw.QTableWidget):
     def on_click(self, url, combo, checkbox):
         """ Downloads the selected manga."""
         checked = checkbox.isChecked()
-        print(checked)
         volume = combo.currentText() if combo.currentText() != "all" else None
         download_manga(url, volume)
         convert(url, volume, checked)
@@ -98,38 +100,46 @@ class SearchTab(qtw.QWidget):
         self.text_label = qtw.QLabel("Search for a Manga:")
         self.search_line = qtw.QLineEdit(self)
         self.submit_button = qtw.QPushButton("Submit")
+        self.search_layout = qtw.QHBoxLayout()
         self.table = ResultsTable()
-        self.layout = qtw.QGridLayout(self)
-        self.layout.setSpacing(10)
+        self.table_layout = qtw.QVBoxLayout()
+        # self.progress = qtw.QProgressBar(self)
         self.user_input = None
         self._configure()
 
     def _text_label(self):
         """ Configures the text label."""
-        self.layout.addWidget(self.text_label, 0, 0)
+        self.search_layout.addWidget(self.text_label)
 
     def _search_line(self):
         """ Configures search box."""
         self.search_line.setMaximumSize(200, 25)
         self.search_line.returnPressed.connect(self.submit_button.click)
-        self.layout.addWidget(self.search_line, 1, 0)
+        self.search_layout.addWidget(self.search_line)
 
     def _submit_button(self):
         """ Configures search submission button."""
         self.submit_button.clicked.connect(self.on_click)
         self.submit_button.setMaximumSize(80, 25)
-        self.layout.addWidget(self.submit_button, 1, 1)
+        self.search_layout.addWidget(self.submit_button)
 
     def _table_box(self):
         """ Configures the search result table."""
-        self.layout.addWidget(self.table, 2, 0)
+        self.table_layout.addWidget(self.table)
+
+#     def _progress_bar(self):
+#         """ Configure the progress bar."""
+#         self.table_layout.addWidget(self.progress)
 
     def _configure(self):
         self._text_label()
         self._search_line()
         self._submit_button()
         self._table_box()
-        self.setLayout(self.layout)
+        # self._progress_bar()
+        # layouts have to be joined together
+        self.table_layout.addLayout(self.search_layout)
+        self.setLayout(self.table_layout)
 
     @qtc.pyqtSlot()
     def on_click(self):
@@ -194,6 +204,5 @@ class AppGui(qtw.QMainWindow):
         self.setWindowTitle(self.title)
         # set initial position on desktop
         self.setGeometry(self.left, self.top, self.width, self.height)
-        self.statusBar().showMessage("In progress")
         self.setCentralWidget(TabsWidget(self, self.height, self.width))
         self.show()
