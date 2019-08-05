@@ -75,4 +75,4 @@ class SearchMenu(Menu):
 
     def _create_options(self):
         """ Take number and url from search object."""
-        return {k: v["manga_url"] for k, v in self.search_results.dict.items()}
+        return {k: v["manga_url"] for k, v in self.search_results.results.items()}

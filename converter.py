@@ -4,7 +4,7 @@ import os
 import re
 import zipfile
 
-from fpdf import FPDF
+from reportlab.pdfgen import canvas
 from PIL import Image
 
 from config import JPG_DIR, MANGA_DIR
@@ -63,13 +63,14 @@ class Conversion:
 
     def _convert_to_pdf(self):
         """ Convert all images to a PDF file."""
-        cover = Image.open(self.images[0])
-        width, height = cover.size
-        pdf = FPDF(unit="pt", format=[width, height])
+        c = canvas.Canvas(self.filename)
         for page in self.images:
-            pdf.add_page()
-            pdf.image(str(page), 0, 0)
-        pdf.output(self.filename, "F")
+            cover = Image.open(page)
+            width, height = cover.size
+            c.setPageSize((width, height))
+            c.drawImage(page, x = 0, y = 0)
+            c.showPage()
+        c.save()
 
     def _convert_to_cbz(self):
         """ Convert all images to a CBZ file."""
@@ -108,3 +109,18 @@ class Conversion:
         for volume in sorted(volumes):
             self.convert_volume(volume)
             self.images = []
+
+
+def convert(manga, volume, cbz):
+    conversion = Conversion(manga)
+    conversion.type = "cbz" if cbz else "pdf"
+    if not os.path.exists(MANGA_DIR):
+        os.makedirs(MANGA_DIR)
+    if not volume:
+        conversion.convert_all_volumes()
+    elif volume.isdigit() or isinstance(volume, int):
+        conversion.convert_volume(volume)
+    elif isinstance(volume, str):
+        conversion.convert_volumes(volume)
+    else:
+        raise ValueError(f'Unknown volume: {volume}')
