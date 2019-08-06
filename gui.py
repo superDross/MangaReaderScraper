@@ -1,4 +1,3 @@
-import sys
 from functools import partial
 
 import PyQt5.QtCore as qtc
@@ -15,7 +14,6 @@ from search import Search
 # TODO:
 # - turn download buttons into checkboxes with a single download button for all
 # - select volume ranges
-# - chapter selection box goes to high
 # - complete the other tabs
 # - progress bar
 # - move to thread so doesn't block gui interaction
@@ -51,13 +49,17 @@ class ResultsTable(qtw.QTableWidget):
         """ Search result row with chapter selection and download button."""
         self.setItem(row_num, 0, qtw.QTableWidgetItem(name))
         combo = self.create_combo_widget(chapters)
+        # stops massive selection box appearing
+        combo.setStyleSheet("QComboBox { combobox-popup: 0; }")
         self.setCellWidget(row_num, 1, combo)
         self.setItem(row_num, 2, qtw.QTableWidgetItem(_type))
         checkbox = qtw.QCheckBox()
         self.setCellWidget(row_num, 3, checkbox)
         download_button = qtw.QPushButton("Download")
         # connect state of row widgets to click function
-        download_button.clicked.connect(partial(self.on_click, url, combo, checkbox))
+        download_button.clicked.connect(
+            partial(self.on_click, url, combo, checkbox)
+        )
         self.setCellWidget(row_num, 4, download_button)
 
     def _add_rows(self):
@@ -103,8 +105,6 @@ class SearchTab(qtw.QWidget):
         self.search_layout = qtw.QHBoxLayout()
         self.table = ResultsTable()
         self.table_layout = qtw.QVBoxLayout()
-        # self.progress = qtw.QProgressBar(self)
-        self.user_input = None
         self._configure()
 
     def _text_label(self):
@@ -127,16 +127,11 @@ class SearchTab(qtw.QWidget):
         """ Configures the search result table."""
         self.table_layout.addWidget(self.table)
 
-#     def _progress_bar(self):
-#         """ Configure the progress bar."""
-#         self.table_layout.addWidget(self.progress)
-
     def _configure(self):
         self._text_label()
         self._search_line()
         self._submit_button()
         self._table_box()
-        # self._progress_bar()
         # layouts have to be joined together
         self.table_layout.addLayout(self.search_layout)
         self.setLayout(self.table_layout)
@@ -144,9 +139,8 @@ class SearchTab(qtw.QWidget):
     @qtc.pyqtSlot()
     def on_click(self):
         """ Used to submit query for search."""
-        self.user_input = self.search_line.text()
         search = Search()
-        search.search(self.user_input)
+        search.search(self.search_line.text())
         self.table.construct(search.results)
         self.search_line.clear()
 
