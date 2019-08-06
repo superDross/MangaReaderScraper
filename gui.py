@@ -12,11 +12,10 @@ from search import Search
 # https://www.riverbankcomputing.com/static/Docs/PyQt4/classes.html
 
 # TODO:
-# - turn download buttons into checkboxes with a single download button for all
+# - download button placement
 # - select volume ranges
 # - complete the other tabs
-# - progress bar
-# - move to thread so doesn't block gui interaction
+# - pop up window showing download progress somehow
 
 
 class ResultsTable(qtw.QTableWidget):
@@ -25,11 +24,11 @@ class ResultsTable(qtw.QTableWidget):
     def __init__(self):
         super().__init__()
         self.results = None
-        self.msg = qtw.QMessageBox()
+        self.download_list = []
 
     def _configure_headers(self):
         self.setColumnCount(5)
-        self.setHorizontalHeaderLabels(["Title", "Chapter", "Type", "CBZ", ""])
+        self.setHorizontalHeaderLabels(["Title", "Chapter", "Type", "CBZ", "Download"])
         header = self.horizontalHeader()
         header.setDefaultAlignment(qtc.Qt.AlignCenter)
         header.setSectionResizeMode(0, qtw.QHeaderView.Stretch)
@@ -52,15 +51,19 @@ class ResultsTable(qtw.QTableWidget):
         # stops massive selection box appearing
         combo.setStyleSheet("QComboBox { combobox-popup: 0; }")
         self.setCellWidget(row_num, 1, combo)
-        self.setItem(row_num, 2, qtw.QTableWidgetItem(_type))
-        checkbox = qtw.QCheckBox()
-        self.setCellWidget(row_num, 3, checkbox)
-        download_button = qtw.QPushButton("Download")
+        type_item = qtw.QTableWidgetItem(_type)
+        type_item.setTextAlignment(qtc.Qt.AlignCenter)
+        self.setItem(row_num, 2, type_item)
+        cbz_checkbox = qtw.QCheckBox()
+        cbz_checkbox.setStyleSheet("margin-left:8%;")
+        self.setCellWidget(row_num, 3, cbz_checkbox)
+        download_checkbox = qtw.QCheckBox()
+        download_checkbox.setStyleSheet("margin-left:40%; margin-right:50%;")
         # connect state of row widgets to click function
-        download_button.clicked.connect(
-            partial(self.on_click, url, combo, checkbox)
+        download_checkbox.clicked.connect(
+            partial(self.on_click, url, combo, cbz_checkbox, download_checkbox)
         )
-        self.setCellWidget(row_num, 4, download_button)
+        self.setCellWidget(row_num, 4, download_checkbox)
 
     def _add_rows(self):
         """ Transforms the search results into rows."""
@@ -77,20 +80,15 @@ class ResultsTable(qtw.QTableWidget):
         self._configure_headers()
         self._add_rows()
 
-    def _completion_msg(self):
-        self.msg.setIcon(qtw.QMessageBox.Information)
-        self.msg.setText("Download Complete!")
-        self.msg.setWindowTitle("message")
-        self.msg.show()
-
     @qtc.pyqtSlot()
-    def on_click(self, url, combo, checkbox):
+    def on_click(self, url, combo, cbz, download):
         """ Downloads the selected manga."""
-        checked = checkbox.isChecked()
+        checked = cbz.isChecked()
         volume = combo.currentText() if combo.currentText() != "all" else None
-        download_manga(url, volume)
-        convert(url, volume, checked)
-        self._completion_msg()
+        if download.isChecked():
+            self.download_list.append((url, volume, checked))
+        else:
+            self.download_list.remove((url, volume, checked))
 
 
 class SearchTab(qtw.QWidget):
@@ -104,7 +102,9 @@ class SearchTab(qtw.QWidget):
         self.submit_button = qtw.QPushButton("Submit")
         self.search_layout = qtw.QHBoxLayout()
         self.table = ResultsTable()
+        self.download_button = qtw.QPushButton("Download")
         self.table_layout = qtw.QVBoxLayout()
+        self.msg = qtw.QMessageBox()
         self._configure()
 
     def _text_label(self):
@@ -113,13 +113,13 @@ class SearchTab(qtw.QWidget):
 
     def _search_line(self):
         """ Configures search box."""
-        self.search_line.setMaximumSize(200, 25)
+        self.search_line.setMaximumSize(400, 25)
         self.search_line.returnPressed.connect(self.submit_button.click)
         self.search_layout.addWidget(self.search_line)
 
     def _submit_button(self):
         """ Configures search submission button."""
-        self.submit_button.clicked.connect(self.on_click)
+        self.submit_button.clicked.connect(self.on_submit)
         self.submit_button.setMaximumSize(80, 25)
         self.search_layout.addWidget(self.submit_button)
 
@@ -127,22 +127,45 @@ class SearchTab(qtw.QWidget):
         """ Configures the search result table."""
         self.table_layout.addWidget(self.table)
 
+    def _download_button(self):
+        self.download_button.clicked.connect(self.on_download)
+        self.download_button.setMaximumSize(80, 25)
+        self.search_layout.addWidget(self.download_button)
+
+    def _msg_box(self, text):
+        self.msg.setIcon(qtw.QMessageBox.Information)
+        self.msg.setText(text)
+        self.msg.setWindowTitle("message")
+        self.msg.show()
+
     def _configure(self):
         self._text_label()
         self._search_line()
         self._submit_button()
+        self._download_button()
         self._table_box()
         # layouts have to be joined together
         self.table_layout.addLayout(self.search_layout)
         self.setLayout(self.table_layout)
 
     @qtc.pyqtSlot()
-    def on_click(self):
+    def on_submit(self):
         """ Used to submit query for search."""
         search = Search()
         search.search(self.search_line.text())
         self.table.construct(search.results)
         self.search_line.clear()
+        self.table.download_list = []
+
+    @qtc.pyqtSlot()
+    def on_download(self):
+        if not self.table.download_list:
+            return self._msg_box("Please select something")
+        for entry in self.table.download_list:
+            url, volume, cbz = entry
+            download_manga(url, volume)
+            convert(url, volume, cbz)
+        self._msg_box("Download complete!")
 
 
 class SelectionTab(qtw.QWidget):
