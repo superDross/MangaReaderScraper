@@ -21,13 +21,13 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def gui():
+def gui() -> None:
     app = QApplication(sys.argv)
     ex = AppGui()
     sys.exit(app.exec_())
 
 
-def cli():
+def cli() -> None:
     parser = get_parser()
     args = vars(parser.parse_args())
 
@@ -43,7 +43,7 @@ def cli():
     clean_up()
 
 
-def get_parser():
+def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="downloads and converts manga volumes to pdf or cbz format"
     )
@@ -59,7 +59,7 @@ def get_parser():
     return parser
 
 
-def clean_up():
+def clean_up() -> None:
     """ Delete all scrapped jpg files."""
     directory = JPG_DIR
     for jpg in os.listdir(directory):

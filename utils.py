@@ -1,3 +1,4 @@
+from typing import Callable
 import functools
 import logging
 import time
@@ -8,7 +9,7 @@ import requests
 logger = logging.getLogger(__name__)
 
 
-def get_html_from_url(url):
+def get_html_from_url(url: str) -> bs4.BeautifulSoup:
     """ Download the HTML text from a given url."""
     req = requests.get(url)
     req.raise_for_status()
@@ -16,7 +17,7 @@ def get_html_from_url(url):
     return url
 
 
-def download_timer(func):
+def download_timer(func: Callable) -> Callable:
     """ Manga volume(s) download timer."""
 
     @functools.wraps(func)

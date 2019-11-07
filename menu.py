@@ -1,23 +1,20 @@
 import time
+from typing import Dict, List
 
 from search import Search
 
 
-class Menu(object):
-    """ Base class for all menus.
-
-    Attributes:
-        options (dict): {option (str): method (func)}
-        choices (str): string representation of _options.
-        parent (Menu): menu object above this menu,
+class Menu:
+    """
+    Base class for all menus.
     """
 
-    def __init__(self, options, choices, parent=None):
-        self.parent = parent
+    def __init__(self, options: Dict[str, str], choices: str, parent: bool = None):
+        self.parent: Menu = parent
         self.options = self._add_parent_to_options(options)
         self.choices = self._add_back_to_choices(choices)
 
-    def handle_options(self):
+    def handle_options(self) -> str:
         """ Extract and execute a method from self.options."""
         try:
             print(self.choices)
@@ -30,7 +27,7 @@ class Menu(object):
             time.sleep(1)
             return self.handle_options()
 
-    def _add_parent_to_options(self, options):
+    def _add_parent_to_options(self, options: Dict[str, str]) -> Dict[str, str]:
         """ Modify options to include parent menu."""
         if self.parent:
             number_options = len(options)
@@ -38,22 +35,20 @@ class Menu(object):
             options[new_option_key] = self.parent
         return options
 
-    def _add_back_to_choices(self, choices):
+    def _add_back_to_choices(self, choices: str) -> str:
         """ Modify choices to include back option to parent menu."""
         if not self.parent:
             return choices
         num = len(self.options)
         if choices:
-            return "{}\n{}. Back".format(choices, num)
+            return f"{choices}\n{num}. Back"
         else:
-            return "{}. Back".format(num)
+            return f"{num}. Back"
 
     @classmethod
-    def from_list(cls, l):
-        """ Constructs self._options and self.choices from a list.
-
-        Args:
-            l (list: str): list of strings to transform into a Menu.
+    def from_list(cls, l: List[str]) -> None:
+        """
+        Constructs self._options and self.choices from a list.
         """
         options = {str(k + 1): i for k, i in enumerate(l)}
         choices = "\n".join("{}. {}".format(k, i) for k, i in sorted(options.items()))
@@ -61,18 +56,18 @@ class Menu(object):
 
 
 class SearchMenu(Menu):
-    def __init__(self, query):
-        self.search_results = self._search(query)
-        choices = self.search_results.table
-        options = self._create_options()
+    def __init__(self, query: str) -> None:
+        self.search_results: Search = self._search(query)
+        choices: str = self.search_results.table
+        options: Dict[str, str] = self._create_options()
         Menu.__init__(self, options, choices)
 
-    def _search(self, query):
+    def _search(self, query: str) -> Search:
         """ Search for query and return Search object."""
         s = Search()
         s.search(query)
         return s
 
-    def _create_options(self):
+    def _create_options(self) -> Dict[str, str]:
         """ Take number and url from search object."""
         return {k: v["manga_url"] for k, v in self.search_results.results.items()}

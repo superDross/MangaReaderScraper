@@ -1,4 +1,5 @@
 import re
+from typing import List
 
 from tabulate import tabulate
 
@@ -8,17 +9,17 @@ from utils import get_html_from_url
 
 class Search:
     def __init__(self):
-        self.results = {}
-        self.table = None
+        self.results: dict = {}
+        self.table: str = None
 
     def _get_search_results(
         self,
-        query,
-        manga_type=0,
-        manga_status=0,
-        order=0,
-        genre="0000000000000000000000000000000000000",
-    ):
+        query: str,
+        manga_type: int = 0,
+        manga_status: int = 0,
+        order: int = 0,
+        genre: str = "0000000000000000000000000000000000000",
+    ) -> List[str]:
         """ Scrape and return HTML dict with search results."""
         url = f"""{MANGA_URL}/search/?w={query}&rd={manga_type}
                    &status={manga_status}&order=0&genre={genre}&p=0"""
@@ -26,7 +27,7 @@ class Search:
         search_results = html_response.find_all("div", {"class": "mangaresultitem"})
         return search_results
 
-    def _extract_text(self, result):
+    def _extract_text(self, result: str) -> dict:
         """ Extract the desired text from a HTML search result."""
         manga_name = result.find("div", {"class": "manga_name"})
         title = manga_name.text
@@ -40,7 +41,7 @@ class Search:
             "type": manga_type.split("(")[0],
         }
 
-    def _extract_metadata(self, search_results):
+    def _extract_metadata(self, search_results: List[str]) -> None:
         """ Extract all the desired text from the HTML search
             results and set as a dict.
         """
@@ -50,14 +51,16 @@ class Search:
             self.results[str(key)] = manga_metadata
             key += 1
 
-    def _to_table(self):
+    def _to_table(self) -> None:
         """ Transform the dictionary into a table."""
         columns = ["", "Title", "Volumes", "Type"]
-        data = [[k, x["title"], x["chapters"], x["type"]] for k, x in self.results.items()]
+        data = [
+            [k, x["title"], x["chapters"], x["type"]] for k, x in self.results.items()
+        ]
         table = tabulate(data, headers=columns, tablefmt="psql")
         self.table = table
 
-    def search(self, query):
+    def search(self, query: str) -> None:
         results = self._get_search_results(query)
         self._extract_metadata(results)
         self._to_table()
