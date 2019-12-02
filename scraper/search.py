@@ -1,15 +1,15 @@
 import re
-from typing import List
+from typing import List, Dict
 
 from tabulate import tabulate
 
-from config import MANGA_URL
-from utils import get_html_from_url
+from scraper.config import MANGA_URL
+from scraper.utils import get_html_from_url
 
 
 class Search:
-    def __init__(self):
-        self.results: dict = {}
+    def __init__(self) -> None:
+        self.results: Dict[str, Dict[str, str]] = {}
         self.table: str = None
 
     def _get_search_results(
@@ -20,15 +20,19 @@ class Search:
         order: int = 0,
         genre: str = "0000000000000000000000000000000000000",
     ) -> List[str]:
-        """ Scrape and return HTML dict with search results."""
+        """
+        Scrape and return HTML dict with search results
+        """
         url = f"""{MANGA_URL}/search/?w={query}&rd={manga_type}
                    &status={manga_status}&order=0&genre={genre}&p=0"""
         html_response = get_html_from_url(url)
         search_results = html_response.find_all("div", {"class": "mangaresultitem"})
         return search_results
 
-    def _extract_text(self, result: str) -> dict:
-        """ Extract the desired text from a HTML search result."""
+    def _extract_text(self, result: str) -> Dict[str, str]:
+        """
+        Extract the desired text from a HTML search result
+        """
         manga_name = result.find("div", {"class": "manga_name"})
         title = manga_name.text
         manga_url = manga_name.find("a").get("href")
@@ -42,17 +46,18 @@ class Search:
         }
 
     def _extract_metadata(self, search_results: List[str]) -> None:
-        """ Extract all the desired text from the HTML search
-            results and set as a dict.
         """
-        key = 1
-        for result in search_results:
+        Extract all the desired text from the HTML search
+        results and set as a dict.
+        """
+        for key, result in enumerate(search_results, start=1):
             manga_metadata = self._extract_text(result)
             self.results[str(key)] = manga_metadata
-            key += 1
 
     def _to_table(self) -> None:
-        """ Transform the dictionary into a table."""
+        """
+        Transform the dictionary into a table
+        """
         columns = ["", "Title", "Volumes", "Type"]
         data = [
             [k, x["title"], x["chapters"], x["type"]] for k, x in self.results.items()

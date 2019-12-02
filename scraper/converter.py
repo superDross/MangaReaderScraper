@@ -8,7 +8,7 @@ from typing import List
 from PIL import Image
 from reportlab.pdfgen import canvas
 
-from config import JPG_DIR, MANGA_DIR
+from scraper.config import JPG_DIR, MANGA_DIR
 
 logger = logging.getLogger(__name__)
 

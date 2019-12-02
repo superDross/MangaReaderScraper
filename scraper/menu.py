@@ -1,7 +1,7 @@
 import time
-from typing import Dict, List
+from typing import Dict, List, Optional
 
-from search import Search
+from scraper.search import Search
 
 
 class Menu:
@@ -9,13 +9,17 @@ class Menu:
     Base class for all menus.
     """
 
-    def __init__(self, options: Dict[str, str], choices: str, parent: bool = None):
+    def __init__(
+        self, options: Dict[str, str], choices: str, parent: Optional[bool] = None
+    ) -> None:
         self.parent: Menu = parent
-        self.options = self._add_parent_to_options(options)
-        self.choices = self._add_back_to_choices(choices)
+        self.options: Dict[str, str] = self._add_parent_to_options(options)
+        self.choices: str = self._add_back_to_choices(choices)
 
     def handle_options(self) -> str:
-        """ Extract and execute a method from self.options."""
+        """
+        Extract and execute a method from self.options
+        """
         try:
             print(self.choices)
             choice = input(">> ")
@@ -28,7 +32,9 @@ class Menu:
             return self.handle_options()
 
     def _add_parent_to_options(self, options: Dict[str, str]) -> Dict[str, str]:
-        """ Modify options to include parent menu."""
+        """
+        Modify options to include parent menu
+        """
         if self.parent:
             number_options = len(options)
             new_option_key = str(number_options + 1)
@@ -36,7 +42,9 @@ class Menu:
         return options
 
     def _add_back_to_choices(self, choices: str) -> str:
-        """ Modify choices to include back option to parent menu."""
+        """
+        Modify choices to include back option to parent menu
+        """
         if not self.parent:
             return choices
         num = len(self.options)
@@ -63,11 +71,15 @@ class SearchMenu(Menu):
         Menu.__init__(self, options, choices)
 
     def _search(self, query: str) -> Search:
-        """ Search for query and return Search object."""
+        """
+        Search for query and return Search object
+        """
         s = Search()
         s.search(query)
         return s
 
     def _create_options(self) -> Dict[str, str]:
-        """ Take number and url from search object."""
+        """
+        Take number and url from search object
+        """
         return {k: v["manga_url"] for k, v in self.search_results.results.items()}

@@ -5,9 +5,9 @@ import PyQt5.QtCore as qtc
 import PyQt5.QtWidgets as qtw
 from PyQt5.QtWidgets import QCheckBox, QComboBox
 
-from converter import convert
-from download import download_manga
-from search import Search
+from scraper.converter import convert
+from scraper.download import download_manga
+from scraper.search import Search
 
 # https://pythonspot.com/pyqt5-tabs/
 # https://build-system.fman.io/pyqt5-tutorial
@@ -21,7 +21,9 @@ from search import Search
 
 
 class ResultsTable(qtw.QTableWidget):
-    """ Search results in a tabeled format. """
+    """
+    Search results in a tabeled format
+    """
 
     def __init__(self) -> None:
         super().__init__()
@@ -39,15 +41,21 @@ class ResultsTable(qtw.QTableWidget):
 
     @staticmethod
     def create_combo_widget(num: Union[int, str]) -> None:
-        """ Creates a combobox with selection from 0 to parsed num."""
+        """
+        Creates a combobox with selection from 0 to parsed num
+        """
         combobox = qtw.QComboBox()
         combobox.addItem("all")
         for i in range(1, int(num) + 1):
             combobox.addItem(str(i))
         return combobox
 
-    def _add_row(self, row_num: str, name: str, url: str, chapters: str, _type: str) -> None:
-        """ Search result row with chapter selection and download button."""
+    def _add_row(
+        self, row_num: str, name: str, url: str, chapters: str, _type: str
+    ) -> None:
+        """
+        Search result row with chapter selection and download button
+        """
         self.setItem(row_num, 0, qtw.QTableWidgetItem(name))
         combo = self.create_combo_widget(chapters)
         # stops massive selection box appearing
@@ -90,7 +98,9 @@ class ResultsTable(qtw.QTableWidget):
     def on_click(
         self, url: str, combo: QComboBox, cbz: QCheckBox, download: QCheckBox
     ) -> None:
-        """ Downloads the selected manga."""
+        """
+        Downloads the selected manga
+        """
         checked = cbz.isChecked()
         volume = combo.currentText() if combo.currentText() != "all" else None
         if download.isChecked():
@@ -100,7 +110,9 @@ class ResultsTable(qtw.QTableWidget):
 
 
 class SearchTab(qtw.QWidget):
-    """ Tab allowing user to search and select mangas."""
+    """
+    Tab allowing user to search and select mangas
+    """
 
     def __init__(self) -> None:
         super().__init__()
@@ -117,23 +129,31 @@ class SearchTab(qtw.QWidget):
         self._configure()
 
     def _text_label(self) -> None:
-        """ Configures the text label."""
+        """
+        Configures the text label
+        """
         self.search_layout.addWidget(self.text_label)
 
     def _search_line(self) -> None:
-        """ Configures search box."""
+        """
+        Configures search box
+        """
         self.search_line.setMaximumSize(400, 25)
         self.search_line.returnPressed.connect(self.submit_button.click)
         self.search_layout.addWidget(self.search_line)
 
     def _submit_button(self) -> None:
-        """ Configures search submission button."""
+        """
+        Configures search submission button
+        """
         self.submit_button.clicked.connect(self.on_submit)
         self.submit_button.setMaximumSize(80, 25)
         self.search_layout.addWidget(self.submit_button)
 
     def _table_box(self) -> None:
-        """ Configures the search result table."""
+        """
+        Configures the search result table
+        """
         self.table_layout.addWidget(self.table)
 
     def _download_button(self) -> None:
@@ -159,7 +179,9 @@ class SearchTab(qtw.QWidget):
 
     @qtc.pyqtSlot()
     def on_submit(self) -> None:
-        """ Used to submit query for search."""
+        """
+        Used to submit query for search
+        """
         search = Search()
         search.search(self.search_line.text())
         self.table.construct(search.results)
@@ -178,7 +200,9 @@ class SearchTab(qtw.QWidget):
 
 
 class SelectionTab(qtw.QWidget):
-    """ Tab allowing the user to download a known manga & volume."""
+    """
+    Tab allowing the user to download a known manga & volume
+    """
 
     def __init__(self) -> None:
         super().__init__()
@@ -186,7 +210,9 @@ class SelectionTab(qtw.QWidget):
 
 
 class HelpTab(qtw.QWidget):
-    """ Tab showing application instructions."""
+    """
+    Tab showing application instructions
+    """
 
     def __init__(self) -> None:
         super().__init__()
@@ -194,7 +220,9 @@ class HelpTab(qtw.QWidget):
 
 
 class TabsWidget(qtw.QWidget):
-    """ All tabs in the main window."""
+    """
+    All tabs in the main window
+    """
 
     def __init__(self, parent: qtw.QMainWindow, height: int, width: int) -> None:
         super().__init__(parent)
@@ -215,7 +243,9 @@ class TabsWidget(qtw.QWidget):
 
 
 class AppGui(qtw.QMainWindow):
-    """ Primary GUI window."""
+    """
+    Primary GUI window
+    """
 
     def __init__(self):
         super().__init__()

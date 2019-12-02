@@ -1,7 +1,7 @@
-from typing import Callable
 import functools
 import logging
 import time
+from typing import Callable
 
 import bs4
 import requests
@@ -10,19 +10,25 @@ logger = logging.getLogger(__name__)
 
 
 def get_html_from_url(url: str) -> bs4.BeautifulSoup:
-    """ Download the HTML text from a given url."""
+    """
+    Download the HTML text from a given url
+    """
     req = requests.get(url)
     req.raise_for_status()
-    url = bs4.BeautifulSoup(req.text, features="lxml")
-    return url
+    html = bs4.BeautifulSoup(req.text, features="lxml")
+    return html
 
 
 def download_timer(func: Callable) -> Callable:
-    """ Manga volume(s) download timer."""
+    """
+    Manga volume(s) download timer
+    """
 
     @functools.wraps(func)
     def wrapper_timer(*args):
-        """ Assumes last arg is the volume digit."""
+        """
+        Assumes last arg is the volume digit
+        """
         start = time.time()
         returned = func(*args)
         run_time = round(time.time() - start, 1)

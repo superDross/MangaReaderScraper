@@ -5,11 +5,11 @@ import sys
 
 from PyQt5.QtWidgets import QApplication
 
-from config import JPG_DIR, MANGA_DIR
-from converter import convert
-from download import download_manga
-from gui import AppGui
-from menu import SearchMenu
+from scraper.config import JPG_DIR, MANGA_DIR
+from scraper.converter import convert
+from scraper.download import download_manga
+from scraper.gui import AppGui
+from scraper.menu import SearchMenu
 
 logging.basicConfig(
     level=logging.INFO,
