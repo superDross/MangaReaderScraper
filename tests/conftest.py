@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 
 from scraper.config import HERE
 from scraper.download import DownloadManga
+from scraper.converter import Conversion
 
 
 def get_html_file(filepath):
@@ -36,13 +37,28 @@ def mocked_get_html_from_url_return_value():
         yield mocked_func
 
 
+@pytest.fixture(scope="session", autouse=True)
+def mocked_jpg_env_var():
+    """
+    Mock JPG_DIR env var in converter module to point to test jpg dir
+    """
+    mock_dir = f"{HERE}/tests/test_files/jpgs"
+    with mock.patch("scraper.converter.JPG_DIR", mock_dir) as mocked_dir:
+        yield mocked_dir
+
+
+
+@pytest.fixture(scope="session", autouse=True)
+def mocked_manga_env_var():
+    """
+    Mock MANGA_DIR env var in converter module to point to test jpg dir
+    """
+    mock_dir = f"{HERE}/tests/test_files/jpgs"
+    with mock.patch("scraper.converter.MANGA_DIR", mock_dir) as mocked_dir:
+        yield mocked_dir
+
 @pytest.fixture
 def manga_search():
-    """
-    Usage in pytest:
-      def test_something(manga_search):
-          assert len(manga_search) == 6
-    """
     html_path = f"{HERE}/tests/test_files/dragonball_search.html"
     html = get_bs4_tree(html_path)
     return html
@@ -81,3 +97,15 @@ def download():
     download = DownloadManga("dragon-ball-episode-of-bardock")
     download.volume = 2
     return download
+
+
+@pytest.fixture
+def converter():
+    conv = Conversion('test-manga')
+    conv.volume = 1
+    return conv
+
+
+@pytest.fixture
+def test_jpg_dir():
+    return f"{HERE}/tests/test_files/jpgs"

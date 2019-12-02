@@ -41,7 +41,7 @@ class Search:
         return {
             "title": title.replace("\n", ""),
             "manga_url": manga_url[1:],
-            "chapters": re.sub("\D", "", chapters),
+            "chapters": re.sub(r"\D", "", chapters),
             "type": manga_type.split("(")[0],
         }
 

@@ -98,7 +98,7 @@ class Conversion:
     def convert_volumes(self, volumes: str) -> None:
         start, end = volumes.replace(" ", "").split("-")
         if not start.isdigit() and not end.isdigit():
-            raise TypeError("Must be thing")
+            raise TypeError("volumes arg must be a number")
         all_vols = [vol for vol in range(int(start), int(end) + 1)]
         for volume in sorted(all_vols):
             self.convert_volume(volume)

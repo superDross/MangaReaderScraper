@@ -63,7 +63,8 @@ def clean_up() -> None:
     """ Delete all scrapped jpg files."""
     directory = JPG_DIR
     for jpg in os.listdir(directory):
-        os.remove(os.path.join(directory, jpg))
+        # os.remove(os.path.join(directory, jpg))
+        pass
 
 
 if __name__ == "__main__":
