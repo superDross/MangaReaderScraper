@@ -2,14 +2,15 @@
 Pytest fixtures
 """
 
+import logging
 from unittest import mock
 
 import pytest
 from bs4 import BeautifulSoup
 
 from scraper.config import HERE
-from scraper.download import DownloadManga
 from scraper.converter import Conversion
+from scraper.download import DownloadManga
 
 
 def get_html_file(filepath):
@@ -66,6 +67,7 @@ def mocked_manga_env_var():
     with mock.patch("scraper.converter.MANGA_DIR", mock_dir) as mocked_dir:
         yield mocked_dir
 
+
 @pytest.fixture
 def manga_search():
     html_path = f"{HERE}/tests/test_files/dragonball_search.html"
@@ -110,7 +112,7 @@ def download():
 
 @pytest.fixture
 def converter():
-    conv = Conversion('test-manga')
+    conv = Conversion("test-manga")
     conv.volume = 1
     return conv
 
@@ -118,3 +120,8 @@ def converter():
 @pytest.fixture
 def test_jpg_dir():
     return f"{HERE}/tests/test_files/jpgs"
+
+
+@pytest.fixture
+def logger():
+    return logging.getLogger("unittest_logger")

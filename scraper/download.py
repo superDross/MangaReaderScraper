@@ -5,15 +5,16 @@ Scrapes a given mangas volume(s) page images from MangaReader.net
 import logging
 import os
 import re
+from logging import Logger
 from multiprocessing.pool import Pool, ThreadPool
 from typing import List, Optional, Union
 
 import requests
-from bs4 import BeautifulSoup
 
+from bs4 import BeautifulSoup
 from scraper import custom_exceptions
 from scraper.config import JPG_DIR, MANGA_URL
-from scraper.utils import download_timer, get_html_from_url
+from scraper.utils import CustomAdapter, download_timer, get_adapter, get_html_from_url
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,7 @@ class DownloadManga:
     def __init__(self, manga: str) -> None:
         self.manga: str = manga
         self.volume: Optional[int] = None
+        self.adapter: Union[Logger, CustomAdapter] = logging
 
     def _get_all_volume_urls(self) -> List[str]:
         """
@@ -86,13 +88,11 @@ class DownloadManga:
         Download all pages of a given volume number
         """
         self.volume = volume
+        self.adapter = get_adapter(logger, self.manga, self.volume)
         volume_html = self._get_volume_html_text()
         self._check_volume_exists(volume_html)
         volume_page_urls = self._get_all_volume_pages_urls(volume_html)
-        logging.info(
-            f'Downloading {self.manga.replace("-", " ").title()} '
-            f"Volume {self.volume}"
-        )
+        self.adapter.info("Downloading")
         # Threading as it is a matter of IO.
         with ThreadPool() as pool:
             pool.map(self.download_page, volume_page_urls)
@@ -101,7 +101,7 @@ class DownloadManga:
     def download_volumes(self, volumes: str) -> None:
         start, end = volumes.replace(" ", "").split("-")
         if not start.isdigit() and not end.isdigit():
-            raise TypeError("Must be thing")
+            raise TypeError("volumes must contain digits")
         all_vols = [vol for vol in range(int(start), int(end) + 1)]
         with Pool() as pool:
             pool.map(self.download_volume, all_vols)

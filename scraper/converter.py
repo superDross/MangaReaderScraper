@@ -3,12 +3,14 @@ import logging
 import os
 import re
 import zipfile
-from typing import List
+from logging import Logger
+from typing import List, Union
 
 from PIL import Image
-from reportlab.pdfgen import canvas
 
+from reportlab.pdfgen import canvas
 from scraper.config import JPG_DIR, MANGA_DIR
+from scraper.utils import CustomAdapter, get_adapter
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +22,7 @@ class Conversion:
         self.images: List[str] = []
         self._type: str = "pdf"
         self.filename: str = None
+        self.adapter: Union[Logger, CustomAdapter] = logging
 
     @property
     def type(self) -> str:
@@ -87,13 +90,14 @@ class Conversion:
     def convert_volume(self, volume: int) -> None:
         """ Convert images of a specific volume number to a pdf/cbz file."""
         self.volume = volume
+        self.adapter = get_adapter(logger, self.manga, self.volume)
         self._get_volume_images()
         self._sort_images()
         self._set_filename()
         self._create_manga_dir()
         converter = self._get_conversion_method()
         converter()
-        logging.info(f"Created {self.filename}")
+        self.adapter.info(f"Created {self.filename}")
 
     def convert_volumes(self, volumes: str) -> None:
         start, end = volumes.replace(" ", "").split("-")

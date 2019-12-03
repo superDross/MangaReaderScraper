@@ -1,12 +1,32 @@
 import functools
 import logging
 import time
-from typing import Callable
+from logging import Logger, LoggerAdapter
+from typing import Callable, Tuple
 
-import bs4
 import requests
 
+import bs4
+
 logger = logging.getLogger(__name__)
+
+
+class CustomAdapter(LoggerAdapter):
+    """
+    Prepends manga name & volume to the logger message
+    """
+
+    def process(self, msg: str, kwargs: dict) -> Tuple[str, dict]:
+        manga = self.extra.get("manga").replace('-', ' ').title()
+        volume = self.extra.get("volume")
+        if volume:
+            return f"[{manga}:{volume}] {msg}", kwargs
+        return f"[{manga}] {msg}", kwargs
+
+
+def get_adapter(logger: Logger, manga: str, volume: str) -> CustomAdapter:
+    extra = {"manga": manga, "volume": volume}
+    return CustomAdapter(logger, extra)
 
 
 def get_html_from_url(url: str) -> bs4.BeautifulSoup:
