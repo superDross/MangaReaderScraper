@@ -4,9 +4,8 @@ import time
 from logging import Logger, LoggerAdapter
 from typing import Callable, Tuple
 
-import requests
-
 import bs4
+import requests
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +16,7 @@ class CustomAdapter(LoggerAdapter):
     """
 
     def process(self, msg: str, kwargs: dict) -> Tuple[str, dict]:
-        manga = self.extra.get("manga").replace('-', ' ').title()
+        manga = self.extra.get("manga").replace("-", " ").title()
         volume = self.extra.get("volume")
         if volume:
             return f"[{manga}:{volume}] {msg}", kwargs

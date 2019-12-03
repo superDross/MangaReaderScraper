@@ -6,7 +6,7 @@
 - use pathlib instea of os module
 - mypy for type checking
 
-- Travis CI
+- Travis CI i
 - setup tools sorted so a proper installation process can work
 - upload to pypi
 
