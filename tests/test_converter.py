@@ -1,3 +1,5 @@
+import os
+import zipfile
 from unittest import mock
 
 import pytest
@@ -49,8 +51,44 @@ def test_set_filename(converter):
     assert expected == converter.filename
 
 
-# def test_convert_to_cbz(converter):
-#     converter.type = "cbz"
-#     converter._get_volume_images()
-#     converter._sort_images()
-#     converter._convert_to_cbz()
+def test_get_conversion_method_pdf(converter):
+    converter.type = "pdf"
+    method = converter._get_conversion_method()
+    assert method.__name__ == "_convert_to_pdf"
+
+
+def test_get_conversion_method_cbz(converter):
+    converter.type = "cbz"
+    method = converter._get_conversion_method()
+    assert method.__name__ == "_convert_to_cbz"
+
+
+def test_convert_to_cbz(converter):
+    converter.type = "cbz"
+    converter.convert_volume(1)
+    expected_file_path = (
+        f"{HERE}/tests/test_files/jpgs/test-manga/test-manga_volume_1.cbz"
+    )
+    assert os.path.exists(expected_file_path)
+    assert zipfile.is_zipfile(expected_file_path)
+
+
+def test_convert_to_pdf(converter):
+    converter.type = "pdf"
+    converter.convert_volume(1)
+    expected_file_path = (
+        f"{HERE}/tests/test_files/jpgs/test-manga/test-manga_volume_1.pdf"
+    )
+    assert os.path.exists(expected_file_path)
+    # check is a valid pdf file
+    sliced_pdf = open(expected_file_path, "rb").read()[:10]
+    assert "PDF" in sliced_pdf.decode("utf-8")
+
+
+def teardown_module(module):
+    files = [
+        f"{HERE}/tests/test_files/jpgs/test-manga/test-manga_volume_1.cbz",
+        f"{HERE}/tests/test_files/jpgs/test-manga/test-manga_volume_1.pdf",
+    ]
+    for f in files:
+        os.remove(f)
