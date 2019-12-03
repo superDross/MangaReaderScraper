@@ -38,7 +38,7 @@ def mocked_get_html_from_url_return_value():
 
 
 @pytest.fixture(scope="session", autouse=True)
-def mocked_jpg_env_var():
+def mocked_jpg_env_var_converter():
     """
     Mock JPG_DIR env var in converter module to point to test jpg dir
     """
@@ -46,6 +46,15 @@ def mocked_jpg_env_var():
     with mock.patch("scraper.converter.JPG_DIR", mock_dir) as mocked_dir:
         yield mocked_dir
 
+
+@pytest.fixture(scope="session", autouse=True)
+def mocked_jpg_env_var_download():
+    """
+    Mock JPG_DIR env var in converter module to point to test jpg dir
+    """
+    mock_dir = f"{HERE}/tests/test_files/jpgs"
+    with mock.patch("scraper.download.JPG_DIR", mock_dir) as mocked_dir:
+        yield mocked_dir
 
 
 @pytest.fixture(scope="session", autouse=True)

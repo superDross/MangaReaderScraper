@@ -5,6 +5,7 @@ from unittest import mock
 
 import pytest
 
+from scraper.config import HERE
 from scraper.custom_exceptions import VolumeDoesntExist
 from tests.utils import mock_requests_get_return
 
@@ -59,12 +60,9 @@ def test_check_volume_fails(download, manga_bad_volume_html):
 
 def test_get_page_filename(download):
     results = download._get_page_filename(PAGE_URL)
-    # truncate the result to remove dirs above project root
-    project_name = subprocess.check_output(
-        'basename -s .git `git config --get remote.origin.url` | tr -d "\n"', shell=True
-    ).decode("utf-8")
-    index = re.search(project_name, results).start()
-    expected = "MangaReaderScraper/jpgs/dragon-ball-episode-of-bardock_2_2.jpg"
+    # truncate the result to remove dirs project root & above
+    index = re.search("tests", results).start()
+    expected = "tests/test_files/jpgs/dragon-ball-episode-of-bardock_2_2.jpg"
     assert results[index:] == expected
 
 
@@ -83,4 +81,8 @@ def test_download_page(mocked_func, mocked_requests, manga_volume_page_html, dow
     filecontents = open(filename, "r").read()
     assert filecontents == "h"
 
-    os.remove(filename)
+
+def teardown_module(module):
+    files = [f"{HERE}/tests/test_files/jpgs/dragon-ball-episode-of-bardock_2_2.jpg"]
+    for f in files:
+        os.remove(f)
