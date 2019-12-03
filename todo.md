@@ -4,6 +4,7 @@
 - refactor so all BS4 stuff takes place in parser class(es)
 - make changes to GUI (see `gui.py`)
 - use pathlib instea of os module
+- mypy for type checking
 
 - Travis CI
 - setup tools sorted so a proper installation process can work
