@@ -3,13 +3,20 @@ import logging
 import os
 import sys
 
-from PyQt5.QtWidgets import QApplication
-
 from scraper.config import JPG_DIR, MANGA_DIR
 from scraper.converter import convert
 from scraper.download import download_manga
-from scraper.gui import AppGui
 from scraper.menu import SearchMenu
+
+try:
+    # PyQt5 is broken, requires to install PyQt5-sip then PyQt5
+    # however there is no way to specify install order in setup.py
+    # so this nasty hack will have to do now
+    from PyQt5.QtWidgets import QApplication
+    from scraper.gui import AppGui
+except:
+    pass
+
 
 logging.basicConfig(
     level=logging.INFO,
