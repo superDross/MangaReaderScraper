@@ -2,7 +2,7 @@ import functools
 import logging
 import time
 from logging import Logger, LoggerAdapter
-from typing import Callable, Tuple
+from typing import Callable, Optional, Tuple
 
 import bs4
 import requests
@@ -23,8 +23,13 @@ class CustomAdapter(LoggerAdapter):
         return f"[{manga}] {msg}", kwargs
 
 
-def get_adapter(logger: Logger, manga: str, volume: str) -> CustomAdapter:
-    extra = {"manga": manga, "volume": volume}
+def get_adapter(
+    logger: Logger, manga: str, volume: Optional[str] = None
+) -> CustomAdapter:
+    if volume:
+        extra = {"manga": manga, "volume": volume}
+    else:
+        extra = {"manga": manga}
     return CustomAdapter(logger, extra)
 
 

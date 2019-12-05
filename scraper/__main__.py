@@ -2,10 +2,11 @@ import argparse
 import logging
 import os
 import sys
+from typing import Union
 
 from scraper.config import JPG_DIR, MANGA_DIR
 from scraper.converter import convert
-from scraper.download import download_manga
+from scraper.download import Download
 from scraper.menu import SearchMenu
 
 try:
@@ -32,6 +33,16 @@ def gui() -> None:
     app = QApplication(sys.argv)
     ex = AppGui()
     sys.exit(app.exec_())
+
+
+def download_manga(manga: str, volume: Union[str, int]) -> None:
+    downloader = Download(manga)
+    if not os.path.exists(JPG_DIR):
+        os.makedirs(JPG_DIR)
+    if not volume:
+        downloader.download_volumes()
+    else:
+        downloader.download_volume(volume)
 
 
 def cli() -> None:

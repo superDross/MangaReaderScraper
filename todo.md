@@ -1,6 +1,7 @@
 # TODO
 
 - Use config file to determine where to download mangas to (package default config file too)
+- delete jpgs after converting to pdf/cbz
 
 - complete test coverage
 - refactor so all BS4 stuff takes place in parser class(es)
