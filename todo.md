@@ -1,5 +1,7 @@
 # TODO
 
+- Use config file to determine where to download mangas to (package default config file too)
+
 - complete test coverage
 - refactor so all BS4 stuff takes place in parser class(es)
 - make changes to GUI (see `gui.py`)
@@ -7,7 +9,5 @@
 - mypy for type checking
 
 - Travis CI
-- setup tools sorted so a proper installation process can work
-- upload to pypi
 
 - Docker? Not sure if pointless as it is not a web app.

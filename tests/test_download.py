@@ -6,7 +6,7 @@ from unittest import mock
 import pytest
 
 from scraper.config import HERE
-from scraper.custom_exceptions import VolumeDoesntExist
+from scraper.exceptions import VolumeDoesntExist
 from tests.utils import mock_requests_get_return
 
 PAGE_URL = "http://mangareader.net/dragon-ball-episode-of-bardock/2/2"
