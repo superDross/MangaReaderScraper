@@ -19,7 +19,7 @@ class DownloadManga:
     def __init__(self, manga: str) -> None:
         self.manga: str = manga
         self.volume: Optional[int] = None
-        self.adapter: Union[Logger, CustomAdapter] = logging
+        self.adapter: Union[Logger, CustomAdapter] = logger
         self.parser = HTMLParser(manga)
 
     def save_page(self, page: str) -> None:
@@ -58,11 +58,8 @@ class DownloadManga:
         Download all pages and volumes
         """
         all_volume_numbers = self.parser.volumes()
-        # NOTE: download_volume can not be pickled (module pickle error)
         with Pool() as pool:
             pool.map(self.download_volume, all_volume_numbers)
-        # for vol in all_volume_numbers:
-        #     self.download_volume(vol)
 
 
 def download_manga(manga: str, volume: Union[str, int]) -> None:
