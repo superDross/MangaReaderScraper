@@ -6,7 +6,6 @@ import logging
 import os
 from typing import List, Optional, Union
 
-from scraper.config import JPG_DIR
 from scraper.manga import MangaFactory, Volume
 from scraper.utils import download_timer, get_adapter
 
@@ -26,9 +25,8 @@ class Download:
         Download volume page images from a given manga volume
         """
         for page in volume.pages:
-            page_filename = f"{JPG_DIR}/{volume.name}_{volume.number}_{page.number}.jpg"
-            if not os.path.isfile(page_filename):
-                with open(page_filename, "wb") as handler:
+            if not os.path.isfile(page.file_path):
+                with open(page.file_path, "wb") as handler:
                     handler.write(page.img)
 
     @download_timer

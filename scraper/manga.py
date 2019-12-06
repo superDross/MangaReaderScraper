@@ -6,17 +6,19 @@ from dataclasses import dataclass
 from multiprocessing.pool import Pool, ThreadPool
 from typing import List, Optional, Tuple
 
+from scraper.config import JPG_DIR
 from scraper.parsers import MangaParser
 
 
 @dataclass
 class Page:
     """
-    Holds page number and is corresponding image
+    Holds page number, is corresponding image & location
     """
 
     number: int
     img: bytes
+    file_path: str
 
 
 class Volume:
@@ -41,20 +43,27 @@ class Volume:
         """
         self._pages = sorted(self._pages, key=lambda x: x.number)
 
+    def _page_path(self, page_number):
+        return f"{JPG_DIR}/{self.name}_{self.number}_{page_number}.jpg"
+
     @property
     def pages(self) -> None:
         return self._pages
 
     @pages.setter
     def pages(self, metadata: List[Tuple[int, bytes]]) -> None:
-        self._pages = [Page(number, img) for number, img in metadata]
+
+        self._pages = [
+            Page(number, img, self._page_path(number)) for number, img in metadata
+        ]
         self._sort_pages()
 
     def add_page(self, page_number: int, img: bytes) -> None:
         """
         Appends a Page object from a page number & its image
         """
-        page = Page(manga=self, number=page_number, img=img)
+        file_path = self._page_path(page_number)
+        page = Page(number=page_number, img=img, file_path=file_path)
         self._pages.append(page)
         self._sort_pages()
 
