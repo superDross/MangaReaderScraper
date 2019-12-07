@@ -6,6 +6,7 @@ import logging
 import os
 from typing import List, Optional, Union
 
+from scraper.config import MANGA_DIR
 from scraper.manga import MangaFactory, Volume
 from scraper.utils import download_timer, get_adapter
 
