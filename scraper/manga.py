@@ -2,7 +2,6 @@
 Manga building blocks & factories
 """
 
-import os
 from dataclasses import dataclass
 from multiprocessing.pool import Pool, ThreadPool
 from typing import Dict, List, Optional
@@ -17,7 +16,7 @@ MANGA_DIR = settings()["manga_directory"]
 @dataclass(frozen=True, repr=False)
 class Page:
     """
-    Holds page number, image data & file location
+    Holds page number & its image
     """
 
     number: int
@@ -37,8 +36,7 @@ class Volume:
     Manga volume & its pages
     """
 
-    def __init__(self, name: str, number: int, file_path: str) -> None:
-        self.name: str = name
+    def __init__(self, number: int, file_path: str) -> None:
         self.number: int = number
         self.file_path: str = file_path
         self._pages: Dict[int, Page] = {}
@@ -81,7 +79,7 @@ class Volume:
         self._pages[page_number] = page
 
     def total_pages(self) -> int:
-        return max(self.pages[-1])
+        return max(self.pages[-1].number)
 
 
 class Manga:
@@ -126,11 +124,11 @@ class Manga:
         if self.volume.get(volume_number):
             raise ValueError(f"Volume {volume_number} is already present")
         vol_path = self._volume_path(volume_number)
-        volume = Volume(name=self.name, number=volume_number, file_path=vol_path)
+        volume = Volume(number=volume_number, file_path=vol_path)
         self._volumes[volume.number] = volume
 
 
-class MangaFactory:
+class MangaBuilder:
     """
     Creates Manga objects
     """

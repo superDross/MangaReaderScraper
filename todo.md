@@ -1,11 +1,5 @@
 # TODO
 
-## Refactor
-
-### Essential
-
-- Use config file to determine where to download mangas to (package default config file too)
-
 ## Future
 
 - Fuzzy search --manga arg if an exact match is not found

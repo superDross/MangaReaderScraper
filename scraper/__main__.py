@@ -1,10 +1,8 @@
 import argparse
 import logging
-import os
 import sys
-from typing import Optional, Union
 
-from scraper.download import Download
+from scraper.download import download_manga
 from scraper.menu import SearchMenu
 from scraper.utils import settings
 
@@ -34,11 +32,6 @@ def gui() -> None:
     app = QApplication(sys.argv)
     ex = AppGui()
     sys.exit(app.exec_())
-
-
-def download_manga(manga_name: str, volume: Optional[int], filetype: str) -> None:
-    downloader = Download(manga_name, filetype)
-    downloader.download_volumes(volume)
 
 
 def cli() -> None:

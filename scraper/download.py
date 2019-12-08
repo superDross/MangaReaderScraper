@@ -13,7 +13,7 @@ from PIL import Image
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
-from scraper.manga import MangaFactory, Volume
+from scraper.manga import MangaBuilder, Volume
 from scraper.utils import download_timer, get_adapter, settings
 
 logger = logging.getLogger(__name__)
@@ -27,7 +27,8 @@ class Download:
     """
 
     def __init__(self, manga_name: str, filetype: str) -> None:
-        self.factory = MangaFactory(manga_name)
+        self.manga_name = manga_name
+        self.factory = MangaBuilder(manga_name)
         self.adapter = get_adapter(logger, manga_name)
         self.type = filetype
 
@@ -60,7 +61,7 @@ class Download:
         """
         with zipfile.ZipFile(volume.file_path, "w") as cbz:
             for num, page in enumerate(volume.pages):
-                tmp_jpg = f"/tmp/page_{num}.jpg"
+                tmp_jpg = f"/tmp/{self.manga_name}_{volume.number}_page_{num}.jpg"
                 with open(tmp_jpg, "wb") as f:
                     f.write(page.img)
                 cbz.write(tmp_jpg)
@@ -85,3 +86,8 @@ class Download:
         with Pool() as pool:
             pool.map(save_method, manga.volumes)
         self.adapter.info(f"All volumes downloaded")
+
+
+def download_manga(manga_name: str, volume: Optional[int], filetype: str) -> None:
+    downloader = Download(manga_name, filetype)
+    downloader.download_volumes(volume)

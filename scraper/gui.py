@@ -5,9 +5,9 @@ import PyQt5.QtCore as qtc
 import PyQt5.QtWidgets as qtw
 from PyQt5.QtWidgets import QCheckBox, QComboBox
 
-from scraper.converter import convert
 from scraper.download import download_manga
-from scraper.search import Search
+from scraper.parsers import get_search_results
+from scraper.table import TableProducer
 
 # https://pythonspot.com/pyqt5-tabs/
 # https://build-system.fman.io/pyqt5-tutorial
@@ -182,9 +182,10 @@ class SearchTab(qtw.QWidget):
         """
         Used to submit query for search
         """
-        search = Search()
-        search.search(self.search_line.text())
-        self.table.construct(search.results)
+        search_results = get_search_results(self.search_line.text())
+        table = TableProducer()
+        table.generate(search_results)
+        self.table.construct(table.results)
         self.search_line.clear()
         self.table.download_list = []
 
@@ -194,8 +195,8 @@ class SearchTab(qtw.QWidget):
             return self._msg_box("Please select something")
         for entry in self.table.download_list:
             url, volume, cbz = entry
-            download_manga(url, volume)
-            convert(url, volume, cbz)
+            filetype = "cbz" if cbz else "pdf"
+            download_manga(url, volume, filetype)
         self._msg_box("Download complete!")
 
 
