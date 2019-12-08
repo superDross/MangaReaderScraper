@@ -1,5 +1,7 @@
+import configparser
 import functools
 import logging
+import os
 import time
 from logging import Logger, LoggerAdapter
 from typing import Callable, Optional, Tuple
@@ -60,3 +62,28 @@ def download_timer(func: Callable) -> Callable:
         return returned
 
     return wrapper_timer
+
+
+def create_base_config() -> None:
+    config = configparser.ConfigParser()
+    config.add_section("config")
+
+    user_home = os.path.expanduser("~")
+    config["config"]["manga_directory"] = f"{user_home}/Downloads"
+    config["config"]["manga_url"] = "http://mangareader.net"
+
+    configpath = f"{user_home}/.config/mangascraper.ini"
+    with open(configpath, "w") as configfile:
+        config.write(configfile)
+
+
+def settings() -> configparser.SectionProxy:
+    """
+    Retrieve settings file contents
+    """
+    config = configparser.ConfigParser()
+    user_config = f"{os.path.expanduser('~')}/.config/mangascraper.ini"
+    if not os.path.exists(user_config):
+        create_base_config()
+    config.read(user_config)
+    return config["config"]

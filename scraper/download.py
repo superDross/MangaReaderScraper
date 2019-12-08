@@ -5,17 +5,20 @@ Downloads manga page images
 import logging
 import os
 import zipfile
+from io import BytesIO
 from multiprocessing.pool import Pool
 from typing import Callable, List, Optional
 
 from PIL import Image
+from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
-from scraper.config import MANGA_DIR
 from scraper.manga import MangaFactory, Volume
-from scraper.utils import download_timer, get_adapter
+from scraper.utils import download_timer, get_adapter, settings
 
 logger = logging.getLogger(__name__)
+
+MANGA_DIR = settings()["manga_directory"]
 
 
 class Download:
@@ -38,26 +41,30 @@ class Download:
 
     def _to_pdf(self, volume: Volume) -> None:
         """
-        Convert all page images to a PDF file.
+        Save all pages to a PDF file
         """
-        # TODO: possible to add page.img instead of filepath?
-        #       this would mean we would not have to save images to disk
         c = canvas.Canvas(volume.file_path)
         for page in volume.pages:
-            cover = Image.open(page.file_path)
+            img = BytesIO(page.img)
+            cover = Image.open(img)
             width, height = cover.size
             c.setPageSize((width, height))
-            c.drawImage(page.file_path, x=0, y=0)
+            imgreader = ImageReader(img)
+            c.drawImage(imgreader, x=0, y=0)
             c.showPage()
         c.save()
 
     def _to_cbz(self, volume: Volume) -> None:
         """
-        Convert all page images to a CBZ file.
+        Save all pages to a CBZ file
         """
         with zipfile.ZipFile(volume.file_path, "w") as cbz:
-            for page in volume.pages:
-                cbz.write(page.file_path, page.file_path)
+            for num, page in enumerate(volume.pages):
+                tmp_jpg = f"/tmp/page_{num}.jpg"
+                with open(tmp_jpg, "wb") as f:
+                    f.write(page.img)
+                cbz.write(tmp_jpg)
+                os.remove(tmp_jpg)
 
     def _get_save_method(self) -> Callable:
         """
@@ -74,7 +81,6 @@ class Download:
         self.adapter.info(f"Starting Downloads")
         manga = self.factory.get_manga_volumes(vol_nums, self.type)
         self._create_manga_dir(manga.name)
-        manga.save()
         save_method = self._get_save_method()
         with Pool() as pool:
             pool.map(save_method, manga.volumes)

@@ -4,9 +4,9 @@ import os
 import sys
 from typing import Optional, Union
 
-from scraper.config import JPG_DIR, MANGA_DIR
 from scraper.download import Download
 from scraper.menu import SearchMenu
+from scraper.utils import settings
 
 try:
     # PyQt5 is broken, requires to install PyQt5-sip then PyQt5
@@ -16,6 +16,8 @@ try:
     from scraper.gui import AppGui
 except:
     pass
+
+MANGA_DIR = settings()["manga_directory"]
 
 
 logging.basicConfig(
@@ -36,8 +38,6 @@ def gui() -> None:
 
 def download_manga(manga_name: str, volume: Optional[int], filetype: str) -> None:
     downloader = Download(manga_name, filetype)
-    if not os.path.exists(JPG_DIR):
-        os.makedirs(JPG_DIR)
     downloader.download_volumes(volume)
 
 
@@ -52,16 +52,15 @@ def cli() -> None:
         volume = input(msg)
         if "-" in volume:
             start, end = volume.split("-")
-            args["volume"] = list(range(int(start), int(end) + 1))
+            args["volumes"] = list(range(int(start), int(end) + 1))
         elif volume:
-            args["volume"] = [int(x) for x in volume.split()]
+            args["volumes"] = [int(x) for x in volume.split()]
         else:
-            args["volume"] = None
+            args["volumes"] = None
 
     filetype = "cbz" if args["cbz"] else "pdf"
 
-    download_manga(args["manga"], args["volume"], filetype)
-    clean_up()
+    download_manga(args["manga"], args["volumes"], filetype)
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -73,21 +72,13 @@ def get_parser() -> argparse.ArgumentParser:
         "--search", "-s", type=str, help="search manga reader", nargs="*"
     )
     parser.add_argument(
-        "--volume", "-v", nargs="+", type=int, help="manga volume to download"
+        "--volumes", "-v", nargs="+", type=int, help="manga volume to download"
     )
     parser.add_argument("--output", "-o", default=MANGA_DIR)
     parser.add_argument(
         "--cbz", action="store_true", help="output in cbz format instead of pdf"
     )
     return parser
-
-
-def clean_up() -> None:
-    """ Delete all scrapped jpg files."""
-    directory = JPG_DIR
-    for jpg in os.listdir(directory):
-        # os.remove(os.path.join(directory, jpg))
-        pass
 
 
 if __name__ == "__main__":

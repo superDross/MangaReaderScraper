@@ -7,9 +7,11 @@ from dataclasses import dataclass
 from multiprocessing.pool import Pool, ThreadPool
 from typing import Dict, List, Optional
 
-from scraper.config import JPG_DIR, MANGA_DIR
 from scraper.new_types import PageData, VolumeData
 from scraper.parsers import MangaParser
+from scraper.utils import settings
+
+MANGA_DIR = settings()["manga_directory"]
 
 
 @dataclass(frozen=True, repr=False)
@@ -20,23 +22,14 @@ class Page:
 
     number: int
     img: bytes
-    file_path: str
 
     def __repr__(self) -> str:
         img = True if self.img else False
-        return f"Page(number={self.number}, img={img}, file_path={self.file_path})"
+        return f"Page(number={self.number}, img={img})"
 
     def __str__(self) -> str:
         img = True if self.img else False
-        return f"Page(number={self.number}, img={img}, file_path={self.file_path})"
-
-    def save(self) -> None:
-        """
-        Save page image to disk
-        """
-        if not os.path.isfile(self.file_path):
-            with open(self.file_path, "wb") as handler:
-                handler.write(self.img)
+        return f"Page(number={self.number}, img={img})"
 
 
 class Volume:
@@ -60,9 +53,6 @@ class Volume:
         for page in self.pages:
             yield page
 
-    def _page_path(self, page_number: int) -> str:
-        return f"{JPG_DIR}/{self.name}_{self.number}_{page_number}.jpg"
-
     @property
     def page(self) -> None:
         return self._pages
@@ -77,8 +67,7 @@ class Volume:
     def pages(self, metadata: List[PageData]) -> None:
         self._pages = {}
         for page_number, img in metadata:
-            page_file_path = self._page_path(page_number)
-            page = Page(number=page_number, img=img, file_path=page_file_path,)
+            page = Page(number=page_number, img=img)
             self._pages[page_number] = page
 
     def add_page(self, page_number: int, img: bytes) -> None:
@@ -139,14 +128,6 @@ class Manga:
         vol_path = self._volume_path(volume_number)
         volume = Volume(name=self.name, number=volume_number, file_path=vol_path)
         self._volumes[volume.number] = volume
-
-    def save(self) -> None:
-        """
-        Saves all manga volumes page images to disk
-        """
-        for volume in self.volumes:
-            for page in volume.pages:
-                page.save()
 
 
 class MangaFactory:

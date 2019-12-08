@@ -8,9 +8,10 @@ from typing import List, Tuple
 import requests
 from bs4 import BeautifulSoup
 
-from scraper.config import MANGA_URL
 from scraper.exceptions import VolumeDoesntExist
-from scraper.utils import get_html_from_url
+from scraper.utils import get_html_from_url, settings
+
+MANGA_URL = settings()["manga_url"]
 
 
 class MangaParser:

@@ -19,7 +19,7 @@ setuptools.setup(
     version="0.1",
     author="superDross",
     author_email="dross78375@gmail.com",
-    description="Manga scrapier",
+    description="Manga scraper",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/superDross/MangaReaderScraper",
