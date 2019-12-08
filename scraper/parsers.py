@@ -43,7 +43,7 @@ class MangaParser:
 
     def page_data(self, page_url: str) -> Tuple[int, bytes]:
         """
-        Returns a Page object by scraping from a a given url
+        Returns a Page object by scraping from a given url
         """
         volume_num, page_num = page_url.split("/")[-2:]
         if not volume_num.isdigit():
@@ -51,14 +51,14 @@ class MangaParser:
         page_html = get_html_from_url(page_url)
         img_url = page_html.find("img").get("src")
         img_data = requests.get(img_url).content
-        return (page_num, img_data)
+        return (int(page_num), img_data)
 
-    def all_volume_numbers(self) -> List[str]:
+    def all_volume_numbers(self) -> List[int]:
         """
         All volume numbers for a manga
         """
         url = f"{MANGA_URL}/{self.manga_name}"
         manga_html = get_html_from_url(url)
         volume_tags = manga_html.find("div", id="chapterlist").find_all("a")
-        volume_numbers = [vol.get("href").split("/")[-1] for vol in volume_tags]
+        volume_numbers = [int(vol.get("href").split("/")[-1]) for vol in volume_tags]
         return volume_numbers

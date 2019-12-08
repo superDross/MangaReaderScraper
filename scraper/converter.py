@@ -99,12 +99,12 @@ class Conversion:
         converter()
         self.adapter.info(f"Created {self.filename}")
 
-    def convert_volumes(self, volumes: str) -> None:
-        start, end = volumes.replace(" ", "").split("-")
-        if not start.isdigit() and not end.isdigit():
-            raise TypeError("volumes arg must be a number")
-        all_vols = [vol for vol in range(int(start), int(end) + 1)]
-        for volume in sorted(all_vols):
+    def convert_volumes(self, volumes: int) -> None:
+        # start, end = volumes.replace(" ", "").split("-")
+        # if not start.isdigit() and not end.isdigit():
+        #     raise TypeError("volumes arg must be a number")
+        # all_vols = [vol for vol in range(int(start), int(end) + 1)]
+        for volume in sorted(volumes):
             self.convert_volume(volume)
             self.images = []
 
@@ -116,16 +116,12 @@ class Conversion:
             self.images = []
 
 
-def convert(manga: str, volume: int, cbz: bool) -> None:
+def convert(manga: str, volumes: list, cbz: bool) -> None:
     conversion = Conversion(manga)
     conversion.type = "cbz" if cbz else "pdf"
     if not os.path.exists(MANGA_DIR):
         os.makedirs(MANGA_DIR)
-    if not volume:
+    if not volumes:
         conversion.convert_all_volumes()
-    elif volume.isdigit() or isinstance(volume, int):
-        conversion.convert_volume(volume)
-    elif isinstance(volume, str):
-        conversion.convert_volumes(volume)
-    else:
-        raise ValueError(f"Unknown volume: {volume}")
+    elif isinstance(volumes, list):
+        conversion.convert_volumes(volumes)

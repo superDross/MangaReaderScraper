@@ -56,10 +56,7 @@ def download_timer(func: Callable) -> Callable:
         start = time.time()
         returned = func(*args)
         run_time = round(time.time() - start, 1)
-        if len(args) > 1:
-            logging.info(f"Volume {args[-1]} downloaded in {run_time} seconds")
-        else:
-            logging.info(f"All volumes downloaded in {run_time} seconds")
+        logging.info(f"Volumes downloaded in {run_time} seconds")
         return returned
 
     return wrapper_timer

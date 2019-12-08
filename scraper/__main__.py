@@ -2,7 +2,7 @@ import argparse
 import logging
 import os
 import sys
-from typing import Union
+from typing import Optional, Union
 
 from scraper.config import JPG_DIR, MANGA_DIR
 from scraper.converter import convert
@@ -35,14 +35,11 @@ def gui() -> None:
     sys.exit(app.exec_())
 
 
-def download_manga(manga: str, volume: Union[str, int]) -> None:
+def download_manga(manga: str, volume: Optional[int]) -> None:
     downloader = Download(manga)
     if not os.path.exists(JPG_DIR):
         os.makedirs(JPG_DIR)
-    if not volume:
-        downloader.download_volumes()
-    else:
-        downloader.download_volume(volume)
+    downloader.download_volumes(volume)
 
 
 def cli() -> None:
@@ -69,7 +66,9 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--search", "-s", type=str, help="search manga reader", nargs="*"
     )
-    parser.add_argument("--volume", "-v", type=int, help="manga volume to download")
+    parser.add_argument(
+        "--volume", "-v", nargs="+", type=int, help="manga volume to download"
+    )
     parser.add_argument("--output", "-o", default=MANGA_DIR)
     parser.add_argument(
         "--cbz", action="store_true", help="output in cbz format instead of pdf"
