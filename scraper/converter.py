@@ -7,12 +7,14 @@ from logging import Logger
 from typing import List, Union
 
 from PIL import Image
-
 from reportlab.pdfgen import canvas
+
 from scraper.config import JPG_DIR, MANGA_DIR
 from scraper.utils import CustomAdapter, get_adapter
 
 logger = logging.getLogger(__name__)
+
+# TODO: fix filetype in Manga; filename only saves with pdf extension
 
 
 class Conversion:

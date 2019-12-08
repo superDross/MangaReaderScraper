@@ -62,3 +62,21 @@ class MangaParser:
         volume_tags = manga_html.find("div", id="chapterlist").find_all("a")
         volume_numbers = [int(vol.get("href").split("/")[-1]) for vol in volume_tags]
         return volume_numbers
+
+
+def get_search_results(
+    query: str,
+    manga_type: int = 0,
+    manga_status: int = 0,
+    order: int = 0,
+    genre: str = "0000000000000000000000000000000000000",
+) -> List[str]:
+    """
+    Scrape and return HTML dict with search results
+    """
+    # TODO: change to class when integrating args e.g. genre
+    url = f"""{MANGA_URL}/search/?w={query}&rd={manga_type}
+               &status={manga_status}&order=0&genre={genre}&p=0"""
+    html_response = get_html_from_url(url)
+    search_results = html_response.find_all("div", {"class": "mangaresultitem"})
+    return search_results

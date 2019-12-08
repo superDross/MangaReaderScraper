@@ -1,6 +1,7 @@
 """
 Manga building blocks & factories
 """
+
 import os
 from dataclasses import dataclass
 from multiprocessing.pool import Pool, ThreadPool
@@ -22,6 +23,10 @@ class Page:
     file_path: str
 
     def __repr__(self) -> str:
+        img = True if self.img else False
+        return f"Page(number={self.number}, img={img}, file_path={self.file_path})"
+
+    def __str__(self) -> str:
         img = True if self.img else False
         return f"Page(number={self.number}, img={img}, file_path={self.file_path})"
 

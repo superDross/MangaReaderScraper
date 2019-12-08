@@ -1,7 +1,8 @@
 import time
 from typing import Dict, List, Optional
 
-from scraper.search import Search
+from scraper.parsers import get_search_results
+from scraper.tables import TableProducer
 
 
 class Menu:
@@ -65,18 +66,19 @@ class Menu:
 
 class SearchMenu(Menu):
     def __init__(self, query: str) -> None:
-        self.search_results: Search = self._search(query)
+        self.search_results: str = self._search(query)
         choices: str = self.search_results.table
         options: Dict[str, str] = self._create_options()
         Menu.__init__(self, options, choices)
 
-    def _search(self, query: str) -> Search:
+    def _search(self, query: str) -> str:
         """
         Search for query and return Search object
         """
-        s = Search()
-        s.search(query)
-        return s
+        search_results = get_search_results(query)
+        factory = TableProducer()
+        factory.generate(search_results)
+        return factory
 
     def _create_options(self) -> Dict[str, str]:
         """

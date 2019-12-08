@@ -50,8 +50,14 @@ def cli() -> None:
         menu = SearchMenu(args["search"])
         args["manga"] = menu.handle_options()
         msg = "Which volume do you want to download (Enter alone to download all volumes)?\n"
-        args["volume"] = input(msg)
-        args["volume"] = None if args["volume"] == "" else args["volume"]
+        volume = input(msg)
+        if "-" in volume:
+            start, end = volume.split("-")
+            args["volume"] = list(range(int(start), int(end) + 1))
+        elif volume:
+            args["volume"] = [int(x) for x in volume.split()]
+        else:
+            args["volume"] = None
 
     download_manga(args["manga"], args["volume"])
     convert(args["manga"], args["volume"], args["cbz"])

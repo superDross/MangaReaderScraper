@@ -3,31 +3,17 @@ from typing import Dict, List
 
 from tabulate import tabulate
 
-from scraper.config import MANGA_URL
-from scraper.utils import get_html_from_url
+from scraper.parsers import get_search_results
 
 
-class Search:
+class TableProducer:
+    """
+    Search results table
+    """
+
     def __init__(self) -> None:
         self.results: Dict[str, Dict[str, str]] = {}
         self.table: str = None
-
-    def _get_search_results(
-        self,
-        query: str,
-        manga_type: int = 0,
-        manga_status: int = 0,
-        order: int = 0,
-        genre: str = "0000000000000000000000000000000000000",
-    ) -> List[str]:
-        """
-        Scrape and return HTML dict with search results
-        """
-        url = f"""{MANGA_URL}/search/?w={query}&rd={manga_type}
-                   &status={manga_status}&order=0&genre={genre}&p=0"""
-        html_response = get_html_from_url(url)
-        search_results = html_response.find_all("div", {"class": "mangaresultitem"})
-        return search_results
 
     def _extract_text(self, result: str) -> Dict[str, str]:
         """
@@ -65,7 +51,10 @@ class Search:
         table = tabulate(data, headers=columns, tablefmt="psql")
         self.table = table
 
-    def search(self, query: str) -> None:
-        results = self._get_search_results(query)
-        self._extract_metadata(results)
+    def generate(self, search_results: List[str]) -> str:
+        """
+        Generate search results into a table
+        """
+        self._extract_metadata(search_results)
         self._to_table()
+        return self.table
