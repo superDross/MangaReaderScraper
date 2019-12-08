@@ -44,9 +44,10 @@ class Volume:
     Manga volume & its pages
     """
 
-    def __init__(self, name: str, number: int) -> None:
+    def __init__(self, name: str, number: int, file_path: str) -> None:
         self.name: str = name
         self.number: int = number
+        self.file_path: str = file_path
         self._pages: Dict[int, Page] = {}
 
     def __repr__(self) -> str:
@@ -112,8 +113,8 @@ class Manga:
 
     def _volume_path(self, volume_number: int) -> str:
         return (
-            f"{MANGA_DIR}/{self.manga}/{self.manga}"
-            f"_volume_{self.volume}.{self.filetype}"
+            f"{MANGA_DIR}/{self.name}/{self.name}"
+            f"_volume_{volume_number}.{self.filetype}"
         )
 
     @property
@@ -135,7 +136,8 @@ class Manga:
     def add_volume(self, volume_number: int) -> None:
         if self.volume.get(volume_number):
             raise ValueError(f"Volume {volume_number} is already present")
-        volume = Volume(name=self.name, number=volume_number)
+        vol_path = self._volume_path(volume_number)
+        volume = Volume(name=self.name, number=volume_number, file_path=vol_path)
         self._volumes[volume.number] = volume
 
     def save(self) -> None:
@@ -178,12 +180,14 @@ class MangaFactory:
         with Pool() as pool:
             return pool.map(self._get_volume_data, vol_nums)
 
-    def get_manga_volumes(self, vol_nums: Optional[List[int]] = None) -> Manga:
+    def get_manga_volumes(
+        self, vol_nums: Optional[List[int]] = None, filetype: str = "pdf"
+    ) -> Manga:
         """
         Returns a Manga object containing the requested volumes
         """
         volumes_data = self._get_volumes_data(vol_nums)
-        manga = Manga(self.parser.manga_name)
+        manga = Manga(self.parser.manga_name, filetype)
         for volume_data in volumes_data:
             volume_number, pages_data = volume_data
             manga.add_volume(volume_number)

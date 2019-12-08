@@ -5,7 +5,6 @@ import sys
 from typing import Optional, Union
 
 from scraper.config import JPG_DIR, MANGA_DIR
-from scraper.converter import convert
 from scraper.download import Download
 from scraper.menu import SearchMenu
 
@@ -35,8 +34,8 @@ def gui() -> None:
     sys.exit(app.exec_())
 
 
-def download_manga(manga: str, volume: Optional[int]) -> None:
-    downloader = Download(manga)
+def download_manga(manga_name: str, volume: Optional[int], filetype: str) -> None:
+    downloader = Download(manga_name, filetype)
     if not os.path.exists(JPG_DIR):
         os.makedirs(JPG_DIR)
     downloader.download_volumes(volume)
@@ -59,8 +58,9 @@ def cli() -> None:
         else:
             args["volume"] = None
 
-    download_manga(args["manga"], args["volume"])
-    convert(args["manga"], args["volume"], args["cbz"])
+    filetype = "cbz" if args["cbz"] else "pdf"
+
+    download_manga(args["manga"], args["volume"], filetype)
     clean_up()
 
 
