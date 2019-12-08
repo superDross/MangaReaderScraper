@@ -1,5 +1,7 @@
 # TODO
 
+Tests
+
 ## Future
 
 - Fuzzy search --manga arg if an exact match is not found

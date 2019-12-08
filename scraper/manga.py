@@ -2,10 +2,11 @@
 Manga building blocks & factories
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from multiprocessing.pool import Pool, ThreadPool
 from typing import Dict, List, Optional
 
+from scraper.exceptions import PageAlreadyPresent, VolumeAlreadyPresent
 from scraper.new_types import PageData, VolumeData
 from scraper.parsers import MangaParser
 from scraper.utils import settings
@@ -31,15 +32,15 @@ class Page:
         return f"Page(number={self.number}, img={img})"
 
 
+@dataclass
 class Volume:
     """
     Manga volume & its pages
     """
 
-    def __init__(self, number: int, file_path: str) -> None:
-        self.number: int = number
-        self.file_path: str = file_path
-        self._pages: Dict[int, Page] = {}
+    number: int
+    file_path: str
+    _pages: Dict[int, Page] = field(default_factory=dict, repr=False)
 
     def __repr__(self) -> str:
         return f"Volume(number={self.number}, pages={len(self.pages)})"
@@ -73,20 +74,23 @@ class Volume:
         Appends a Page object from a page number & its image
         """
         if self.page.get(page_number):
-            raise ValueError(f"Page {page_number} is already present")
-        file_path = self._page_path(page_number)
-        page = Page(number=page_number, img=img, file_path=file_path)
+            raise PageAlreadyPresent(f"Page {page_number} is already present")
+        page = Page(number=page_number, img=img)
         self._pages[page_number] = page
 
     def total_pages(self) -> int:
-        return max(self.pages[-1].number)
+        return max(self.page)
 
 
+@dataclass
 class Manga:
-    def __init__(self, name: str, filetype: str = "pdf") -> None:
-        self.name: str = name
-        self.filetype: str = filetype
-        self._volumes: Dict[int, Volume] = {}
+    """
+    Manga with volume and pages objects
+    """
+
+    name: str
+    filetype: str
+    _volumes: Dict[int, Volume] = field(default_factory=dict, repr=False)
 
     def __repr__(self) -> str:
         return f"Manga(name={self.name}, volumes={len(self.volumes)})"
@@ -122,7 +126,7 @@ class Manga:
 
     def add_volume(self, volume_number: int) -> None:
         if self.volume.get(volume_number):
-            raise ValueError(f"Volume {volume_number} is already present")
+            raise VolumeAlreadyPresent(f"Volume {volume_number} is already present")
         vol_path = self._volume_path(volume_number)
         volume = Volume(number=volume_number, file_path=vol_path)
         self._volumes[volume.number] = volume

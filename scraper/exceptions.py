@@ -22,3 +22,11 @@ class MangaDoesNotExist(Exception):
         Exception.__init__(self, msg)
         self.manga = manga
         self.msg = msg
+
+
+class PageAlreadyPresent(Exception):
+    pass
+
+
+class VolumeAlreadyPresent(Exception):
+    pass
