@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QCheckBox, QComboBox
 
 from scraper.download import download_manga
 from scraper.parsers import get_search_results
-from scraper.table import TableProducer
+from scraper.tables import TableProducer
 
 # https://pythonspot.com/pyqt5-tabs/
 # https://build-system.fman.io/pyqt5-tutorial
