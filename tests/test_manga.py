@@ -3,7 +3,17 @@ from unittest import mock
 import pytest
 
 from scraper.exceptions import PageAlreadyPresent, VolumeAlreadyPresent
-from scraper.manga import Manga, Page, Volume
+from scraper.manga import Manga, MangaBuilder, Page, Volume
+
+
+def test_page_repr(page):
+    expected = f"Page(number={page.number}, img=True)"
+    assert page.__repr__() == expected
+
+
+def test_page_str(page):
+    expected = f"Page(number={page.number}, img=True)"
+    assert page.__str__() == expected
 
 
 def test_volume_add_page():
@@ -22,6 +32,22 @@ def test_add_multiple_pages_to_volume():
     assert len(volume.page) == 2
 
 
+def test_volume_repr(volume):
+    expected = f"Volume(number={volume.number}, pages={len(volume.pages)})"
+    assert volume.__repr__() == expected
+
+
+def test_volume_str(volume):
+    expected = f"Volume(number={volume.number}, pages={len(volume.pages)})"
+    assert volume.__str__() == expected
+
+
+def test_volume_iter(volume):
+    generator = volume.__iter__()
+    values = list(generator)
+    assert values == volume.pages
+
+
 def test_volume_total_pages(volume):
     assert volume.total_pages() == 2
 
@@ -35,9 +61,11 @@ def test_pages_property_in_volume_returns_a_sorted_list(volume):
     volume.add_page(12, b"blah")
     volume.add_page(6, b"jk")
     volume.add_page(3, b"something")
+    img1 = open("tests/test_files/jpgs/test-manga_1_1.jpg", "rb")
+    img2 = open("tests/test_files/jpgs/test-manga_1_2.jpg", "rb")
     expected = [
-        Page(1, b"here"),
-        Page(2, b"bye"),
+        Page(1, img1.read()),
+        Page(2, img2.read()),
         Page(3, b"something"),
         Page(6, b"jk"),
         Page(12, b"blah"),
@@ -99,3 +127,49 @@ def test_volumes_property_in_manga_returns_a_sorted_list(manga):
 
 def test_get_page_2_from_manga(manga):
     assert manga.volume[1].page[2] == Page(2, b"bye")
+
+
+def test_manga_repr(manga):
+    expected = f"Manga(name={manga.name}, volumes={len(manga.volumes)})"
+    assert manga.__repr__() == expected
+
+
+def test_manga_str(manga):
+    expected = f"Manga(name={manga.name}, volumes={len(manga.volumes)})"
+    assert manga.__str__() == expected
+
+
+def test_manga_iter(manga):
+    generator = manga.__iter__()
+    values = list(generator)
+    assert values == manga.volumes
+
+
+@pytest.mark.parametrize("inval", [[1, 2, 3], None])
+def test_mangabuilder_get_all_volumes(inval, parser):
+    with mock.patch("scraper.manga.MangaParser", parser):
+        builder = MangaBuilder(manga_name="dragon-ball")
+        manga = builder.get_manga_volumes(vol_nums=inval)
+        v1 = Volume(1, "/tmp/dragon-ball/dragon-ball_volume_1.pdf")
+        v2 = Volume(2, "/tmp/dragon-ball/dragon-ball_volume_2.pdf")
+        v3 = Volume(3, "/tmp/dragon-ball/dragon-ball_volume_3.pdf")
+        pages = [(1, b"page 1 img"), (2, b"page 2 img")]
+        v1.pages = pages
+        v2.pages = pages
+        v3.pages = pages
+        assert manga.volumes == [v1, v2, v3]
+        assert manga.volume[2] == v2
+        assert manga.volume[1].page[1] == v1.page[1]
+        assert manga.volume[3].page[2] == v1.page[2]
+
+
+def test_mangabuilder_get_single_volumes(parser):
+    with mock.patch("scraper.manga.MangaParser", parser):
+        builder = MangaBuilder(manga_name="dragon-ball")
+        manga = builder.get_manga_volumes(vol_nums=[1])
+        v1 = Volume(1, "/tmp/dragon-ball/dragon-ball_volume_1.pdf")
+        pages = [(1, b"page 1 img"), (2, b"page 2 img")]
+        v1.pages = pages
+        assert manga.volumes == [v1]
+        assert manga.volume[1] == v1
+        assert manga.volume[1].page[1] == v1.page[1]

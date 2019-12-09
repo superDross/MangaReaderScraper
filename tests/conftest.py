@@ -1,0 +1,163 @@
+"""
+Pytest fixtures
+"""
+
+import logging
+import os
+from unittest import mock
+
+import pytest
+from bs4 import BeautifulSoup
+
+from scraper.manga import Manga, MangaBuilder, Page, Volume
+from scraper.parsers import MangaParser
+from scraper.utils import get_html_from_url
+
+
+class MockedMangaParser:
+    """
+    Mocks MangaParser
+
+    Can't use MagicMock as it results in a pickling error when used with
+    multiprocessig, hence the need for this hack.
+    """
+
+    def __init__(self, manga_name):
+        self.manga_name = manga_name
+
+    def all_volume_numbers(self):
+        return [1, 2, 3]
+
+    def page_urls(self, volume):
+        return [
+            f"http://mangareader.net/dragon-ball-episode-of-bardock/{volume}",
+            f"http://mangareader.net/dragon-ball-episode-of-bardock/{volume}/2",
+        ]
+
+    def page_data(self, page_url):
+        volume_num, page_num = page_url.split("/")[-2:]
+        if not volume_num.isdigit():
+            page_num = "1"
+        return (int(page_num), bytes(f"page {page_num} img", "utf-8"))
+
+
+def get_html_file(filepath):
+    with open(filepath, "r") as f:
+        return f.read()
+
+
+def get_bs4_tree(filepath):
+    html_string = get_html_file(filepath)
+    html = BeautifulSoup(html_string, features="lxml")
+    return html
+
+
+def get_images():
+    """
+    Opens a list of two jpeg images
+    """
+    return [
+        open(f"tests/test_files/jpgs/test-manga_1_{n}.jpg", "rb").read() for n in [1, 2]
+    ]
+
+
+@pytest.fixture(scope="session", autouse=True)
+def mocked_manga_env_var():
+    """
+    Mock MANGA_DIR env var in manga module to point to /tmp/ dir
+
+    This will be applied to every single test prior to execution
+    """
+    mock_dir = f"/tmp"
+    with mock.patch("scraper.manga.MANGA_DIR", mock_dir) as mocked_dir:
+        yield mocked_dir
+
+
+@pytest.fixture
+def parser():
+    return MockedMangaParser
+
+
+@pytest.fixture
+def search_html() -> BeautifulSoup:
+    """
+    HTML result after searching for query 'dragonball'
+    """
+    html_path = "tests/test_files/dragonball_search.html"
+    html = get_bs4_tree(html_path)
+    return html
+
+
+@pytest.fixture
+def invalid_search_html() -> BeautifulSoup:
+    """
+    HTML result after searching for something that has no matches
+    """
+    html_path = "tests/test_files/no_search_results_found.html"
+    html = get_bs4_tree(html_path)
+    return html
+
+
+@pytest.fixture
+def page_html() -> BeautifulSoup:
+    """
+    Returns the HTML to a specfic manga volume page
+    """
+    html_path = "tests/test_files/dragonball_bardock_volume_2_page.html"
+    html = get_bs4_tree(html_path)
+    return html
+
+
+@pytest.fixture
+def manga_title_page_html() -> BeautifulSoup:
+    html_path = f"tests/test_files/dragonball_bardock_page.html"
+    html = get_bs4_tree(html_path)
+    return html
+
+
+@pytest.fixture
+def volume_html() -> BeautifulSoup:
+    """
+    Returns the HTML to a specfic manga volume
+    """
+    html_path = "tests/test_files/dragonball_bardock_volume_2.html"
+    html = get_bs4_tree(html_path)
+    return html
+
+
+@pytest.fixture
+def invalid_volume_html() -> BeautifulSoup:
+    """
+    Returns the HTML to an invalid manga volume request
+    """
+    html_path = "tests/test_files/dragonball_bardock_volume_100.html"
+    html = get_bs4_tree(html_path)
+    return html
+
+
+@pytest.fixture
+def page():
+    return Page(1, b"data")
+
+
+@pytest.fixture
+def volume():
+    img1, img2 = get_images()
+    page_data = [(1, img1), (2, img2)]
+    volume = Volume(1, "/Some/path")
+    volume.pages = page_data
+    return volume
+
+
+@pytest.fixture
+def manga():
+    manga = Manga("dragon-ball", "pdf")
+    manga.volumes = [1, 2]
+    manga.volume[1].pages = [(1, b"here"), (2, b"bye")]
+    manga.volume[2].pages = [(1, b"hello"), (2, b"jimmy")]
+    return manga
+
+
+@pytest.fixture
+def logger():
+    return logging.getLogger("unittest_logger")

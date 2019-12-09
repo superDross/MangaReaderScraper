@@ -2,7 +2,9 @@
 HTML parsers that scrape and parse data from MangaReader.net
 """
 
+import logging
 import re
+import sys
 from typing import List, Tuple
 
 import requests
@@ -10,6 +12,8 @@ from bs4 import BeautifulSoup
 
 from scraper.exceptions import VolumeDoesntExist
 from scraper.utils import get_html_from_url, settings
+
+logger = logging.getLogger(__name__)
 
 MANGA_URL = settings()["manga_url"]
 
@@ -44,7 +48,7 @@ class MangaParser:
 
     def page_data(self, page_url: str) -> Tuple[int, bytes]:
         """
-        Returns a Page object by scraping from a given url
+        Extracts a manga pages data
         """
         volume_num, page_num = page_url.split("/")[-2:]
         if not volume_num.isdigit():
@@ -52,6 +56,8 @@ class MangaParser:
         page_html = get_html_from_url(page_url)
         img_url = page_html.find("img").get("src")
         img_data = requests.get(img_url).content
+        with open(f"/home/david/test-manga_1_{page_num}.jpg", "wb") as ff:
+            ff.write(img_data)
         return (int(page_num), img_data)
 
     def all_volume_numbers(self) -> List[int]:
@@ -66,7 +72,7 @@ class MangaParser:
 
 
 def get_search_results(
-    query: str,
+    query: list,
     manga_type: int = 0,
     manga_status: int = 0,
     order: int = 0,
@@ -76,8 +82,12 @@ def get_search_results(
     Scrape and return HTML dict with search results
     """
     # TODO: change to class when integrating args e.g. genre
+    query = "_".join(query)
     url = f"""{MANGA_URL}/search/?w={query}&rd={manga_type}
                &status={manga_status}&order=0&genre={genre}&p=0"""
     html_response = get_html_from_url(url)
     search_results = html_response.find_all("div", {"class": "mangaresultitem"})
+    if not search_results:
+        logging.warning(f"No search results found for {query}")
+        sys.exit()
     return search_results

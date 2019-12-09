@@ -140,9 +140,6 @@ class MangaBuilder:
     def __init__(self, manga_name: str) -> None:
         self.parser: MangaParser = MangaParser(manga_name)
 
-    def __call__(self, volumes: Optional[List[int]] = None) -> Manga:
-        return self.get_manga_volumes(volumes)
-
     def _get_volume_data(self, volume_number: int) -> VolumeData:
         """
         Returns volume number & each pages raw data
