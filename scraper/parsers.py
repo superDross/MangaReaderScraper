@@ -10,7 +10,7 @@ from typing import List, Tuple
 import requests
 from bs4 import BeautifulSoup
 
-from scraper.exceptions import VolumeDoesntExist
+from scraper.exceptions import MangaDoesNotExist, VolumeDoesntExist
 from scraper.utils import get_html_from_url, settings
 
 logger = logging.getLogger(__name__)
@@ -30,12 +30,18 @@ class MangaParser:
         """
         Retrieve HTML for a given manga volume number
         """
-        volume_html = get_html_from_url(f"{MANGA_URL}/{self.manga_name}/{volume}")
-        string = re.compile(".*not published.*")
-        matches = volume_html.find_all(string=string, recursive=True)
-        if matches:
-            raise VolumeDoesntExist(self.manga_name, volume)
-        return volume_html
+        try:
+            volume_html = get_html_from_url(f"{MANGA_URL}/{self.manga_name}/{volume}")
+            string = re.compile(".*not published.*")
+            matches = volume_html.find_all(string=string, recursive=True)
+            if matches:
+                raise VolumeDoesntExist(self.manga_name, volume)
+            return volume_html
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 404:
+                raise MangaDoesNotExist(self.manga_name)
+            # this needed?
+            raise e
 
     def page_urls(self, volume: int) -> List[str]:
         """
@@ -64,11 +70,18 @@ class MangaParser:
         """
         All volume numbers for a manga
         """
-        url = f"{MANGA_URL}/{self.manga_name}"
-        manga_html = get_html_from_url(url)
-        volume_tags = manga_html.find("div", id="chapterlist").find_all("a")
-        volume_numbers = [int(vol.get("href").split("/")[-1]) for vol in volume_tags]
-        return volume_numbers
+        try:
+            url = f"{MANGA_URL}/{self.manga_name}"
+            manga_html = get_html_from_url(url)
+            volume_tags = manga_html.find("div", id="chapterlist").find_all("a")
+            volume_numbers = [
+                int(vol.get("href").split("/")[-1]) for vol in volume_tags
+            ]
+            return volume_numbers
+        except requests.exceptions.HTTPError as e:
+            if e.response.status_code == 404:
+                raise MangaDoesNotExist(self.manga_name)
+            raise e
 
 
 def get_search_results(

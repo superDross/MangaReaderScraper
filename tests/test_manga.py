@@ -153,7 +153,9 @@ def test_mangabuilder_get_all_volumes(inval, parser):
         v1 = Volume(1, "/tmp/dragon-ball/dragon-ball_volume_1.pdf")
         v2 = Volume(2, "/tmp/dragon-ball/dragon-ball_volume_2.pdf")
         v3 = Volume(3, "/tmp/dragon-ball/dragon-ball_volume_3.pdf")
-        pages = [(1, b"page 1 img"), (2, b"page 2 img")]
+        img1 = open("tests/test_files/jpgs/test-manga_1_1.jpg", "rb")
+        img2 = open("tests/test_files/jpgs/test-manga_1_2.jpg", "rb")
+        pages = [(1, img1.read()), (2, img2.read())]
         v1.pages = pages
         v2.pages = pages
         v3.pages = pages
@@ -168,7 +170,9 @@ def test_mangabuilder_get_single_volumes(parser):
         builder = MangaBuilder(manga_name="dragon-ball")
         manga = builder.get_manga_volumes(vol_nums=[1])
         v1 = Volume(1, "/tmp/dragon-ball/dragon-ball_volume_1.pdf")
-        pages = [(1, b"page 1 img"), (2, b"page 2 img")]
+        img1 = open("tests/test_files/jpgs/test-manga_1_1.jpg", "rb")
+        img2 = open("tests/test_files/jpgs/test-manga_1_2.jpg", "rb")
+        pages = [(1, img1.read()), (2, img2.read())]
         v1.pages = pages
         assert manga.volumes == [v1]
         assert manga.volume[1] == v1

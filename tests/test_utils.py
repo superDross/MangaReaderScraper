@@ -34,8 +34,7 @@ def test_create_base_config():
 
 
 def test_settings():
-    if not os.path.exists("/tmp/.config/"):
-        os.mkdir("/tmp/.config")
+    os.mkdir("/tmp/.config")
     with mock.patch("scraper.utils.os.path.expanduser", lambda x: "/tmp"):
         create_base_config()
         config = settings()
@@ -44,14 +43,7 @@ def test_settings():
 
 
 def test_settings_creates_base_config():
-    if os.path.exists("/tmp/.config/mangascraper.ini"):
-        os.remove("/tmp/.config/mangascraper.ini")
+    os.mkdir("/tmp/.config")
     with mock.patch("scraper.utils.os.path.expanduser", lambda x: "/tmp"):
         settings()
         assert os.path.exists("/tmp/.config/mangascraper.ini")
-
-
-# TODO: pytest must have a better teardown method than this
-def teardown_module(module):
-    if os.path.exists("/tmp/.config/"):
-        shutil.rmtree("/tmp/.config")

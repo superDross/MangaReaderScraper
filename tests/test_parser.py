@@ -47,27 +47,17 @@ def test_invalid_volume_parser(invalid_volume_html):
             parser.page_urls(2000)
 
 
-def test_page_data(page_html):
+@pytest.mark.parametrize("url_suffix,expected_num", [("2/2", 2), ("2", 1)])
+def test_page_data(url_suffix, expected_num, page_html):
     with mock.patch("scraper.parsers.get_html_from_url") as mocked_func:
         mocked_func.return_value = page_html
         parser = MangaParser("dragon-ball")
         page_data = parser.page_data(
-            "http://mangareader.net/dragon-ball-episode-of-bardock/2/2"
+            f"http://mangareader.net/dragon-ball-episode-of-bardock/{url_suffix}"
         )
         page_num, img_data = page_data
-        assert page_num == 2
-        assert "JFIF" in str(img_data[:15])
-
-
-def test_page_data_first_page(page_html):
-    with mock.patch("scraper.parsers.get_html_from_url") as mocked_func:
-        mocked_func.return_value = page_html
-        parser = MangaParser("dragon-ball")
-        page_data = parser.page_data(
-            "http://mangareader.net/dragon-ball-episode-of-bardock/2"
-        )
-        page_num, img_data = page_data
-        assert page_num == 1
+        assert page_num == expected_num
+        # ensure it is an JPEG
         assert "JFIF" in str(img_data[:15])
 
 

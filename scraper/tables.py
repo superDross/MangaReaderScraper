@@ -3,8 +3,6 @@ from typing import Dict, List
 
 from tabulate import tabulate
 
-from scraper.parsers import get_search_results
-
 
 class TableProducer:
     """

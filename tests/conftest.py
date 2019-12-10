@@ -4,13 +4,15 @@ Pytest fixtures
 
 import logging
 import os
+import shutil
 from unittest import mock
 
 import pytest
 from bs4 import BeautifulSoup
 
 from scraper.manga import Manga, MangaBuilder, Page, Volume
-from scraper.parsers import MangaParser
+from scraper.menu import Menu
+from scraper.parsers import MangaParser, get_search_results
 from scraper.utils import get_html_from_url
 
 
@@ -38,7 +40,8 @@ class MockedMangaParser:
         volume_num, page_num = page_url.split("/")[-2:]
         if not volume_num.isdigit():
             page_num = "1"
-        return (int(page_num), bytes(f"page {page_num} img", "utf-8"))
+        img = open(f"tests/test_files/jpgs/test-manga_1_{page_num}.jpg", "rb").read()
+        return (int(page_num), img)
 
 
 def get_html_file(filepath):
@@ -71,6 +74,24 @@ def mocked_manga_env_var():
     mock_dir = f"/tmp"
     with mock.patch("scraper.manga.MANGA_DIR", mock_dir) as mocked_dir:
         yield mocked_dir
+
+
+@pytest.fixture(scope="session", autouse=True)
+def mocked_manga_env_var_download():
+    mock_dir = f"/tmp"
+    with mock.patch("scraper.download.MANGA_DIR", mock_dir) as mocked_dir:
+        yield mocked_dir
+
+
+@pytest.fixture(autouse=True)
+def teardown_files():
+    """
+    Remove directories after every test, if present
+    """
+    directories = ["/tmp/.config/", "/tmp/dragon-ball/"]
+    for directory in directories:
+        if os.path.exists(directory):
+            shutil.rmtree(directory)
 
 
 @pytest.fixture
@@ -161,3 +182,58 @@ def manga():
 @pytest.fixture
 def logger():
     return logging.getLogger("unittest_logger")
+
+
+@pytest.fixture
+def menu():
+    choices = "pick A or B for stuff"
+    options = {"A": "1", "B": "2"}
+    parent = Menu(options, choices)
+    choices = (
+        "+----+---------------------------------+-----------+--------+\n"
+        "|    | Title                           |   Volumes | Type   |\n"
+        "|----+---------------------------------+-----------+--------|\n"
+        "|  1 | Dragon Ball                     |       520 | Manga  |\n"
+        "|  2 | Dragon Ball SD                  |        34 | Manga  |\n"
+        "|  3 | Dragon Ball: Episode of Bardock |         3 | Manga  |\n"
+        "|  4 | DragonBall Next Gen             |         4 | Manga  |\n"
+        "|  5 | Dragon Ball Z - Rebirth of F    |         3 | Manga  |\n"
+        "|  6 | Dragon Ball Super               |        54 | Manga  |\n"
+        "+----+---------------------------------+-----------+--------+"
+    )
+    options = {
+        "1": "dragon-ball",
+        "2": "dragon-ball-sd",
+        "3": "dragon-ball-episode-of-bardock",
+        "4": "dragonball-next-gen",
+        "5": "dragon-ball-z-rebirth-of-f",
+        "6": "dragon-ball-super",
+    }
+    return Menu(options, choices, parent)
+
+
+@pytest.fixture
+def menu_no_choices():
+    options = {"A": "1", "B": "2"}
+    parent = Menu(options)
+    choices = (
+        "+----+---------------------------------+-----------+--------+\n"
+        "|    | Title                           |   Volumes | Type   |\n"
+        "|----+---------------------------------+-----------+--------|\n"
+        "|  1 | Dragon Ball                     |       520 | Manga  |\n"
+        "|  2 | Dragon Ball SD                  |        34 | Manga  |\n"
+        "|  3 | Dragon Ball: Episode of Bardock |         3 | Manga  |\n"
+        "|  4 | DragonBall Next Gen             |         4 | Manga  |\n"
+        "|  5 | Dragon Ball Z - Rebirth of F    |         3 | Manga  |\n"
+        "|  6 | Dragon Ball Super               |        54 | Manga  |\n"
+        "+----+---------------------------------+-----------+--------+"
+    )
+    options = {
+        "1": "dragon-ball",
+        "2": "dragon-ball-sd",
+        "3": "dragon-ball-episode-of-bardock",
+        "4": "dragonball-next-gen",
+        "5": "dragon-ball-z-rebirth-of-f",
+        "6": "dragon-ball-super",
+    }
+    return Menu(options, choices, parent)
