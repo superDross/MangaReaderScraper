@@ -1,5 +1,4 @@
 import os
-import shutil
 from unittest import mock
 
 from scraper.utils import CustomAdapter, create_base_config, get_adapter, settings
