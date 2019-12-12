@@ -10,10 +10,8 @@ from unittest import mock
 import pytest
 from bs4 import BeautifulSoup
 
-from scraper.manga import Manga, MangaBuilder, Page, Volume
+from scraper.manga import Manga, Page, Volume
 from scraper.menu import Menu
-from scraper.parsers import MangaParser, get_search_results
-from scraper.utils import get_html_from_url
 
 
 class MockedMangaParser:
@@ -80,6 +78,13 @@ def mocked_manga_env_var():
 def mocked_manga_env_var_download():
     mock_dir = f"/tmp"
     with mock.patch("scraper.download.MANGA_DIR", mock_dir) as mocked_dir:
+        yield mocked_dir
+
+
+@pytest.fixture(scope="session", autouse=True)
+def mocked_manga_env_var_cli():
+    mock_dir = f"/tmp"
+    with mock.patch("scraper.__main__.MANGA_DIR", mock_dir) as mocked_dir:
         yield mocked_dir
 
 

@@ -1,6 +1,7 @@
 import argparse
 import logging
 import sys
+from typing import List, Tuple, Union
 
 from scraper.download import download_manga
 from scraper.menu import SearchMenu
@@ -34,26 +35,58 @@ def gui() -> None:
     sys.exit(app.exec_())
 
 
-def cli() -> None:
+def get_volume_values(volume: str) -> Union[List[int], None]:
+    """
+    Transform a string digit into a list of integers
+    """
+    if "-" in volume:
+        start, end = volume.split("-")
+        return list(range(int(start), int(end) + 1))
+    elif volume:
+        return [int(x) for x in volume.split()]
+    else:
+        return None
+
+
+def manga_search(query: str) -> Tuple[str, List[int]]:
+    """
+    Search for a manga and return the manga name and volumes
+    selected by user input
+    """
+    menu = SearchMenu(query)
+    manga = menu.handle_options()
+    msg = (
+        "Which volume do you want to download "
+        "(Enter alone to download all volumes)?\n"
+    )
+    volume_input = input(msg)
+    volumes = get_volume_values(volume_input)
+    return (manga, volumes)
+
+
+def cli(arguments: List[str]) -> dict:
     parser = get_parser()
-    args = vars(parser.parse_args())
+    args = parser.parse_args(arguments)
+    manga, volumes = (args.manga, args.volumes)
+    filetype = "cbz" if args.cbz else "pdf"
 
-    if args["search"]:
-        menu = SearchMenu(args["search"])
-        args["manga"] = menu.handle_options()
-        msg = "Which volume do you want to download (Enter alone to download all volumes)?\n"
-        volume = input(msg)
-        if "-" in volume:
-            start, end = volume.split("-")
-            args["volumes"] = list(range(int(start), int(end) + 1))
-        elif volume:
-            args["volumes"] = [int(x) for x in volume.split()]
-        else:
-            args["volumes"] = None
+    if args.search:
+        manga, volumes = manga_search(args.search)
 
-    filetype = "cbz" if args["cbz"] else "pdf"
+    elif args.volumes:
+        volumes = []
+        for vol in args.volumes:
+            volumes += get_volume_values(vol)
 
-    download_manga(args["manga"], args["volumes"], filetype)
+    download_manga(manga, volumes, filetype)
+
+    return dict(
+        cbz=args.cbz,
+        manga=manga,
+        output=args.output,
+        search=args.search,
+        volumes=volumes,
+    )
 
 
 def get_parser() -> argparse.ArgumentParser:
@@ -65,7 +98,7 @@ def get_parser() -> argparse.ArgumentParser:
         "--search", "-s", type=str, help="search manga reader", nargs="*"
     )
     parser.add_argument(
-        "--volumes", "-v", nargs="+", type=int, help="manga volume to download"
+        "--volumes", "-v", nargs="+", type=str, help="manga volume to download"
     )
     parser.add_argument("--output", "-o", default=MANGA_DIR)
     parser.add_argument(
@@ -76,6 +109,6 @@ def get_parser() -> argparse.ArgumentParser:
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        cli()
+        cli(sys.argv[1:])
     else:
         gui()

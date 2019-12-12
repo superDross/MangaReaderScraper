@@ -2,6 +2,7 @@
 Manga building blocks & factories
 """
 
+import logging
 from dataclasses import dataclass, field
 from multiprocessing.pool import Pool, ThreadPool
 from typing import Dict, List, Optional
@@ -9,7 +10,9 @@ from typing import Dict, List, Optional
 from scraper.exceptions import PageAlreadyPresent, VolumeAlreadyPresent
 from scraper.new_types import PageData, VolumeData
 from scraper.parsers import MangaParser
-from scraper.utils import settings
+from scraper.utils import get_adapter, settings
+
+logger = logging.getLogger(__name__)
 
 MANGA_DIR = settings()["manga_directory"]
 
@@ -144,6 +147,8 @@ class MangaBuilder:
         """
         Returns volume number & each pages raw data
         """
+        adapter = get_adapter(logger, self.parser.manga_name, volume_number)
+        adapter.info("downloading pages")
         urls = self.parser.page_urls(volume_number)
         with ThreadPool() as pool:
             pages_data = pool.map(self.parser.page_data, urls)

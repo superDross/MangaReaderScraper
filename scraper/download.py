@@ -88,6 +88,6 @@ class Download:
         self.adapter.info(f"All volumes downloaded")
 
 
-def download_manga(manga_name: str, volume: Optional[int], filetype: str) -> None:
+def download_manga(manga_name: str, volumes: Optional[int], filetype: str) -> None:
     downloader = Download(manga_name, filetype)
-    downloader.download_volumes(volume)
+    downloader.download_volumes(volumes)

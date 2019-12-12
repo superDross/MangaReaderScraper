@@ -15,7 +15,7 @@ repos:
     rev: 4.3.21-2
     hooks:
     -   id: isort
-        args: [--check-only, --diff, -ws, -tc, -o=tabulate, -w, "88", romember/*.py,  romember/tests/*.py]
+        args: [--check-only, --diff, -ws, -tc, -o=tabulate, -w, "88", scraper/*.py,  tests/*.py]
 
 -   repo: https://github.com/psf/black
     rev: stable

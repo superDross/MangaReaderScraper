@@ -40,8 +40,6 @@ class MangaParser:
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 404:
                 raise MangaDoesNotExist(self.manga_name)
-            # this needed?
-            raise e
 
     def page_urls(self, volume: int) -> List[str]:
         """
@@ -81,7 +79,6 @@ class MangaParser:
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 404:
                 raise MangaDoesNotExist(self.manga_name)
-            raise e
 
 
 def get_search_results(
