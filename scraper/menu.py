@@ -1,9 +1,9 @@
 from typing import Any, Dict, List, Optional
 
 from scraper.exceptions import InvalidOption
+from scraper.new_types import CLS
 from scraper.parsers import get_search_results
 from scraper.tables import TableProducer
-from scraper.typing import CLS
 
 
 class Menu:

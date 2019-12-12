@@ -7,8 +7,14 @@ Search and download specific volumes of a manga series from MangaReader and stor
 To install:
 
 ```bash
+pip install --user MangaReaderScraper
+```
+
+For development:
+
+```bash
 git clone https://github.com/superDross/MangaReaderScraper
-pip3 install -r MangaReaderScraper/requirements.txt
+pip install -r MangaReaderScraper/requirements.txt
 export PYTHONPATH=$PYTHONPATH:/path/to/MangaReaderScraper/
 ```
 
@@ -16,8 +22,11 @@ export PYTHONPATH=$PYTHONPATH:/path/to/MangaReaderScraper/
 
 To use the GUI instead of the CLI, simply don't parse any args:
 
+NOTE: due to a bug in PyQt5, this can only be used if you installed
+locally by cloning directly from the repo.
+
 ```bash
-python3 MangaReaderScraper
+python scraper
 ```
 
 ## CLI
@@ -26,7 +35,7 @@ python3 MangaReaderScraper
 
 `--search` Search mangareader.net for a given query and select to download one of the mangas from the parsed searched results. <br />
 `--manga` Manga series name to download. <br />
-`--volume` Manga series volume number to download. <br />
+`--volumes` Manga series volume number to download. <br />
 `--cbz` Store in CBZ format instead of PDF. <br />
 
 ### Example Usage
@@ -50,15 +59,18 @@ Select manga number
 5
 Dragon Ball Super has been selected for download.
 Which volume do you want to download (Enter alone to download all volumes)?
-1
+1-25 33 56
 ```
 
-To simply download a manga series volumes:
+To download a manga directly:
 
 ```
 # Download all Dragon Ball volumes
-python3 MangaReaderScraper --manga dragon-ball
+manga-scraper --manga dragon-ball
 
 # Download volume 2 of the Final Fantasy XII manga
-python3 MangaReaderScraper --manga final-fantasy-xii --volume 2
+manga-scraper --manga final-fantasy-xii --volumes 2
+
+# Download Dragon Ball Super volumes 3-7 & 23
+manga-scraper --manga dragon-ball-super --volumes 3-7 23
 ```
