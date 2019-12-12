@@ -56,7 +56,7 @@ class Volume:
             yield page
 
     @property
-    def page(self) -> None:
+    def page(self) -> Dict[int, Page]:
         return self._pages
 
     @property

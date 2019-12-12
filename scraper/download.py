@@ -6,6 +6,7 @@ import logging
 import os
 import zipfile
 from io import BytesIO
+from logging import LoggerAdapter
 from multiprocessing.pool import Pool
 from typing import Callable, List, Optional
 
@@ -27,10 +28,10 @@ class Download:
     """
 
     def __init__(self, manga_name: str, filetype: str) -> None:
-        self.manga_name = manga_name
-        self.factory = MangaBuilder(manga_name)
-        self.adapter = get_adapter(logger, manga_name)
-        self.type = filetype
+        self.manga_name: str = manga_name
+        self.factory: MangaBuilder = MangaBuilder(manga_name)
+        self.adapter: LoggerAdapter = get_adapter(logger, manga_name)
+        self.type: str = filetype
 
     def _create_manga_dir(self, manga_name: str) -> None:
         """

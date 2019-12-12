@@ -4,7 +4,7 @@ import logging
 import os
 import time
 from logging import Logger, LoggerAdapter
-from typing import Callable, Optional, Tuple
+from typing import Any, Callable, Optional, Tuple
 
 import bs4
 import requests
@@ -51,7 +51,7 @@ def download_timer(func: Callable) -> Callable:
     """
 
     @functools.wraps(func)
-    def wrapper_timer(*args):
+    def wrapper_timer(*args) -> Any:
         """
         Assumes last arg is the volume digit
         """

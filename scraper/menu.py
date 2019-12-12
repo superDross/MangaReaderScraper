@@ -1,9 +1,9 @@
-import time
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from scraper.exceptions import InvalidOption
 from scraper.parsers import get_search_results
 from scraper.tables import TableProducer
+from scraper.typing import CLS
 
 
 class Menu:
@@ -21,7 +21,7 @@ class Menu:
         self.options: Dict[str, str] = self._add_parent_to_options(options)
         self.choices: str = self._add_back_to_choices(choices)
 
-    def handle_options(self, counts=0) -> str:
+    def handle_options(self) -> Any:
         """
         Extract and execute a method from self.options
         """
@@ -59,7 +59,7 @@ class Menu:
             return f"{num}. Back"
 
     @classmethod
-    def from_list(cls, l: List[str]) -> None:
+    def from_list(cls, l: List[str]) -> CLS:
         """
         Constructs self._options and self.choices from a list.
         """
