@@ -219,8 +219,6 @@ def menu():
 
 @pytest.fixture
 def menu_no_choices():
-    options = {"A": "1", "B": "2"}
-    parent = Menu(options)
     choices = (
         "+----+---------------------------------+-----------+--------+\n"
         "|    | Title                           |   Volumes | Type   |\n"
@@ -241,4 +239,7 @@ def menu_no_choices():
         "5": "dragon-ball-z-rebirth-of-f",
         "6": "dragon-ball-super",
     }
-    return Menu(options, choices, parent)
+    parent = Menu(options, choices)
+    options = {"A": "1", "B": "2"}
+    child = Menu(options, parent=parent)
+    return child

@@ -1,8 +1,9 @@
 from unittest import mock
 
 import pytest
+import requests
 
-from scraper.exceptions import VolumeDoesntExist
+from scraper.exceptions import MangaDoesNotExist, VolumeDoesntExist
 from scraper.parsers import MangaParser, get_search_results
 
 
@@ -83,3 +84,15 @@ def test_get_search_results_with_invalid_query(caplog, invalid_search_html):
         with pytest.raises(SystemExit):
             get_search_results("gibberish")
             assert caplog.text == "No search results found for gibberish"
+
+
+@mock.patch("scraper.utils.requests.get")
+def test_404_errors(mock_request):
+    mock_resp = requests.models.Response()
+    mock_resp.status_code = 404
+    mock_request.return_value = mock_resp
+    parser = MangaParser("blahblahblah")
+    with pytest.raises(MangaDoesNotExist):
+        parser.all_volume_numbers()
+    with pytest.raises(MangaDoesNotExist):
+        parser.page_urls(1)

@@ -30,3 +30,7 @@ class PageAlreadyPresent(Exception):
 
 class VolumeAlreadyPresent(Exception):
     pass
+
+
+class InvalidOption(Exception):
+    pass

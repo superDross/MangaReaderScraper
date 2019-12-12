@@ -1,6 +1,7 @@
 import time
 from typing import Dict, List, Optional
 
+from scraper.exceptions import InvalidOption
 from scraper.parsers import get_search_results
 from scraper.tables import TableProducer
 
@@ -11,13 +12,16 @@ class Menu:
     """
 
     def __init__(
-        self, options: Dict[str, str], choices: str, parent: Optional[bool] = None
+        self,
+        options: Dict[str, str],
+        choices: Optional[str] = None,
+        parent: Optional[bool] = None,
     ) -> None:
         self.parent: Menu = parent
         self.options: Dict[str, str] = self._add_parent_to_options(options)
         self.choices: str = self._add_back_to_choices(choices)
 
-    def handle_options(self) -> str:
+    def handle_options(self, counts=0) -> str:
         """
         Extract and execute a method from self.options
         """
@@ -27,10 +31,10 @@ class Menu:
             item = self.options[choice]
             return item
         except KeyError:
-            msg = "{} is not a valid choice. Try again.\n"
-            print(msg.format(choice))
-            time.sleep(1)
-            return self.handle_options()
+            raise InvalidOption(
+                f"{choice} is invalid. Choose an option from "
+                f"{', '.join(self.options.keys())}"
+            )
 
     def _add_parent_to_options(self, options: Dict[str, str]) -> Dict[str, str]:
         """
