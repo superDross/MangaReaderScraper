@@ -89,6 +89,15 @@ def cli(arguments: List[str]) -> dict:
     )
 
 
+def cli_entry() -> None:
+    """
+    Required as entry_point in setup.py cannot take args,
+    however, we need cli() to take args for unit testing
+    purposes. Hence the need for this funcion.
+    """
+    cli(sys.argv[1:])
+
+
 def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="downloads and converts manga volumes to pdf or cbz format"
@@ -109,6 +118,6 @@ def get_parser() -> argparse.ArgumentParser:
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        cli(sys.argv[1:])
+        cli_entry()
     else:
         gui()

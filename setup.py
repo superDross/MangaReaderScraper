@@ -16,7 +16,7 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="MangaReaderScraper",
     # should correlate with git tag
-    version="0.2",
+    version="0.21",
     author="superDross",
     author_email="dross78375@gmail.com",
     description="Manga scraper",
@@ -30,7 +30,7 @@ setuptools.setup(
         "Operating System :: POSIX :: Linux",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     ],
-    entry_points={"console_scripts": ["manga-scraper = scraper.__main__:cli"]},
+    entry_points={"console_scripts": ["manga-scraper = scraper.__main__:to_cli"]},
     install_requires=[
         "bs4>=0.0.1",
         "lxml>=4.2.5",

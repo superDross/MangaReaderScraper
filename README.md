@@ -43,7 +43,7 @@ python scraper
 After using the search function, a table will appear and you will be asked to select a specific manga (type a number in the first column). You will subsequently be asked to download a specific volume. In the example below, Dragon Ball Super volume 1 has been selected for download.
 
 ```
-$ python3 MangaReaderScraper --search dragon ball
+$ manga-scraper --search dragon ball
 
 +----+---------------------------------+-----------+--------+
 |    | Title                           |   Volumes | Type   |

@@ -7,6 +7,7 @@
 - make changes to GUI (see `gui.py`)
 - complete test coverage
 - profiling
+- support Windows
 
 ## Nice to Haves
 
