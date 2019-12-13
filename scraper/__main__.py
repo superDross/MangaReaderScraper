@@ -57,7 +57,7 @@ def manga_search(query: str) -> Tuple[str, List[int]]:
     manga = menu.handle_options()
     msg = (
         "Which volume do you want to download "
-        "(Enter alone to download all volumes)?\n"
+        "(Enter alone to download all volumes)?\n>> "
     )
     volume_input = input(msg)
     volumes = get_volume_values(volume_input)
@@ -66,27 +66,20 @@ def manga_search(query: str) -> Tuple[str, List[int]]:
 
 def cli(arguments: List[str]) -> dict:
     parser = get_parser()
-    args = parser.parse_args(arguments)
-    manga, volumes = (args.manga, args.volumes)
-    filetype = "cbz" if args.cbz else "pdf"
+    args = vars(parser.parse_args(arguments))
+    filetype = "cbz" if args["cbz"] else "pdf"
 
-    if args.search:
-        manga, volumes = manga_search(args.search)
+    if args["search"]:
+        args["manga"], args["volumes"] = manga_search(args["search"])
 
-    elif args.volumes:
+    elif args["volumes"]:
         volumes = []
-        for vol in args.volumes:
+        for vol in args["volumes"]:
             volumes += get_volume_values(vol)
+        args["volumes"] = volumes
 
-    download_manga(manga, volumes, filetype)
-
-    return dict(
-        cbz=args.cbz,
-        manga=manga,
-        output=args.output,
-        search=args.search,
-        volumes=volumes,
-    )
+    download_manga(args["manga"], args["volumes"], filetype)
+    return args
 
 
 def cli_entry() -> None:
