@@ -18,7 +18,7 @@ class CustomAdapter(LoggerAdapter):
     """
 
     def process(self, msg: str, kwargs: dict) -> Tuple[str, dict]:
-        manga = self.extra.get("manga").replace("-", " ").title()
+        manga = self.extra.get("manga")
         volume = self.extra.get("volume")
         if volume:
             return f"[{manga}:{volume}] {msg}", kwargs

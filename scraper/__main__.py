@@ -4,6 +4,7 @@ import sys
 from typing import List, Tuple, Union
 
 from scraper.download import download_manga
+from scraper.exceptions import MangaDoesNotExist
 from scraper.menu import SearchMenu
 from scraper.utils import settings
 
@@ -35,7 +36,7 @@ def gui() -> None:
     sys.exit(app.exec_())
 
 
-def get_volume_values(volume: str) -> Union[List[int], None]:
+def get_volume_values(volume: str) -> Union[str, None]:
     """
     Transform a string digit into a list of integers
     """
@@ -56,12 +57,11 @@ def manga_search(query: str) -> Tuple[str, List[int]]:
     menu = SearchMenu(query)
     manga = menu.handle_options()
     msg = (
-        "Which volume do you want to download "
+        "Which volume(s) do you want to download "
         "(Enter alone to download all volumes)?\n>> "
     )
-    volume_input = input(msg)
-    volumes = get_volume_values(volume_input)
-    return (manga, volumes)
+    volumes = input(msg)
+    return (manga, volumes.split())
 
 
 def cli(arguments: List[str]) -> dict:
@@ -72,13 +72,22 @@ def cli(arguments: List[str]) -> dict:
     if args["search"]:
         args["manga"], args["volumes"] = manga_search(args["search"])
 
-    elif args["volumes"]:
+    if args["volumes"]:
         volumes = []
         for vol in args["volumes"]:
             volumes += get_volume_values(vol)
         args["volumes"] = volumes
+    else:
+        args["volumes"] = None
 
-    download_manga(args["manga"], args["volumes"], filetype)
+    try:
+        download_manga(args["manga"], args["volumes"], filetype)
+    except MangaDoesNotExist:
+        logging.info(
+            f"No manga found for {args['manga']}. Searching for closest match."
+        )
+        return cli(["--search", args["manga"]])
+
     return args
 
 
@@ -86,7 +95,7 @@ def cli_entry() -> None:
     """
     Required as entry_point in setup.py cannot take args,
     however, we need cli() to take args for unit testing
-    purposes. Hence the need for this funcion.
+    purposes. Hence the need for this function.
     """
     cli(sys.argv[1:])
 

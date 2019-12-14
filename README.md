@@ -37,6 +37,7 @@ python scraper
 `--manga` Manga series name to download. <br />
 `--volumes` Manga series volume number to download. <br />
 `--cbz` Store in CBZ format instead of PDF. <br />
+`--output` Directory to save downloads (defaults to `~/Downloads`) <br />
 
 ### Example Usage
 
@@ -56,10 +57,13 @@ $ manga-scraper --search dragon ball
 |  5 | Dragon Ball Super               |        29 | Manga  |
 +----+---------------------------------+-----------+--------+
 Select manga number
-5
+
+>> 5
+
 Dragon Ball Super has been selected for download.
 Which volume do you want to download (Enter alone to download all volumes)?
-1-25 33 56
+
+>> 1-25 33 56
 ```
 
 To download a manga directly:

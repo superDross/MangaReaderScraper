@@ -103,6 +103,17 @@ SEARCH_PARAMETERS = [
             "cbz": False,
         },
     ),
+    (
+        ["--search", "dragonball"],
+        ["2", "6-10 12"],
+        {
+            "manga": "dragon-ball-sd",
+            "search": ["dragonball"],
+            "volumes": [6, 7, 8, 9, 10, 12],
+            "output": "/tmp",
+            "cbz": False,
+        },
+    ),
 ]
 
 
