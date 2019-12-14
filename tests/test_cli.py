@@ -4,6 +4,7 @@ from unittest import mock
 import pytest
 
 from scraper.__main__ import cli
+from scraper.exceptions import MangaDoesNotExist
 
 PATAMETERS = [
     (
@@ -134,3 +135,32 @@ def test_search_via_cli(arguments, inputs, expected, monkeypatch, search_html):
         monkeypatch.setattr("builtins.input", lambda x: next(gen))
         args = cli(arguments)
         assert args == expected
+
+
+def test_search_if_failed_manga_match(monkeypatch, search_html):
+    def fake_downloader(*args):
+        """
+        Will raise an error, which should trigger the manga_search
+        function and recall this function with the parameters parsed
+        from mocked manga_search ("search_activated").
+
+        This will help confirm whether the manga_search function was
+        called upon a MangaDoesNotExist error.
+        """
+        if "search activated" in args:
+            return True
+        raise MangaDoesNotExist("name")
+
+    with mock.patch("scraper.__main__.download_manga", fake_downloader):
+        with mock.patch("scraper.__main__.manga_search") as mocked_func:
+            # mock manga_search to return values that signifies it was triggered
+            mocked_func.return_value = ("search activated", "2")
+            args = cli(["--manga", "dragonballzz"])
+            expected = {
+                "manga": "search activated",
+                "search": ["dragonballzz"],
+                "volumes": [2],
+                "output": "/tmp",
+                "cbz": False,
+            }
+            assert args == expected
