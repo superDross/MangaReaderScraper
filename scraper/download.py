@@ -45,6 +45,7 @@ class Download:
         """
         Save all pages to a PDF file
         """
+        self.adapter.info(f"volume saved to {volume.file_path}")
         c = canvas.Canvas(volume.file_path)
         for page in volume.pages:
             img = BytesIO(page.img)
@@ -60,6 +61,7 @@ class Download:
         """
         Save all pages to a CBZ file
         """
+        self.adapter.info(f"volume saved to {volume.file_path}")
         with zipfile.ZipFile(volume.file_path, "w") as cbz:
             for num, page in enumerate(volume.pages):
                 jpgfilename = f"{self.manga_name}_{volume.number}_page_{num}.jpg"
