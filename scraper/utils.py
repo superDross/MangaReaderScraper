@@ -1,9 +1,9 @@
 import configparser
 import functools
 import logging
-import os
 import time
 from logging import Logger, LoggerAdapter
+from pathlib import Path
 from typing import Any, Callable, Optional, Tuple
 
 import bs4
@@ -68,13 +68,19 @@ def create_base_config() -> None:
     config = configparser.ConfigParser()
     config.add_section("config")
 
-    user_home = os.path.expanduser("~")
-    config["config"]["manga_directory"] = f"{user_home}/Downloads"
+    user_home = Path.home()
+    downloaddir = user_home / "Downloads"
+    configdir = user_home / ".config"
+    for path in [downloaddir, configdir]:
+        # mkdir -p
+        path.mkdir(parents=True, exist_ok=True)
+
+    config["config"]["manga_directory"] = str(downloaddir)
     config["config"]["manga_url"] = "http://mangareader.net"
 
-    configpath = f"{user_home}/.config/mangascraper.ini"
-    with open(configpath, "w") as configfile:
-        config.write(configfile)
+    configfile = configdir / "mangascraper.ini"
+    with configfile.open("w") as cf:
+        config.write(cf)
 
 
 def settings() -> configparser.SectionProxy:
@@ -82,8 +88,8 @@ def settings() -> configparser.SectionProxy:
     Retrieve settings file contents
     """
     config = configparser.ConfigParser()
-    user_config = f"{os.path.expanduser('~')}/.config/mangascraper.ini"
-    if not os.path.exists(user_config):
+    user_config = Path.home() / ".config" / "mangascraper.ini"
+    if not user_config.exists():
         create_base_config()
-    config.read(user_config)
+    config.read(str(user_config))
     return config["config"]

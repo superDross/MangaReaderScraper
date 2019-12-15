@@ -1,7 +1,6 @@
 # TODO
 
 
-- use pathlib instead of os module
 - mypy for type checking
 - make changes to GUI (see `gui.py`)
 - complete test coverage

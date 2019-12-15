@@ -1,4 +1,6 @@
 import os
+import shutil
+from pathlib import Path
 from unittest import mock
 
 from scraper.utils import CustomAdapter, create_base_config, get_adapter, settings
@@ -25,16 +27,13 @@ def test_get_adapter(caplog, logger):
 
 
 def test_create_base_config():
-    if not os.path.exists("/tmp/.config/"):
-        os.mkdir("/tmp/.config")
-    with mock.patch("scraper.utils.os.path.expanduser", lambda x: "/tmp"):
+    with mock.patch("scraper.utils.Path.home", lambda: Path("/tmp")):
         create_base_config()
-        assert os.path.exists("/tmp/.config/mangascraper.ini")
+        assert Path("/tmp/.config/mangascraper.ini").exists()
 
 
 def test_settings():
-    os.mkdir("/tmp/.config")
-    with mock.patch("scraper.utils.os.path.expanduser", lambda x: "/tmp"):
+    with mock.patch("scraper.utils.Path.home", lambda: Path("/tmp")):
         create_base_config()
         config = settings()
         assert config["manga_directory"] == "/tmp/Downloads"
@@ -42,7 +41,19 @@ def test_settings():
 
 
 def test_settings_creates_base_config():
-    os.mkdir("/tmp/.config")
-    with mock.patch("scraper.utils.os.path.expanduser", lambda x: "/tmp"):
+    with mock.patch("scraper.utils.Path.home", lambda: Path("/tmp")):
         settings()
-        assert os.path.exists("/tmp/.config/mangascraper.ini")
+        assert Path("/tmp/.config/mangascraper.ini").exists()
+
+
+def teardown_module(module):
+    """
+    Remove directories after every test, if present
+
+    Fixtures only work before a test is executed, hence
+    the need for this module teardown.
+    """
+    directories = ["/tmp/.config/", "/tmp/Downloads/"]
+    for directory in directories:
+        if Path(directory).exists():
+            shutil.rmtree(directory)

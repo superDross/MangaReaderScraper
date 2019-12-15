@@ -60,8 +60,6 @@ class MangaParser:
         page_html = get_html_from_url(page_url)
         img_url = page_html.find("img").get("src")
         img_data = requests.get(img_url).content
-        with open(f"/home/david/test-manga_1_{page_num}.jpg", "wb") as ff:
-            ff.write(img_data)
         return (int(page_num), img_data)
 
     def all_volume_numbers(self) -> List[int]:

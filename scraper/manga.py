@@ -27,10 +27,12 @@ class Page:
     img: bytes
 
     def __repr__(self) -> str:
-        img = True if self.img else False
-        return f"Page(number={self.number}, img={img})"
+        return self._str()
 
     def __str__(self) -> str:
+        return self._str()
+
+    def _str(self) -> str:
         img = True if self.img else False
         return f"Page(number={self.number}, img={img})"
 
@@ -46,14 +48,17 @@ class Volume:
     _pages: Dict[int, Page] = field(default_factory=dict, repr=False)
 
     def __repr__(self) -> str:
-        return f"Volume(number={self.number}, pages={len(self.pages)})"
+        return self._str()
 
     def __str__(self) -> str:
-        return f"Volume(number={self.number}, pages={len(self.pages)})"
+        return self._str()
 
     def __iter__(self) -> Page:
         for page in self.pages:
             yield page
+
+    def _str(self) -> str:
+        return f"Volume(number={self.number}, pages={len(self.pages)})"
 
     @property
     def page(self) -> Dict[int, Page]:
@@ -96,14 +101,17 @@ class Manga:
     _volumes: Dict[int, Volume] = field(default_factory=dict, repr=False)
 
     def __repr__(self) -> str:
-        return f"Manga(name={self.name}, volumes={len(self.volumes)})"
+        return self._str()
 
     def __str__(self) -> str:
-        return f"Manga(name={self.name}, volumes={len(self.volumes)})"
+        return self._str()
 
     def __iter__(self) -> Volume:
         for volume in self.volumes:
             yield volume
+
+    def _str(self) -> str:
+        return f"Manga(name={self.name}, volumes={len(self.volumes)})"
 
     def _volume_path(self, volume_number: int) -> str:
         return (

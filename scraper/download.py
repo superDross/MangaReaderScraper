@@ -3,11 +3,12 @@ Downloads manga page images
 """
 
 import logging
-import os
+import tempfile
 import zipfile
 from io import BytesIO
 from logging import LoggerAdapter
 from multiprocessing.pool import Pool
+from pathlib import Path
 from typing import Callable, List, Optional
 
 from PIL import Image
@@ -37,9 +38,8 @@ class Download:
         """
         Create a manga directory if it does not exist.
         """
-        manga_dir = os.path.join(MANGA_DIR, manga_name)
-        if not os.path.exists(manga_dir):
-            os.makedirs(manga_dir)
+        manga_dir = Path(MANGA_DIR) / manga_name
+        manga_dir.mkdir(parents=True, exist_ok=True)
 
     def _to_pdf(self, volume: Volume) -> None:
         """
@@ -62,11 +62,11 @@ class Download:
         """
         with zipfile.ZipFile(volume.file_path, "w") as cbz:
             for num, page in enumerate(volume.pages):
-                tmp_jpg = f"/tmp/{self.manga_name}_{volume.number}_page_{num}.jpg"
-                with open(tmp_jpg, "wb") as f:
-                    f.write(page.img)
+                jpgfilename = f"{self.manga_name}_{volume.number}_page_{num}.jpg"
+                tmp_jpg = Path(tempfile.gettempdir()) / jpgfilename
+                tmp_jpg.write_bytes(page.img)
                 cbz.write(tmp_jpg)
-                os.remove(tmp_jpg)
+                tmp_jpg.unlink()
 
     def _get_save_method(self) -> Callable:
         """

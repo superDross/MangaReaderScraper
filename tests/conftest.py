@@ -3,8 +3,7 @@ Pytest fixtures
 """
 
 import logging
-import os
-import shutil
+from pathlib import Path
 from unittest import mock
 
 import pytest
@@ -42,13 +41,8 @@ class MockedMangaParser:
         return (int(page_num), img)
 
 
-def get_html_file(filepath):
-    with open(filepath, "r") as f:
-        return f.read()
-
-
 def get_bs4_tree(filepath):
-    html_string = get_html_file(filepath)
+    html_string = Path(filepath).read_text()
     html = BeautifulSoup(html_string, features="lxml")
     return html
 
@@ -86,17 +80,6 @@ def mocked_manga_env_var_cli():
     mock_dir = f"/tmp"
     with mock.patch("scraper.__main__.MANGA_DIR", mock_dir) as mocked_dir:
         yield mocked_dir
-
-
-@pytest.fixture(autouse=True)
-def teardown_files():
-    """
-    Remove directories after every test, if present
-    """
-    directories = ["/tmp/.config/", "/tmp/dragon-ball/"]
-    for directory in directories:
-        if os.path.exists(directory):
-            shutil.rmtree(directory)
 
 
 @pytest.fixture

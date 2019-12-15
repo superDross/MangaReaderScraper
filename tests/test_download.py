@@ -1,4 +1,6 @@
 import os
+import shutil
+from pathlib import Path
 from unittest import mock
 
 import pytest
@@ -26,3 +28,15 @@ def test_download_manga_helper_function(parser):
         expected_path2 = "/tmp/dragon-ball/dragon-ball_volume_2.pdf"
         assert os.path.exists(expected_path)
         assert os.path.exists(expected_path2)
+
+
+def teardown_module(module):
+    """
+    Remove directories after every test, if present
+
+    Fixtures only work before a test is executed, hence
+    the need for this module teardown.
+    """
+    tmp_dir = Path("/tmp/dragon-ball")
+    if tmp_dir.exists():
+        shutil.rmtree(tmp_dir)
