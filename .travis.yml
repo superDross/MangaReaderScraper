@@ -10,5 +10,22 @@ install:
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
   - pip install -r requirements.txt
 
-script:
-  - pytest
+stages:
+  - name: code-style
+  - name: type-checking
+  - name: tests
+
+jobs:
+  include:
+    - stage: code-style
+      install: pip install isort black
+      script: isort --check-only --diff -ws -tc -o=tabulate -o=bs4 -o=requests -o=pytest -w 88
+    - script: black --check --diff
+
+    - stage: type-checking
+      install: pip install mypy
+      script: mypy --no-sctrict-optional --ignore-missing-imports
+
+    - stage: tests
+      install: pip install -r requirements.txt
+      script: pytest
