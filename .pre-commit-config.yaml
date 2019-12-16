@@ -22,3 +22,9 @@ repos:
     hooks:
     -   id: black
         language_version: python3.7
+
+-   repo: https://github.com/pre-commit/mirrors-mypy
+    rev: master
+    hooks:
+    -   id: mypy
+        args: [--no-strict-optional, --ignore-missing-imports]
