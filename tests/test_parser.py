@@ -96,3 +96,13 @@ def test_404_errors(mock_request):
         parser.all_volume_numbers()
     with pytest.raises(MangaDoesNotExist):
         parser.page_urls(1)
+
+
+@mock.patch("scraper.utils.requests.get")
+def test_non_404_errors(mock_request):
+    mock_resp = requests.models.Response()
+    mock_resp.status_code = 403
+    mock_request.return_value = mock_resp
+    parser = MangaParser("blahblahblah")
+    with pytest.raises(requests.exceptions.HTTPError):
+        parser.all_volume_numbers()

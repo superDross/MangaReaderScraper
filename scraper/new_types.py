@@ -1,9 +1,8 @@
 """
-Custom type hints
+Custom type hints & aliases
 """
 
-from typing import Tuple, TypeVar
+from typing import Iterable, Tuple
 
-PageData = TypeVar("PageData", bound=Tuple[int, bytes])
-VolumeData = TypeVar("VolumeData", bound=Tuple[int, PageData])
-CLS = TypeVar("CLS", bound="TrivialClass")
+PageData = Tuple[int, bytes]
+VolumeData = Tuple[int, Iterable[PageData]]

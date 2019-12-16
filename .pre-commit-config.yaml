@@ -15,7 +15,8 @@ repos:
     rev: 4.3.21-2
     hooks:
     -   id: isort
-        args: [--check-only, --diff, -ws, -tc, -o=tabulate, -w, "88", scraper/*.py,  tests/*.py]
+        # third-party libs are not being recognised as third party
+        args: [--check-only, --diff, -ws, -tc, -o=tabulate, -o=bs4, -o=requests, -o=pytest, -w, "88"]
 
 -   repo: https://github.com/psf/black
     rev: stable
@@ -24,7 +25,7 @@ repos:
         language_version: python3.7
 
 -   repo: https://github.com/pre-commit/mirrors-mypy
-    rev: master
+    rev: v0.750
     hooks:
     -   id: mypy
         args: [--no-strict-optional, --ignore-missing-imports]

@@ -77,10 +77,11 @@ class MangaParser:
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 404:
                 raise MangaDoesNotExist(self.manga_name)
+            raise e
 
 
 def get_search_results(
-    query: list,
+    query_list: List[str],
     manga_type: int = 0,
     manga_status: int = 0,
     order: int = 0,
@@ -90,7 +91,7 @@ def get_search_results(
     Scrape and return HTML dict with search results
     """
     # TODO: change to class when integrating args e.g. genre
-    query = "_".join(query)
+    query = "_".join(query_list)
     url = f"""{MANGA_URL}/search/?w={query}&rd={manga_type}
                &status={manga_status}&order=0&genre={genre}&p=0"""
     html_response = get_html_from_url(url)

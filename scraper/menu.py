@@ -1,7 +1,6 @@
 from typing import Any, Dict, List, Optional
 
 from scraper.exceptions import InvalidOption
-from scraper.new_types import CLS
 from scraper.parsers import get_search_results
 from scraper.tables import TableProducer
 
@@ -15,7 +14,7 @@ class Menu:
         self,
         options: Dict[str, str],
         choices: Optional[str] = None,
-        parent: Optional[bool] = None,
+        parent: Optional["Menu"] = None,
     ) -> None:
         self.parent: Menu = parent
         self.options: Dict[str, str] = self._add_parent_to_options(options)
@@ -36,7 +35,7 @@ class Menu:
                 f"{', '.join(self.options.keys())}"
             )
 
-    def _add_parent_to_options(self, options: Dict[str, str]) -> Dict[str, str]:
+    def _add_parent_to_options(self, options: Dict[str, Any]) -> Dict[str, str]:
         """
         Modify options to include parent menu
         """
@@ -59,7 +58,7 @@ class Menu:
             return f"{num}. Back"
 
     @classmethod
-    def from_list(cls, l: List[str]) -> CLS:
+    def from_list(cls, l: List[str]) -> "Menu":
         """
         Constructs self._options and self.choices from a list.
         """
@@ -69,13 +68,13 @@ class Menu:
 
 
 class SearchMenu(Menu):
-    def __init__(self, query: str) -> None:
-        self.search_results: str = self._search(query)
+    def __init__(self, query: List[str]) -> None:
+        self.search_results: TableProducer = self._search(query)
         choices: str = self.search_results.table
         options: Dict[str, str] = self._create_options()
         Menu.__init__(self, options, choices)
 
-    def _search(self, query: str) -> str:
+    def _search(self, query: List[str]) -> TableProducer:
         """
         Search for query and return Search object
         """

@@ -40,7 +40,7 @@ class ResultsTable(qtw.QTableWidget):
         self.verticalHeader().setVisible(False)
 
     @staticmethod
-    def create_combo_widget(num: Union[int, str]) -> None:
+    def create_combo_widget(num: Union[int, str]) -> qtw.QComboBox:
         """
         Creates a combobox with selection from 0 to parsed num
         """
@@ -51,7 +51,7 @@ class ResultsTable(qtw.QTableWidget):
         return combobox
 
     def _add_row(
-        self, row_num: str, name: str, url: str, chapters: str, _type: str
+        self, row_num: int, name: str, url: str, chapters: str, _type: str
     ) -> None:
         """
         Search result row with chapter selection and download button

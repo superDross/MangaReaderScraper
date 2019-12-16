@@ -4,7 +4,7 @@ import logging
 import time
 from logging import Logger, LoggerAdapter
 from pathlib import Path
-from typing import Any, Callable, Optional, Tuple
+from typing import Any, Callable, MutableMapping, Optional, Tuple, Union
 
 import bs4
 import requests
@@ -17,7 +17,9 @@ class CustomAdapter(LoggerAdapter):
     Prepends manga name & volume to the logger message
     """
 
-    def process(self, msg: str, kwargs: dict) -> Tuple[str, dict]:
+    def process(
+        self, msg: str, kwargs: MutableMapping[str, Any]
+    ) -> Tuple[str, MutableMapping[str, Any]]:
         manga = self.extra.get("manga")
         volume = self.extra.get("volume")
         if volume:
@@ -26,7 +28,7 @@ class CustomAdapter(LoggerAdapter):
 
 
 def get_adapter(
-    logger: Logger, manga: str, volume: Optional[str] = None
+    logger: Logger, manga: str, volume: Optional[Union[str, int]] = None
 ) -> CustomAdapter:
     if volume:
         extra = {"manga": manga, "volume": volume}

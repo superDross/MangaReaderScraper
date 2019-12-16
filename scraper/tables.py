@@ -1,6 +1,7 @@
 import re
-from typing import Dict, List
+from typing import Dict, List, Optional
 
+from bs4.element import Tag
 from tabulate import tabulate
 
 
@@ -11,9 +12,9 @@ class TableProducer:
 
     def __init__(self) -> None:
         self.results: Dict[str, Dict[str, str]] = {}
-        self.table: str = None
+        self.table: Optional[str] = None
 
-    def _extract_text(self, result: str) -> Dict[str, str]:
+    def _extract_text(self, result: Tag) -> Dict[str, str]:
         """
         Extract the desired text from a HTML search result
         """
@@ -49,7 +50,7 @@ class TableProducer:
         table = tabulate(data, headers=columns, tablefmt="psql")
         self.table = table
 
-    def generate(self, search_results: List[str]) -> str:
+    def generate(self, search_results: List[str]) -> Optional[str]:
         """
         Generate search results into a table
         """

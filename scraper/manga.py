@@ -5,7 +5,7 @@ Manga building blocks & factories
 import logging
 from dataclasses import dataclass, field
 from multiprocessing.pool import Pool, ThreadPool
-from typing import Dict, List, Optional
+from typing import Dict, Generator, List, Optional
 
 from scraper.exceptions import PageAlreadyPresent, VolumeAlreadyPresent
 from scraper.new_types import PageData, VolumeData
@@ -53,7 +53,7 @@ class Volume:
     def __str__(self) -> str:
         return self._str()
 
-    def __iter__(self) -> Page:
+    def __iter__(self) -> Generator:
         for page in self.pages:
             yield page
 
@@ -74,8 +74,7 @@ class Volume:
     def pages(self, metadata: List[PageData]) -> None:
         self._pages = {}
         for page_number, img in metadata:
-            page = Page(number=page_number, img=img)
-            self._pages[page_number] = page
+            self.add_page(page_number, img)
 
     def add_page(self, page_number: int, img: bytes) -> None:
         """
@@ -106,7 +105,7 @@ class Manga:
     def __str__(self) -> str:
         return self._str()
 
-    def __iter__(self) -> Volume:
+    def __iter__(self) -> Generator[Volume, None, None]:
         for volume in self.volumes:
             yield volume
 
@@ -184,5 +183,7 @@ class MangaBuilder:
         for volume_data in volumes_data:
             volume_number, pages_data = volume_data
             manga.add_volume(volume_number)
-            manga.volume[volume_number].pages = pages_data
+            # properties cause an error in mypy when getter/setters input
+            # differ, mypy thinks they should be the same
+            manga.volume[volume_number].pages = pages_data  # type: ignore
         return manga

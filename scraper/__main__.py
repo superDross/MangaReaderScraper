@@ -36,20 +36,17 @@ def gui() -> None:
     sys.exit(app.exec_())
 
 
-def get_volume_values(volume: str) -> Union[str, None]:
+def get_volume_values(volume: str) -> List[int]:
     """
     Transform a string digit into a list of integers
     """
     if "-" in volume:
         start, end = volume.split("-")
         return list(range(int(start), int(end) + 1))
-    elif volume:
-        return [int(x) for x in volume.split()]
-    else:
-        return None
+    return [int(x) for x in volume.split()]
 
 
-def manga_search(query: str) -> Tuple[str, List[int]]:
+def manga_search(query: List[str]) -> Tuple[str, List[str]]:
     """
     Search for a manga and return the manga name and volumes
     selected by user input
@@ -61,7 +58,7 @@ def manga_search(query: str) -> Tuple[str, List[int]]:
         "(Enter alone to download all volumes)?\n>> "
     )
     volumes = input(msg)
-    return (manga, volumes.split())
+    return (manga.strip(), volumes.split())
 
 
 def cli(arguments: List[str]) -> dict:
@@ -73,7 +70,7 @@ def cli(arguments: List[str]) -> dict:
         args["manga"], args["volumes"] = manga_search(args["search"])
 
     if args["volumes"]:
-        volumes = []
+        volumes: List[int] = []
         for vol in args["volumes"]:
             volumes += get_volume_values(vol)
         args["volumes"] = volumes
