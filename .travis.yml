@@ -8,15 +8,23 @@ sudo: true
 
 install:
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
-  - pip install -r requirements.txt
 
 stages:
+  - name: security
   - name: code-style
   - name: type-checking
   - name: tests
 
 jobs:
   include:
+    - stage: security
+      install: pip install safety
+      script: safety check
+
+    - stage: security
+      install: pip install bandit
+      script: bandit -iii -s B322 -r scraper/
+
     - stage: code-style
       install: pip install isort
       script: isort --check-only --diff -ws -tc -o=tabulate -o=bs4 -o=requests -o=pytest -w 88
@@ -26,8 +34,8 @@ jobs:
       script: black --check --diff
 
     - stage: type-checking
-      install: pip install mypy
-      script: mypy --no-sctrict-optional --ignore-missing-imports
+      install: pip install mypy==0.750
+      script: mypy --no-strict-optional --ignore-missing-imports
 
     - stage: tests
       install: pip install -r requirements.txt
