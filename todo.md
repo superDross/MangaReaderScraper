@@ -1,12 +1,14 @@
 # TODO
 
-- Travis CI
 - profiling -> py-spy
 - tox??
 - support Windows
 - complete test coverage
+- unit test for GUI
 - make changes to GUI (see `gui.py`)
 
-## Nice to Haves
+## Features
 
-- Docker? Not sure if pointless as it is not a web app.
+- allow to search for genres & type
+- add different parsers for different websites
+- colour the cli
