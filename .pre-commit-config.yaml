@@ -18,6 +18,12 @@ repos:
         # third-party libs are not being recognised as third party
         args: [--check-only, --diff, -ws, -tc, -o=tabulate, -o=bs4, -o=requests, -o=pytest, -w, "88"]
 
+-   repo: https://gitlab.com/pycqa/flake8
+    rev: master
+    hooks:
+    -   id: flake8
+        language_version: python3.7
+
 -   repo: https://github.com/psf/black
     rev: stable
     hooks:

@@ -1,21 +1,18 @@
 import argparse
 import logging
 import sys
-from typing import List, Tuple, Union
+from typing import List, Tuple
+
+# PyQt5 is broken, requires to install PyQt5-sip then PyQt5
+# however there is no way to specify install order in setup.py
+# so this nasty hack will have to do now
+from PyQt5.QtWidgets import QApplication
 
 from scraper.download import download_manga
 from scraper.exceptions import MangaDoesNotExist
+from scraper.gui import AppGui
 from scraper.menu import SearchMenu
 from scraper.utils import settings
-
-try:
-    # PyQt5 is broken, requires to install PyQt5-sip then PyQt5
-    # however there is no way to specify install order in setup.py
-    # so this nasty hack will have to do now
-    from PyQt5.QtWidgets import QApplication
-    from scraper.gui import AppGui
-except:
-    pass
 
 MANGA_DIR = settings()["manga_directory"]
 
@@ -32,7 +29,8 @@ logger = logging.getLogger(__name__)
 
 def gui() -> None:
     app = QApplication(sys.argv)
-    ex = AppGui()
+    window = AppGui()
+    window.show()
     sys.exit(app.exec_())
 
 

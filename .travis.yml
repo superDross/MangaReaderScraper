@@ -26,6 +26,10 @@ jobs:
       # allow bare try/except and disable input warning
       script: bandit -ii -s B322,B110 -r scraper/
 
+    - stage: linter
+      install: pip install flake8
+      script: flake8 --max-line-length=88 scraper/*.py
+
     - stage: code-style
       install: pip install isort
       script: isort --check-only --diff -ws -tc -o=tabulate -o=bs4 -o=requests -o=pytest -w 88
@@ -36,7 +40,7 @@ jobs:
 
     - stage: type-checking
       install: pip install mypy==0.750
-      script: mypy --no-strict-optional --ignore-missing-imports
+      script: mypy --no-strict-optional --ignore-missing-imports scraper/
 
     - stage: tests
       install: pip install -r requirements.txt
