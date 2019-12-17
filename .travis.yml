@@ -23,7 +23,8 @@ jobs:
 
     - stage: security
       install: pip install bandit
-      script: bandit -iii -s B322 -r scraper/
+      # allow bare try/except and disable input warning
+      script: bandit -ii -s B322,B110 -r scraper/
 
     - stage: code-style
       install: pip install isort
