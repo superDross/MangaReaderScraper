@@ -1,7 +1,7 @@
 from typing import Any, Dict, List, Optional
 
 from scraper.exceptions import InvalidOption
-from scraper.parsers import get_search_results
+from scraper.parsers import MangaReaderSearch
 from scraper.tables import TableProducer
 
 
@@ -78,9 +78,9 @@ class SearchMenu(Menu):
         """
         Search for query and return Search object
         """
-        search_results = get_search_results(query)
+        mangasearch = MangaReaderSearch(query)
         factory = TableProducer()
-        factory.generate(search_results)
+        factory.generate(mangasearch)
         return factory
 
     def _create_options(self) -> Dict[str, str]:

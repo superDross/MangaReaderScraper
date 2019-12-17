@@ -1,10 +1,10 @@
-from typing import List
 from unittest import mock
 
 import pytest
 
 from scraper.__main__ import cli
 from scraper.exceptions import MangaDoesNotExist
+from tests.helpers import METADATA
 
 PATAMETERS = [
     (
@@ -128,9 +128,8 @@ def test_download_via_cli(arguments, expected):
 @pytest.mark.parametrize("arguments,inputs,expected", SEARCH_PARAMETERS)
 @mock.patch("scraper.__main__.download_manga", mock.Mock(return_value=1))
 def test_search_via_cli(arguments, inputs, expected, monkeypatch, search_html):
-    search_results = search_html.find_all("div", {"class": "mangaresultitem"})
-    with mock.patch("scraper.menu.get_search_results") as mocked_func:
-        mocked_func.return_value = search_results
+    with mock.patch("scraper.menu.MangaReaderSearch.metadata") as mocked:
+        mocked.return_value = METADATA
         gen = (x for x in inputs)
         monkeypatch.setattr("builtins.input", lambda x: next(gen))
         args = cli(arguments)

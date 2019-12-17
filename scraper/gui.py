@@ -6,7 +6,7 @@ import PyQt5.QtWidgets as qtw
 from PyQt5.QtWidgets import QCheckBox, QComboBox
 
 from scraper.download import download_manga
-from scraper.parsers import get_search_results
+from scraper.parsers import MangaReaderSearch
 from scraper.tables import TableProducer
 
 # https://pythonspot.com/pyqt5-tabs/
@@ -182,9 +182,9 @@ class SearchTab(qtw.QWidget):
         """
         Used to submit query for search
         """
-        search_results = get_search_results(self.search_line.text())
+        mangasearch = MangaReaderSearch(self.search_line.text())
         table = TableProducer()
-        table.generate(search_results)
+        table.generate(mangasearch)
         self.table.construct(table.results)
         self.search_line.clear()
         self.table.download_list = []

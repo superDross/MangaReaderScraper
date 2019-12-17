@@ -1,5 +1,8 @@
 # TODO
 
+- rent space on digital ocean to run this and upload to dropbox
+
+- upload to google-drive/onedrive/dropbox `--upload`
 - support Windows
 - complete test coverage
 - unit test for GUI

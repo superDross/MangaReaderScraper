@@ -10,7 +10,7 @@ from scraper.download import Download, download_manga
 
 @pytest.mark.parametrize("filetype,file_signature", [("pdf", "%PDF-"), ("cbz", "PK")])
 def test_download_manga(filetype, file_signature, parser):
-    with mock.patch("scraper.manga.MangaParser", parser):
+    with mock.patch("scraper.manga.MangaReaderParser", parser):
         downloader = Download("dragon-ball", filetype)
         downloader.download_volumes([1])
         expected_path = f"/tmp/dragon-ball/dragon-ball_volume_1.{filetype}"
@@ -22,7 +22,7 @@ def test_download_manga(filetype, file_signature, parser):
 
 
 def test_download_manga_helper_function(parser):
-    with mock.patch("scraper.manga.MangaParser", parser):
+    with mock.patch("scraper.manga.MangaReaderParser", parser):
         download_manga("dragon-ball", [1, 2], "pdf")
         expected_path = "/tmp/dragon-ball/dragon-ball_volume_1.pdf"
         expected_path2 = "/tmp/dragon-ball/dragon-ball_volume_2.pdf"

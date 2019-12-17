@@ -1,8 +1,8 @@
-import re
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 
-from bs4.element import Tag
 from tabulate import tabulate
+
+from scraper.parsers import MangaReaderSearch
 
 
 class TableProducer:
@@ -13,31 +13,6 @@ class TableProducer:
     def __init__(self) -> None:
         self.results: Dict[str, Dict[str, str]] = {}
         self.table: Optional[str] = None
-
-    def _extract_text(self, result: Tag) -> Dict[str, str]:
-        """
-        Extract the desired text from a HTML search result
-        """
-        manga_name = result.find("div", {"class": "manga_name"})
-        title = manga_name.text
-        manga_url = manga_name.find("a").get("href")
-        chapters = result.find("div", {"class": "chapter_count"}).text
-        manga_type = result.find("div", {"class": "manga_type"}).text
-        return {
-            "title": title.replace("\n", ""),
-            "manga_url": manga_url[1:],
-            "chapters": re.sub(r"\D", "", chapters),
-            "type": manga_type.split("(")[0],
-        }
-
-    def _extract_metadata(self, search_results: List[Tag]) -> None:
-        """
-        Extract all the desired text from the HTML search
-        results and set as a dict.
-        """
-        for key, result in enumerate(search_results, start=1):
-            manga_metadata = self._extract_text(result)
-            self.results[str(key)] = manga_metadata
 
     def _to_table(self) -> None:
         """
@@ -50,10 +25,10 @@ class TableProducer:
         table = tabulate(data, headers=columns, tablefmt="psql")
         self.table = table
 
-    def generate(self, search_results: List[Tag]) -> Optional[str]:
+    def generate(self, search_results: MangaReaderSearch) -> Optional[str]:
         """
         Generate search results into a table
         """
-        self._extract_metadata(search_results)
+        self.results = search_results.metadata()
         self._to_table()
         return self.table

@@ -4,12 +4,12 @@ import pytest
 
 from scraper.exceptions import InvalidOption
 from scraper.menu import Menu, SearchMenu
+from tests.helpers import METADATA
 
 
 def test_searchmenu_attributes(search_html):
-    search_results = search_html.find_all("div", {"class": "mangaresultitem"})
-    with mock.patch("scraper.menu.get_search_results") as mocked_func:
-        mocked_func.return_value = search_results
+    with mock.patch("scraper.menu.MangaReaderSearch.metadata") as mocked:
+        mocked.return_value = METADATA
         search_menu = SearchMenu("dragon-ball")
         expected_choices = (
             "+----+---------------------------------+-----------+--------+\n"

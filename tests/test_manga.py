@@ -147,7 +147,7 @@ def test_manga_iter(manga):
 
 @pytest.mark.parametrize("inval", [[1, 2, 3], None])
 def test_mangabuilder_get_all_volumes(inval, parser):
-    with mock.patch("scraper.manga.MangaParser", parser):
+    with mock.patch("scraper.manga.MangaReaderParser", parser):
         builder = MangaBuilder(manga_name="dragon-ball")
         manga = builder.get_manga_volumes(vol_nums=inval)
         v1 = Volume(1, "/tmp/dragon-ball/dragon-ball_volume_1.pdf")
@@ -166,7 +166,7 @@ def test_mangabuilder_get_all_volumes(inval, parser):
 
 
 def test_mangabuilder_get_single_volumes(parser):
-    with mock.patch("scraper.manga.MangaParser", parser):
+    with mock.patch("scraper.manga.MangaReaderParser", parser):
         builder = MangaBuilder(manga_name="dragon-ball")
         manga = builder.get_manga_volumes(vol_nums=[1])
         v1 = Volume(1, "/tmp/dragon-ball/dragon-ball_volume_1.pdf")

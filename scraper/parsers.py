@@ -5,7 +5,7 @@ HTML parsers that scrape and parse data from MangaReader.net
 import logging
 import re
 import sys
-from typing import List, Tuple
+from typing import Dict, List, Tuple
 
 import requests
 from bs4 import BeautifulSoup
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 MANGA_URL = settings()["manga_url"]
 
 
-class MangaParser:
+class MangaReaderParser:
     """
     Parses data associated with a given manga name
     """
@@ -81,23 +81,62 @@ class MangaParser:
             raise e
 
 
-def get_search_results(
-    query_list: List[str],
-    manga_type: int = 0,
-    manga_status: int = 0,
-    order: int = 0,
-    genre: str = "0000000000000000000000000000000000000",
-) -> List[Tag]:
+class MangaReaderSearch:
     """
-    Scrape and return HTML dict with search results
+    Parse search queries to the site
     """
-    # TODO: change to class when integrating args e.g. genre
-    query = "_".join(query_list)
-    url = f"""{MANGA_URL}/search/?w={query}&rd={manga_type}
-               &status={manga_status}&order=0&genre={genre}&p=0"""
-    html_response = get_html_from_url(url)
-    search_results = html_response.find_all("div", {"class": "mangaresultitem"})
-    if not search_results:
-        logging.warning(f"No search results found for {query}")
-        sys.exit()
-    return search_results
+
+    def __init__(self, query: List[str]):
+        self.query: List[str] = query
+        self.manga_type: int = 0
+        self.manga_status: int = 0
+        self.order: int = 0
+        self.genre: str = "0000000000000000000000000000000000000"
+
+        self.results: List[Tag]
+
+    def _scrape_results(self) -> List[Tag]:
+        """
+        Scrape and return HTML list with search results
+        """
+        query = "_".join(self.query)
+        url = (
+            f"{MANGA_URL}/search/?w={self.query}&rd={self.manga_type}"
+            f"&status={self.manga_status}&order=0&genre={self.genre}&p=0"
+        )
+        html_response = get_html_from_url(url)
+        search_results = html_response.find_all("div", {"class": "mangaresultitem"})
+        if not search_results:
+            logging.warning(f"No search results found for {query}")
+            # TODO: raise error instead, then catch in __main__ and sys.exit?
+            sys.exit()
+
+        self.results = search_results
+        return search_results
+
+    def _extract_text(self, result: Tag) -> Dict[str, str]:
+        """
+        Extract the desired text from a HTML search result
+        """
+        manga_name = result.find("div", {"class": "manga_name"})
+        title = manga_name.text
+        manga_url = manga_name.find("a").get("href")
+        chapters = result.find("div", {"class": "chapter_count"}).text
+        manga_type = result.find("div", {"class": "manga_type"}).text
+        return {
+            "title": title.replace("\n", ""),
+            "manga_url": manga_url[1:],
+            "chapters": re.sub(r"\D", "", chapters),
+            "type": manga_type.split("(")[0],
+        }
+
+    def metadata(self) -> Dict[str, Dict[str, str]]:
+        """
+        Extract each mangas metadata from the search results
+        """
+        results = self._scrape_results()
+        metadata: Dict[str, Dict[str, str]] = {}
+        for key, result in enumerate(results, start=1):
+            manga_metadata = self._extract_text(result)
+            metadata[str(key)] = manga_metadata
+        return metadata
