@@ -1,8 +1,9 @@
 import abc
 from functools import lru_cache
-from typing import List
+from typing import List, Tuple
 
 from scraper.exceptions import MangaParserNotSet
+from scraper.new_types import SearchResults
 
 
 class BaseMangaParser:
@@ -14,16 +15,25 @@ class BaseMangaParser:
         self.name = manga_name
         self.base_url = base_url
 
-    @abc.abstractmethod
-    def page_urls(self):
+    def __call__(self, *args, **kwargs):
+        """
+        Required as mypy thinks you are trying to call an
+        intiliased object and not actually initilise a class.
+        Creating a naked __call__ method stops it from thinking
+        the class is 'not callable'.
+        """
         pass
 
     @abc.abstractmethod
-    def page_data(self):
+    def page_urls(self, volume: int) -> List[str]:
         pass
 
     @abc.abstractmethod
-    def all_volume_numbers(self):
+    def page_data(self, page_url: str) -> Tuple[int, bytes]:
+        pass
+
+    @abc.abstractmethod
+    def all_volume_numbers(self) -> List[int]:
         pass
 
 
@@ -36,8 +46,17 @@ class BaseSearchParser:
         self.query: List[str] = query
         self.base_url: str = base_url
 
+    def __call__(self, *args, **kwargs):
+        """
+        Required as mypy thinks you are trying to call an
+        intiliased object and not actually initilise a class.
+        Creating a naked __call__ method stops it from thinking
+        the class is 'not callable'.
+        """
+        pass
+
     @abc.abstractmethod
-    def search(self):
+    def search(self, query) -> SearchResults:
         pass
 
 
@@ -60,6 +79,15 @@ class BaseSiteParser:
         if cls is BaseSiteParser:
             raise Exception("Abstract class cannot be instantiatied")
         return object.__new__(cls)
+
+    def __call__(self, *args, **kwargs):
+        """
+        Required as mypy thinks you are trying to call an
+        intiliased object and not actually initilise a class.
+        Creating a naked __call__ method stops it from thinking
+        the class is 'not callable'.
+        """
+        pass
 
     @property
     def manga(self):

@@ -73,7 +73,8 @@ def get_manga_parser(source: str) -> BaseSiteParser:
     parser = sources.get(source)
     if not parser:
         raise ValueError(f"{source} is not supported try {', '.join(sources.keys())}")
-    return parser
+    # mypy thinks it will always parse back MangaReader
+    return parser  # type: ignore
 
 
 def cli(arguments: List[str]) -> dict:
@@ -98,7 +99,7 @@ def cli(arguments: List[str]) -> dict:
             manga_name=args["manga"],
             volumes=args["volumes"],
             filetype=filetype,
-            parser=manga_parser,
+            parser=manga_parser,  # type: ignore
         )
     except MangaDoesNotExist:
         logging.info(

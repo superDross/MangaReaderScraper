@@ -9,7 +9,7 @@ from typing import Dict, Generator, List, Optional
 
 from scraper.exceptions import PageAlreadyPresent, VolumeAlreadyPresent
 from scraper.new_types import PageData, VolumeData
-from scraper.parsers.base import BaseMangaParser
+from scraper.parsers.base import BaseSiteParser
 from scraper.utils import get_adapter, settings
 
 logger = logging.getLogger(__name__)
@@ -147,8 +147,8 @@ class MangaBuilder:
     Creates Manga objects
     """
 
-    def __init__(self, parser: BaseMangaParser) -> None:
-        self.parser: BaseMangaParser = parser
+    def __init__(self, parser: BaseSiteParser) -> None:
+        self.parser: BaseSiteParser = parser
 
     def _get_volume_data(self, volume_number: int) -> VolumeData:
         """
