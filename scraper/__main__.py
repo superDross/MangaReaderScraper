@@ -3,18 +3,23 @@ import logging
 import sys
 from typing import List, Tuple
 
+from scraper.download import download_manga
+from scraper.exceptions import MangaDoesNotExist
+
+# from scraper.gui import AppGui
+from scraper.menu import SearchMenu
+from scraper.parsers.base import BaseSiteParser
+from scraper.parsers.mangareader import MangaReader
+from scraper.utils import settings
+
 # PyQt5 is broken, requires to install PyQt5-sip then PyQt5
 # however there is no way to specify install order in setup.py
 # so this nasty hack will have to do now
-from PyQt5.QtWidgets import QApplication
+# from PyQt5.QtWidgets import QApplication
 
-from scraper.download import download_manga
-from scraper.exceptions import MangaDoesNotExist
-from scraper.gui import AppGui
-from scraper.menu import SearchMenu
-from scraper.utils import settings
 
 MANGA_DIR = settings()["manga_directory"]
+SOURCE = settings()["source"]
 
 
 logging.basicConfig(
@@ -27,11 +32,12 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-def gui() -> None:
-    app = QApplication(sys.argv)
-    window = AppGui()
-    window.show()
-    sys.exit(app.exec_())
+# TODO: fix broken gui
+# def gui() -> None:
+#     app = QApplication(sys.argv)
+#     window = AppGui()
+#     window.show()
+#     sys.exit(app.exec_())
 
 
 def get_volume_values(volume: str) -> List[int]:
@@ -44,12 +50,12 @@ def get_volume_values(volume: str) -> List[int]:
     return [int(x) for x in volume.split()]
 
 
-def manga_search(query: List[str]) -> Tuple[str, List[str]]:
+def manga_search(query: List[str], parser) -> Tuple[str, List[str]]:
     """
     Search for a manga and return the manga name and volumes
     selected by user input
     """
-    menu = SearchMenu(query)
+    menu = SearchMenu(query, parser)
     manga = menu.handle_options()
     msg = (
         "Which volume(s) do you want to download "
@@ -59,13 +65,25 @@ def manga_search(query: List[str]) -> Tuple[str, List[str]]:
     return (manga.strip(), volumes.split())
 
 
+def get_manga_parser(source: str) -> BaseSiteParser:
+    """
+    Use the string to return correct parser class
+    """
+    sources = {"mangareader": MangaReader}
+    parser = sources.get(source)
+    if not parser:
+        raise ValueError(f"{source} is not supported try {', '.join(sources.keys())}")
+    return parser
+
+
 def cli(arguments: List[str]) -> dict:
     parser = get_parser()
     args = vars(parser.parse_args(arguments))
     filetype = "cbz" if args["cbz"] else "pdf"
+    manga_parser = get_manga_parser(args["source"])
 
     if args["search"]:
-        args["manga"], args["volumes"] = manga_search(args["search"])
+        args["manga"], args["volumes"] = manga_search(args["search"], manga_parser)
 
     if args["volumes"]:
         volumes: List[int] = []
@@ -76,7 +94,12 @@ def cli(arguments: List[str]) -> dict:
         args["volumes"] = None
 
     try:
-        download_manga(args["manga"], args["volumes"], filetype)
+        download_manga(
+            manga_name=args["manga"],
+            volumes=args["volumes"],
+            filetype=filetype,
+            parser=manga_parser,
+        )
     except MangaDoesNotExist:
         logging.info(
             f"No manga found for {args['manga']}. Searching for closest match."
@@ -110,11 +133,14 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--cbz", action="store_true", help="output in cbz format instead of pdf"
     )
+    parser.add_argument(
+        "--source", "-z", type=str, choices={"mangareader"}, default=SOURCE
+    )
     return parser
 
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         cli_entry()
-    else:
-        gui()
+    # else:
+    #     gui()

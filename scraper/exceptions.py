@@ -34,3 +34,7 @@ class VolumeAlreadyPresent(Exception):
 
 class InvalidOption(Exception):
     pass
+
+
+class MangaParserNotSet(Exception):
+    pass

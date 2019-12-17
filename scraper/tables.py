@@ -2,7 +2,10 @@ from typing import Dict, Optional
 
 from tabulate import tabulate
 
-from scraper.parsers import MangaReaderSearch
+from scraper.new_types import SearchResults
+
+
+# TODO: this should now be a function and not a class
 
 
 class TableProducer:
@@ -25,10 +28,10 @@ class TableProducer:
         table = tabulate(data, headers=columns, tablefmt="psql")
         self.table = table
 
-    def generate(self, search_results: MangaReaderSearch) -> Optional[str]:
+    def generate(self, search_results: SearchResults) -> Optional[str]:
         """
         Generate search results into a table
         """
-        self.results = search_results.metadata()
+        self.results = search_results
         self._to_table()
         return self.table

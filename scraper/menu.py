@@ -1,8 +1,10 @@
 from typing import Any, Dict, List, Optional
 
+from tabulate import tabulate
+
 from scraper.exceptions import InvalidOption
-from scraper.parsers import MangaReaderSearch
-from scraper.tables import TableProducer
+from scraper.new_types import SearchResults
+from scraper.parsers.base import BaseSearchParser
 
 
 class Menu:
@@ -68,23 +70,31 @@ class Menu:
 
 
 class SearchMenu(Menu):
-    def __init__(self, query: List[str]) -> None:
-        self.search_results: TableProducer = self._search(query)
-        choices: str = self.search_results.table
+    def __init__(self, query: List[str], parser: BaseSearchParser) -> None:
+        self.parser: BaseSearchParser = parser()
+        self.search_results: SearchResults = self._search(query)
+        choices: str = self.table()
         options: Dict[str, str] = self._create_options()
         Menu.__init__(self, options, choices)
 
-    def _search(self, query: List[str]) -> TableProducer:
+    def _search(self, query: List[str]) -> SearchResults:
         """
         Search for query and return Search object
         """
-        mangasearch = MangaReaderSearch(query)
-        factory = TableProducer()
-        factory.generate(mangasearch)
-        return factory
+        search_results = self.parser.search(" ".join(query))
+        return search_results
+
+    def table(self) -> str:
+        columns = ["", "Title", "Volumes", "Type"]
+        data = [
+            [k, x["title"], x["chapters"], x["type"]]
+            for k, x in self.search_results.items()
+        ]
+        table = tabulate(data, headers=columns, tablefmt="psql")
+        return table
 
     def _create_options(self) -> Dict[str, str]:
         """
         Take number and url from search object
         """
-        return {k: v["manga_url"] for k, v in self.search_results.results.items()}
+        return {k: v["manga_url"] for k, v in self.search_results.items()}

@@ -9,7 +9,7 @@ from typing import Dict, Generator, List, Optional
 
 from scraper.exceptions import PageAlreadyPresent, VolumeAlreadyPresent
 from scraper.new_types import PageData, VolumeData
-from scraper.parsers import MangaReaderParser
+from scraper.parsers.base import BaseMangaParser
 from scraper.utils import get_adapter, settings
 
 logger = logging.getLogger(__name__)
@@ -147,18 +147,18 @@ class MangaBuilder:
     Creates Manga objects
     """
 
-    def __init__(self, manga_name: str) -> None:
-        self.parser: MangaReaderParser = MangaReaderParser(manga_name)
+    def __init__(self, parser: BaseMangaParser) -> None:
+        self.parser: BaseMangaParser = parser
 
     def _get_volume_data(self, volume_number: int) -> VolumeData:
         """
         Returns volume number & each pages raw data
         """
-        adapter = get_adapter(logger, self.parser.manga_name, volume_number)
+        adapter = get_adapter(logger, self.parser.manga.name, volume_number)
         adapter.info("downloading pages")
-        urls = self.parser.page_urls(volume_number)
+        urls = self.parser.manga.page_urls(volume_number)
         with ThreadPool() as pool:
-            pages_data = pool.map(self.parser.page_data, urls)
+            pages_data = pool.map(self.parser.manga.page_data, urls)
         return (volume_number, pages_data)
 
     def _get_volumes_data(
@@ -168,7 +168,7 @@ class MangaBuilder:
         Returns list of raw volume data
         """
         if not vol_nums:
-            vol_nums = self.parser.all_volume_numbers()
+            vol_nums = self.parser.manga.all_volume_numbers()
         with Pool() as pool:
             return pool.map(self._get_volume_data, vol_nums)
 
@@ -179,7 +179,7 @@ class MangaBuilder:
         Returns a Manga object containing the requested volumes
         """
         volumes_data = self._get_volumes_data(vol_nums)
-        manga = Manga(self.parser.manga_name, filetype)
+        manga = Manga(self.parser.manga.name, filetype)
         for volume_data in volumes_data:
             volume_number, pages_data = volume_data
             manga.add_volume(volume_number)

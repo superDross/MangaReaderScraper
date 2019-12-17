@@ -74,11 +74,10 @@ def create_base_config() -> None:
     downloaddir = user_home / "Downloads"
     configdir = user_home / ".config"
     for path in [downloaddir, configdir]:
-        # mkdir -p
         path.mkdir(parents=True, exist_ok=True)
 
     config["config"]["manga_directory"] = str(downloaddir)
-    config["config"]["manga_url"] = "http://mangareader.net"
+    config["config"]["source"] = "mangareader"
 
     configfile = configdir / "mangascraper.ini"
     with configfile.open("w") as cf:

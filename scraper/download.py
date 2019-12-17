@@ -16,6 +16,7 @@ from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
 from scraper.manga import MangaBuilder, Volume
+from scraper.parsers.base import BaseMangaParser
 from scraper.utils import download_timer, get_adapter, settings
 
 logger = logging.getLogger(__name__)
@@ -28,9 +29,9 @@ class Download:
     Downloads the manga in the desired format
     """
 
-    def __init__(self, manga_name: str, filetype: str) -> None:
+    def __init__(self, manga_name: str, filetype: str, parser: BaseMangaParser) -> None:
         self.manga_name: str = manga_name
-        self.factory: MangaBuilder = MangaBuilder(manga_name)
+        self.factory: MangaBuilder = MangaBuilder(parser=parser(manga_name))
         self.adapter: LoggerAdapter = get_adapter(logger, manga_name)
         self.type: str = filetype
 
@@ -91,6 +92,8 @@ class Download:
         self.adapter.info(f"All volumes downloaded")
 
 
-def download_manga(manga_name: str, volumes: Optional[int], filetype: str) -> None:
-    downloader = Download(manga_name, filetype)
+def download_manga(
+    manga_name: str, volumes: Optional[int], filetype: str, parser: BaseMangaParser
+) -> None:
+    downloader = Download(manga_name, filetype, parser)
     downloader.download_volumes(volumes)
