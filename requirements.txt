@@ -1,5 +1,5 @@
+beautifulsoup4==4.8.1
 black==19.10b0
-bs4==0.0.1
 flake8==3.7.9
 isort==4.3.21
 lxml==4.2.5

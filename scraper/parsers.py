@@ -9,6 +9,7 @@ from typing import List, Tuple
 
 import requests
 from bs4 import BeautifulSoup
+from bs4.element import Tag
 
 from scraper.exceptions import MangaDoesNotExist, VolumeDoesntExist
 from scraper.utils import get_html_from_url, settings
@@ -86,7 +87,7 @@ def get_search_results(
     manga_status: int = 0,
     order: int = 0,
     genre: str = "0000000000000000000000000000000000000",
-) -> List[str]:
+) -> List[Tag]:
     """
     Scrape and return HTML dict with search results
     """

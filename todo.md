@@ -1,7 +1,5 @@
 # TODO
 
-- profiling -> py-spy
-- tox??
 - support Windows
 - complete test coverage
 - unit test for GUI
@@ -9,6 +7,6 @@
 
 ## Features
 
-- allow to search for genres & type
-- add different parsers for different websites
-- colour the cli
+- add different parsers for different websites; MangaRock
+- allow to search for genres & type?
+- colour the cli?

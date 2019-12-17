@@ -30,7 +30,7 @@ class TableProducer:
             "type": manga_type.split("(")[0],
         }
 
-    def _extract_metadata(self, search_results: List[str]) -> None:
+    def _extract_metadata(self, search_results: List[Tag]) -> None:
         """
         Extract all the desired text from the HTML search
         results and set as a dict.
@@ -50,7 +50,7 @@ class TableProducer:
         table = tabulate(data, headers=columns, tablefmt="psql")
         self.table = table
 
-    def generate(self, search_results: List[str]) -> Optional[str]:
+    def generate(self, search_results: List[Tag]) -> Optional[str]:
         """
         Generate search results into a table
         """
