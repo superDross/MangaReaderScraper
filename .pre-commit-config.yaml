@@ -19,13 +19,13 @@ repos:
         args: [--check-only, --diff, -ws, -tc, -o=tabulate, -o=bs4, -o=requests, -o=pytest, -w, "88"]
 
 -   repo: https://gitlab.com/pycqa/flake8
-    rev: master
+    rev: 3.7.9
     hooks:
     -   id: flake8
         language_version: python3.7
 
 -   repo: https://github.com/psf/black
-    rev: stable
+    rev: 19.10b0
     hooks:
     -   id: black
         language_version: python3.7
