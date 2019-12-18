@@ -1,6 +1,6 @@
 # MangaReaderScraper
 
-Search and download specific volumes of a manga series from MangaReader and store as a PDF.
+Search & download mangas from the command line.
 
 ## Install
 
@@ -18,28 +18,16 @@ pip install -r MangaReaderScraper/requirements.txt
 export PYTHONPATH=$PYTHONPATH:/path/to/MangaReaderScraper/
 ```
 
-## GUI
-
-To use the GUI instead of the CLI, simply don't parse any args:
-
-NOTE: due to a bug in PyQt5, this can only be used if you installed
-locally by cloning directly from the repo.
-
-```bash
-python scraper
-```
-
-## CLI
-
-### Options
+## Options
 
 `--search` Search mangareader.net for a given query and select to download one of the mangas from the parsed searched results. <br />
 `--manga` Manga series name to download. <br />
 `--volumes` Manga series volume number to download. <br />
 `--cbz` Store in CBZ format instead of PDF. <br />
 `--output` Directory to save downloads (defaults to `~/Downloads`) <br />
+`--source` Website to scrape from <br />
 
-### Example Usage
+## Example Usage
 
 After using the search function, a table will appear and you will be asked to select a specific manga (type a number in the first column). You will subsequently be asked to download a specific volume. In the example below, Dragon Ball Super volume 1 has been selected for download.
 

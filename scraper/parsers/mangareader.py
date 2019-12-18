@@ -45,12 +45,18 @@ class MangaReaderMangaParser(BaseMangaParser):
                 raise MangaDoesNotExist(self.name)
 
     def page_urls(self, volume: int) -> List[str]:
+        """
+        Return a list of urls for every page in a given volume
+        """
         volume_html = self._scrape_volume(volume)
         all_volume_links = volume_html.find_all("option")
         all_page_urls = [self.base_url + page.get("value") for page in all_volume_links]
         return all_page_urls
 
     def page_data(self, page_url: str) -> Tuple[int, bytes]:
+        """
+        Extracts a manga pages data
+        """
         volume_num, page_num = page_url.split("/")[-2:]
         if not volume_num.isdigit():
             page_num = "1"
@@ -60,6 +66,9 @@ class MangaReaderMangaParser(BaseMangaParser):
         return (int(page_num), img_data)
 
     def all_volume_numbers(self) -> List[int]:
+        """
+        All volume numbers for a manga
+        """
         try:
             url = f"{self.base_url}/{self.name}"
             manga_html = get_html_from_url(url)
@@ -123,6 +132,9 @@ class MangaReaderSearch(BaseSearchParser):
         }
 
     def search(self) -> SearchResults:
+        """
+        Extract each mangas metadata from the search results
+        """
         results = self._scrape_results()
         metadata: Dict[str, Dict[str, str]] = {}
         for key, result in enumerate(results, start=1):
