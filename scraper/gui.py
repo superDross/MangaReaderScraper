@@ -6,7 +6,7 @@ import PyQt5.QtWidgets as qtw
 from PyQt5.QtWidgets import QCheckBox, QComboBox
 
 from scraper.download import download_manga
-from scraper.parsers import MangaReaderSearch
+from scraper.parsers.mangareader import MangaReader
 from scraper.tables import TableProducer
 
 # https://pythonspot.com/pyqt5-tabs/
@@ -182,7 +182,7 @@ class SearchTab(qtw.QWidget):
         """
         Used to submit query for search
         """
-        mangasearch = MangaReaderSearch(self.search_line.text())
+        mangasearch = MangaReader().search(self.search_line.text())
         table = TableProducer()
         table.generate(mangasearch)
         self.table.construct(table.results)
@@ -196,7 +196,8 @@ class SearchTab(qtw.QWidget):
         for entry in self.table.download_list:
             url, volume, cbz = entry
             filetype = "cbz" if cbz else "pdf"
-            download_manga(url, volume, filetype)
+            # None should be a parser class
+            download_manga(url, volume, filetype, None)
         self._msg_box("Download complete!")
 
 

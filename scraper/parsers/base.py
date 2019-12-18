@@ -1,6 +1,10 @@
+"""
+Abstract base classes for all parsers
+"""
+
 import abc
 from functools import lru_cache
-from typing import List, Tuple
+from typing import List, Optional, Tuple, Type
 
 from scraper.exceptions import MangaParserNotSet
 from scraper.new_types import SearchResults
@@ -15,25 +19,25 @@ class BaseMangaParser:
         self.name = manga_name
         self.base_url = base_url
 
-    def __call__(self, *args, **kwargs):
-        """
-        Required as mypy thinks you are trying to call an
-        intiliased object and not actually initilise a class.
-        Creating a naked __call__ method stops it from thinking
-        the class is 'not callable'.
-        """
-        pass
-
     @abc.abstractmethod
     def page_urls(self, volume: int) -> List[str]:
+        """
+        Return a list of urls for every page in a given volume
+        """
         pass
 
     @abc.abstractmethod
     def page_data(self, page_url: str) -> Tuple[int, bytes]:
+        """
+        Extracts a manga pages data
+        """
         pass
 
     @abc.abstractmethod
     def all_volume_numbers(self) -> List[int]:
+        """
+        All volume numbers for a manga
+        """
         pass
 
 
@@ -46,17 +50,11 @@ class BaseSearchParser:
         self.query: List[str] = query
         self.base_url: str = base_url
 
-    def __call__(self, *args, **kwargs):
-        """
-        Required as mypy thinks you are trying to call an
-        intiliased object and not actually initilise a class.
-        Creating a naked __call__ method stops it from thinking
-        the class is 'not callable'.
-        """
-        pass
-
     @abc.abstractmethod
-    def search(self, query) -> SearchResults:
+    def search(self) -> SearchResults:
+        """
+        Extract each mangas metadata from the search results
+        """
         pass
 
 
@@ -67,39 +65,36 @@ class BaseSiteParser:
 
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, base_url, parser_class, search_class, manga_name):
+    def __init__(
+        self,
+        base_url: str,
+        manga_parser: Type[BaseMangaParser],
+        search_parser: Type[BaseSearchParser],
+        manga_name: Optional[str],
+    ):
         self.base_url = base_url
-        self._parser_class = parser_class
-        self._search_class = search_class
-        self._manga = (
-            None if not manga_name else self._parser_class(manga_name, base_url)
+        self._manga_parser = manga_parser
+        self._search_class = search_parser
+        self._manga: Optional[BaseMangaParser] = (
+            None if not manga_name else self._manga_parser(manga_name, base_url)
         )
 
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs) -> "BaseSiteParser":
         if cls is BaseSiteParser:
             raise Exception("Abstract class cannot be instantiatied")
         return object.__new__(cls)
 
-    def __call__(self, *args, **kwargs):
-        """
-        Required as mypy thinks you are trying to call an
-        intiliased object and not actually initilise a class.
-        Creating a naked __call__ method stops it from thinking
-        the class is 'not callable'.
-        """
-        pass
-
     @property
-    def manga(self):
+    def manga(self) -> BaseMangaParser:
         if self._manga:
             return self._manga
         raise MangaParserNotSet("No parser has been set")
 
     @manga.setter
-    def manga(self, manga_name):
-        self._manga = self._parser_class(manga_name, self.base_url)
+    def manga(self, manga_name: str) -> None:
+        self._manga = self._manga_parser(manga_name, self.base_url)
 
     @lru_cache()
-    def search(self, query):
+    def search(self, query: List[str]) -> SearchResults:
         search_parser = self._search_class(query, self.base_url)
         return search_parser.search()

@@ -4,7 +4,7 @@ from tabulate import tabulate
 
 from scraper.exceptions import InvalidOption
 from scraper.new_types import SearchResults
-from scraper.parsers.base import BaseSearchParser
+from scraper.parsers.types import SiteParser, SiteParserClass
 
 
 class Menu:
@@ -70,8 +70,8 @@ class Menu:
 
 
 class SearchMenu(Menu):
-    def __init__(self, query: List[str], parser: BaseSearchParser) -> None:
-        self.parser: BaseSearchParser = parser()
+    def __init__(self, query: List[str], parser: SiteParserClass) -> None:
+        self.parser: SiteParser = parser()
         self.search_results: SearchResults = self._search(query)
         choices: str = self.table()
         options: Dict[str, str] = self._create_options()

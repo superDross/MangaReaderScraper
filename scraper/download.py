@@ -16,12 +16,14 @@ from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
 from scraper.manga import MangaBuilder, Volume
-from scraper.parsers.base import BaseMangaParser
+
+# from scraper.parsers.base import BaseSiteParser
+from scraper.parsers.types import SiteParserClass
+
+# from scraper.new_types import SiteParserClass
 from scraper.utils import download_timer, get_adapter, settings
 
 logger = logging.getLogger(__name__)
-
-MANGA_DIR = settings()["manga_directory"]
 
 
 class Download:
@@ -29,7 +31,7 @@ class Download:
     Downloads the manga in the desired format
     """
 
-    def __init__(self, manga_name: str, filetype: str, parser: BaseMangaParser) -> None:
+    def __init__(self, manga_name: str, filetype: str, parser: SiteParserClass) -> None:
         self.manga_name: str = manga_name
         self.factory: MangaBuilder = MangaBuilder(parser=parser(manga_name))
         self.adapter: LoggerAdapter = get_adapter(logger, manga_name)
@@ -39,7 +41,8 @@ class Download:
         """
         Create a manga directory if it does not exist.
         """
-        manga_dir = Path(MANGA_DIR) / manga_name
+        download_dir = settings()["manga_directory"]
+        manga_dir = Path(download_dir) / manga_name
         manga_dir.mkdir(parents=True, exist_ok=True)
 
     def _to_pdf(self, volume: Volume) -> None:
@@ -93,7 +96,7 @@ class Download:
 
 
 def download_manga(
-    manga_name: str, volumes: Optional[int], filetype: str, parser: BaseMangaParser
+    manga_name: str, volumes: Optional[int], filetype: str, parser: SiteParserClass
 ) -> None:
     downloader = Download(manga_name, filetype, parser)
     downloader.download_volumes(volumes)

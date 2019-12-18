@@ -8,8 +8,8 @@ from scraper.exceptions import MangaDoesNotExist
 
 # from scraper.gui import AppGui
 from scraper.menu import SearchMenu
-from scraper.parsers.base import BaseSiteParser
 from scraper.parsers.mangareader import MangaReader
+from scraper.parsers.types import SiteParserClass
 from scraper.utils import settings
 
 # PyQt5 is broken, requires to install PyQt5-sip then PyQt5
@@ -50,7 +50,7 @@ def get_volume_values(volume: str) -> List[int]:
     return [int(x) for x in volume.split()]
 
 
-def manga_search(query: List[str], parser) -> Tuple[str, List[str]]:
+def manga_search(query: List[str], parser: SiteParserClass) -> Tuple[str, List[str]]:
     """
     Search for a manga and return the manga name and volumes
     selected by user input
@@ -65,7 +65,7 @@ def manga_search(query: List[str], parser) -> Tuple[str, List[str]]:
     return (manga.strip(), volumes.split())
 
 
-def get_manga_parser(source: str) -> BaseSiteParser:
+def get_manga_parser(source: str) -> SiteParserClass:
     """
     Use the string to return correct parser class
     """
@@ -73,8 +73,7 @@ def get_manga_parser(source: str) -> BaseSiteParser:
     parser = sources.get(source)
     if not parser:
         raise ValueError(f"{source} is not supported try {', '.join(sources.keys())}")
-    # mypy thinks it will always parse back MangaReader
-    return parser  # type: ignore
+    return parser
 
 
 def cli(arguments: List[str]) -> dict:
@@ -99,7 +98,7 @@ def cli(arguments: List[str]) -> dict:
             manga_name=args["manga"],
             volumes=args["volumes"],
             filetype=filetype,
-            parser=manga_parser,  # type: ignore
+            parser=manga_parser,
         )
     except MangaDoesNotExist:
         logging.info(

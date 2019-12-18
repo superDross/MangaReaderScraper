@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 
 
 class VolumeDoesntExist(Exception):
@@ -6,7 +6,9 @@ class VolumeDoesntExist(Exception):
     Raise if the volume doesn't exist in MangaReader
     """
 
-    def __init__(self, manga: str, volume: str, msg: Optional[str] = None) -> None:
+    def __init__(
+        self, manga: str, volume: Union[str, int], msg: Optional[str] = None
+    ) -> None:
         if not msg:
             msg = f"{manga} volume {volume} is not available at mangareader.net"
         Exception.__init__(self, msg)

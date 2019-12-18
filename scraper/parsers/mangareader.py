@@ -5,7 +5,7 @@ HTML parsers that scrape and parse data from MangaReader.net
 import logging
 import re
 import sys
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
 import requests
 from bs4 import BeautifulSoup
@@ -19,16 +19,11 @@ from scraper.utils import get_html_from_url
 logger = logging.getLogger(__name__)
 
 
-# scraper/parsers/base.py
-# scraper/parsers/mangareader.py
-# scraper/parsers/mangarock.py
-
-
 class MangaReaderMangaParser(BaseMangaParser):
     def __init__(self, manga_name: str, base_url: str) -> None:
         super().__init__(manga_name, base_url)
 
-    def _scrape_volume(self, volume) -> BeautifulSoup:
+    def _scrape_volume(self, volume: int) -> BeautifulSoup:
         """
         Retrieve HTML for a given manga volume number
         """
@@ -44,18 +39,12 @@ class MangaReaderMangaParser(BaseMangaParser):
                 raise MangaDoesNotExist(self.name)
 
     def page_urls(self, volume: int) -> List[str]:
-        """
-        Return a list of urls for every page in a given volume
-        """
         volume_html = self._scrape_volume(volume)
         all_volume_links = volume_html.find_all("option")
         all_page_urls = [self.base_url + page.get("value") for page in all_volume_links]
         return all_page_urls
 
     def page_data(self, page_url: str) -> Tuple[int, bytes]:
-        """
-        Extracts a manga pages data
-        """
         volume_num, page_num = page_url.split("/")[-2:]
         if not volume_num.isdigit():
             page_num = "1"
@@ -65,9 +54,6 @@ class MangaReaderMangaParser(BaseMangaParser):
         return (int(page_num), img_data)
 
     def all_volume_numbers(self) -> List[int]:
-        """
-        All volume numbers for a manga
-        """
         try:
             url = f"{self.base_url}/{self.name}"
             manga_html = get_html_from_url(url)
@@ -128,9 +114,6 @@ class MangaReaderSearch(BaseSearchParser):
         }
 
     def search(self) -> SearchResults:
-        """
-        Extract each mangas metadata from the search results
-        """
         results = self._scrape_results()
         metadata: Dict[str, Dict[str, str]] = {}
         for key, result in enumerate(results, start=1):
@@ -140,10 +123,10 @@ class MangaReaderSearch(BaseSearchParser):
 
 
 class MangaReader(BaseSiteParser):
-    def __init__(self, manga_name=None):
+    def __init__(self, manga_name: Optional[str] = None) -> None:
         super().__init__(
-            base_url="http://mangareader.net",
-            parser_class=MangaReaderMangaParser,
-            search_class=MangaReaderSearch,
             manga_name=manga_name,
+            base_url="http://mangareader.net",
+            manga_parser=MangaReaderMangaParser,
+            search_parser=MangaReaderSearch,
         )
