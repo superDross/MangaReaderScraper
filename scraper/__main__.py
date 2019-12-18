@@ -85,6 +85,9 @@ def cli(arguments: List[str]) -> dict:
     if args["search"]:
         args["manga"], args["volumes"] = manga_search(args["search"], manga_parser)
 
+    else:
+        args["manga"] = " ".join(args["manga"])
+
     if args["volumes"]:
         volumes: List[int] = []
         for vol in args["volumes"]:
@@ -122,7 +125,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description="downloads and converts manga volumes to pdf or cbz format"
     )
-    parser.add_argument("--manga", "-m", type=str, help="manga series name")
+    parser.add_argument("--manga", "-m", type=str, help="manga series name", nargs="*")
     parser.add_argument(
         "--search", "-s", type=str, help="search manga reader", nargs="*"
     )
