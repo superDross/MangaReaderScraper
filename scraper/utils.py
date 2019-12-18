@@ -84,7 +84,7 @@ def create_base_config() -> None:
         config.write(cf)
 
 
-def settings() -> configparser.SectionProxy:
+def settings() -> configparser.ConfigParser:
     """
     Retrieve settings file contents
     """
@@ -93,4 +93,4 @@ def settings() -> configparser.SectionProxy:
     if not user_config.exists():
         create_base_config()
     config.read(str(user_config))
-    return config["config"]
+    return config

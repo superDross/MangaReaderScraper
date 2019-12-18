@@ -27,7 +27,9 @@ def mocked_manga_env_var():
 
 @pytest.fixture(scope="session", autouse=True)
 def mocked_download_settings():
-    mocked_settings = mock.MagicMock(return_value={"manga_directory": "/tmp/"})
+    mocked_settings = mock.MagicMock(
+        return_value={"config": {"manga_directory": "/tmp/"}}
+    )
     with mock.patch("scraper.download.settings", mocked_settings) as mocked_dir:
         yield mocked_dir
 

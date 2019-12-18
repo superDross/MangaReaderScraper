@@ -14,7 +14,8 @@ from scraper.utils import get_adapter, settings
 
 logger = logging.getLogger(__name__)
 
-MANGA_DIR = settings()["manga_directory"]
+# TODO: place inside Manga class where used, it is not used anywhere else
+MANGA_DIR = settings()["config"]["manga_directory"]
 
 
 @dataclass(frozen=True, repr=False)

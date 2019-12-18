@@ -37,7 +37,7 @@ class Download:
         """
         Create a manga directory if it does not exist.
         """
-        download_dir = settings()["manga_directory"]
+        download_dir = settings()["config"]["manga_directory"]
         manga_dir = Path(download_dir) / manga_name
         manga_dir.mkdir(parents=True, exist_ok=True)
 

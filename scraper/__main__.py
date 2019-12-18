@@ -18,8 +18,8 @@ from scraper.utils import settings
 # from PyQt5.QtWidgets import QApplication
 
 
-MANGA_DIR = settings()["manga_directory"]
-SOURCE = settings()["source"]
+MANGA_DIR = settings()["config"]["manga_directory"]
+SOURCE = settings()["config"]["source"]
 
 
 logging.basicConfig(
