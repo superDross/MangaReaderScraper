@@ -1,4 +1,3 @@
-import os
 import shutil
 from pathlib import Path
 from unittest import mock
@@ -37,7 +36,7 @@ def test_settings():
         create_base_config()
         config = settings()
         assert config["manga_directory"] == "/tmp/Downloads"
-        assert config["manga_url"] == "http://mangareader.net"
+        assert config["source"] == "mangareader"
 
 
 def test_settings_creates_base_config():

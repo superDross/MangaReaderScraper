@@ -20,7 +20,13 @@ logger = logging.getLogger(__name__)
 
 
 class MangaReaderMangaParser(BaseMangaParser):
-    def __init__(self, manga_name: str, base_url: str) -> None:
+    """
+    Scrapes & parses a specific manga page on mangareader.net
+    """
+
+    def __init__(
+        self, manga_name: str, base_url: str = "http://mangareader.net"
+    ) -> None:
         super().__init__(manga_name, base_url)
 
     def _scrape_volume(self, volume: int) -> BeautifulSoup:
@@ -69,7 +75,11 @@ class MangaReaderMangaParser(BaseMangaParser):
 
 
 class MangaReaderSearch(BaseSearchParser):
-    def __init__(self, query: List[str], base_url: str) -> None:
+    """
+    Parses search queries from mangareader.net/search
+    """
+
+    def __init__(self, query: str, base_url: str = "http://mangareader.net") -> None:
         super().__init__(query, base_url)
         self.manga_type: int = 0
         self.manga_status: int = 0
@@ -82,7 +92,6 @@ class MangaReaderSearch(BaseSearchParser):
         """
         Scrape and return HTML list with search results
         """
-        query = "_".join(self.query)
         url = (
             f"{self.base_url}/search/?w={self.query}&rd={self.manga_type}"
             f"&status={self.manga_status}&order=0&genre={self.genre}&p=0"
@@ -90,7 +99,7 @@ class MangaReaderSearch(BaseSearchParser):
         html_response = get_html_from_url(url)
         search_results = html_response.find_all("div", {"class": "mangaresultitem"})
         if not search_results:
-            logging.warning(f"No search results found for {query}")
+            logging.warning(f"No search results found for {self.query}")
             # TODO: raise error instead, then catch in __main__ and sys.exit?
             sys.exit()
 
@@ -123,6 +132,10 @@ class MangaReaderSearch(BaseSearchParser):
 
 
 class MangaReader(BaseSiteParser):
+    """
+    Scraper & parser for mangareader.net
+    """
+
     def __init__(self, manga_name: Optional[str] = None) -> None:
         super().__init__(
             manga_name=manga_name,

@@ -4,7 +4,7 @@ import pytest
 
 from scraper.__main__ import cli
 from scraper.exceptions import MangaDoesNotExist
-from tests.helpers import METADATA
+from tests.helpers import MockedSiteParser
 
 PATAMETERS = [
     (
@@ -14,6 +14,7 @@ PATAMETERS = [
             "manga": "dragonball",
             "output": "/tmp",
             "search": None,
+            "source": "mangareader",
             "volumes": None,
         },
     ),
@@ -24,6 +25,7 @@ PATAMETERS = [
             "manga": "dragonball",
             "output": "/tmp",
             "search": None,
+            "source": "mangareader",
             "volumes": [1, 2],
         },
     ),
@@ -34,6 +36,7 @@ PATAMETERS = [
             "manga": "one-piece",
             "output": "/tmp",
             "search": None,
+            "source": "mangareader",
             "volumes": [231],
         },
     ),
@@ -44,6 +47,7 @@ PATAMETERS = [
             "manga": "something",
             "output": "/home/me/Downloads",
             "search": None,
+            "source": "mangareader",
             "volumes": None,
         },
     ),
@@ -54,6 +58,7 @@ PATAMETERS = [
             "manga": "something",
             "output": "/tmp",
             "search": None,
+            "source": "mangareader",
             "volumes": [1, 2, 3, 4, 5, 40],
         },
     ),
@@ -66,6 +71,7 @@ SEARCH_PARAMETERS = [
         {
             "manga": "dragon-ball",
             "search": ["dragon", "ball"],
+            "source": "mangareader",
             "volumes": [5],
             "output": "/tmp",
             "cbz": False,
@@ -77,6 +83,7 @@ SEARCH_PARAMETERS = [
         {
             "manga": "dragon-ball-super",
             "search": ["dragonball"],
+            "source": "mangareader",
             "volumes": [8, 9],
             "output": "/tmp",
             "cbz": False,
@@ -88,6 +95,7 @@ SEARCH_PARAMETERS = [
         {
             "manga": "dragon-ball-sd",
             "search": ["dragonball"],
+            "source": "mangareader",
             "volumes": [6, 7, 8, 9, 10],
             "output": "/tmp",
             "cbz": False,
@@ -99,6 +107,7 @@ SEARCH_PARAMETERS = [
         {
             "manga": "dragon-ball-sd",
             "search": ["dragonball"],
+            "source": "mangareader",
             "volumes": None,
             "output": "/tmp",
             "cbz": False,
@@ -110,6 +119,7 @@ SEARCH_PARAMETERS = [
         {
             "manga": "dragon-ball-sd",
             "search": ["dragonball"],
+            "source": "mangareader",
             "volumes": [6, 7, 8, 9, 10, 12],
             "output": "/tmp",
             "cbz": False,
@@ -128,8 +138,7 @@ def test_download_via_cli(arguments, expected):
 @pytest.mark.parametrize("arguments,inputs,expected", SEARCH_PARAMETERS)
 @mock.patch("scraper.__main__.download_manga", mock.Mock(return_value=1))
 def test_search_via_cli(arguments, inputs, expected, monkeypatch, search_html):
-    with mock.patch("scraper.menu.MangaReaderSearch.metadata") as mocked:
-        mocked.return_value = METADATA
+    with mock.patch("scraper.__main__.get_manga_parser", return_value=MockedSiteParser):
         gen = (x for x in inputs)
         monkeypatch.setattr("builtins.input", lambda x: next(gen))
         args = cli(arguments)
@@ -137,7 +146,7 @@ def test_search_via_cli(arguments, inputs, expected, monkeypatch, search_html):
 
 
 def test_search_if_failed_manga_match(monkeypatch, search_html):
-    def fake_downloader(*args):
+    def fake_downloader(*args, **kwargs):
         """
         Will raise an error, which should trigger the manga_search
         function and recall this function with the parameters parsed
@@ -146,7 +155,7 @@ def test_search_if_failed_manga_match(monkeypatch, search_html):
         This will help confirm whether the manga_search function was
         called upon a MangaDoesNotExist error.
         """
-        if "search activated" in args:
+        if "search activated" in args or "search activated" in kwargs["manga_name"]:
             return True
         raise MangaDoesNotExist("name")
 
@@ -158,6 +167,7 @@ def test_search_if_failed_manga_match(monkeypatch, search_html):
             expected = {
                 "manga": "search activated",
                 "search": ["dragonballzz"],
+                "source": "mangareader",
                 "volumes": [2],
                 "output": "/tmp",
                 "cbz": False,

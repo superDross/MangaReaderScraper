@@ -1,9 +1,8 @@
-from unittest import mock
-
 import pytest
 
 from scraper.exceptions import PageAlreadyPresent, VolumeAlreadyPresent
 from scraper.manga import Manga, MangaBuilder, Page, Volume
+from tests.helpers import MockedSiteParser
 
 
 def test_page_repr(page):
@@ -146,34 +145,34 @@ def test_manga_iter(manga):
 
 
 @pytest.mark.parametrize("inval", [[1, 2, 3], None])
-def test_mangabuilder_get_all_volumes(inval, parser):
-    with mock.patch("scraper.manga.MangaReaderParser", parser):
-        builder = MangaBuilder(manga_name="dragon-ball")
-        manga = builder.get_manga_volumes(vol_nums=inval)
-        v1 = Volume(1, "/tmp/dragon-ball/dragon-ball_volume_1.pdf")
-        v2 = Volume(2, "/tmp/dragon-ball/dragon-ball_volume_2.pdf")
-        v3 = Volume(3, "/tmp/dragon-ball/dragon-ball_volume_3.pdf")
-        img1 = open("tests/test_files/jpgs/test-manga_1_1.jpg", "rb")
-        img2 = open("tests/test_files/jpgs/test-manga_1_2.jpg", "rb")
-        pages = [(1, img1.read()), (2, img2.read())]
-        v1.pages = pages
-        v2.pages = pages
-        v3.pages = pages
-        assert manga.volumes == [v1, v2, v3]
-        assert manga.volume[2] == v2
-        assert manga.volume[1].page[1] == v1.page[1]
-        assert manga.volume[3].page[2] == v1.page[2]
+def test_mangabuilder_get_all_volumes(inval):
+    parser = MockedSiteParser()
+    builder = MangaBuilder(parser)
+    manga = builder.get_manga_volumes(vol_nums=inval)
+    v1 = Volume(1, "/tmp/dragon-ball/dragon-ball_volume_1.pdf")
+    v2 = Volume(2, "/tmp/dragon-ball/dragon-ball_volume_2.pdf")
+    v3 = Volume(3, "/tmp/dragon-ball/dragon-ball_volume_3.pdf")
+    img1 = open("tests/test_files/jpgs/test-manga_1_1.jpg", "rb")
+    img2 = open("tests/test_files/jpgs/test-manga_1_2.jpg", "rb")
+    pages = [(1, img1.read()), (2, img2.read())]
+    v1.pages = pages
+    v2.pages = pages
+    v3.pages = pages
+    assert manga.volume[2] == v2
+    assert manga.volume[1].page[1] == v1.page[1]
+    assert manga.volume[3].page[2] == v1.page[2]
+    assert manga.volumes == [v1, v2, v3]
 
 
 def test_mangabuilder_get_single_volumes(parser):
-    with mock.patch("scraper.manga.MangaReaderParser", parser):
-        builder = MangaBuilder(manga_name="dragon-ball")
-        manga = builder.get_manga_volumes(vol_nums=[1])
-        v1 = Volume(1, "/tmp/dragon-ball/dragon-ball_volume_1.pdf")
-        img1 = open("tests/test_files/jpgs/test-manga_1_1.jpg", "rb")
-        img2 = open("tests/test_files/jpgs/test-manga_1_2.jpg", "rb")
-        pages = [(1, img1.read()), (2, img2.read())]
-        v1.pages = pages
-        assert manga.volumes == [v1]
-        assert manga.volume[1] == v1
-        assert manga.volume[1].page[1] == v1.page[1]
+    parser = MockedSiteParser()
+    builder = MangaBuilder(parser)
+    manga = builder.get_manga_volumes(vol_nums=[1])
+    v1 = Volume(1, "/tmp/dragon-ball/dragon-ball_volume_1.pdf")
+    img1 = open("tests/test_files/jpgs/test-manga_1_1.jpg", "rb")
+    img2 = open("tests/test_files/jpgs/test-manga_1_2.jpg", "rb")
+    pages = [(1, img1.read()), (2, img2.read())]
+    v1.pages = pages
+    assert manga.volumes == [v1]
+    assert manga.volume[1] == v1
+    assert manga.volume[1].page[1] == v1.page[1]

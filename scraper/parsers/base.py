@@ -43,11 +43,11 @@ class BaseMangaParser:
 
 class BaseSearchParser:
     """
-    Parse search queries to manga reader
+    Parse search queries & returns the results
     """
 
-    def __init__(self, query: List[str], base_url: str) -> None:
-        self.query: List[str] = query
+    def __init__(self, query: str, base_url: str) -> None:
+        self.query: str = query
         self.base_url: str = base_url
 
     @abc.abstractmethod
@@ -74,7 +74,7 @@ class BaseSiteParser:
     ):
         self.base_url = base_url
         self._manga_parser = manga_parser
-        self._search_class = search_parser
+        self._search_parser = search_parser
         self._manga: Optional[BaseMangaParser] = (
             None if not manga_name else self._manga_parser(manga_name, base_url)
         )
@@ -95,6 +95,6 @@ class BaseSiteParser:
         self._manga = self._manga_parser(manga_name, self.base_url)
 
     @lru_cache()
-    def search(self, query: List[str]) -> SearchResults:
-        search_parser = self._search_class(query, self.base_url)
+    def search(self, query: str) -> SearchResults:
+        search_parser = self._search_parser(query, self.base_url)
         return search_parser.search()

@@ -1,38 +1,28 @@
-from unittest import mock
-
 import pytest
 
 from scraper.exceptions import InvalidOption
 from scraper.menu import Menu, SearchMenu
-from tests.helpers import METADATA
+from tests.helpers import TABLE, MockedSearch
+
+
+def test_generate_search_menu_table(search_html):
+    search_menu = SearchMenu("dragon-ball", MockedSearch)
+    table = search_menu.table()
+    assert table == TABLE
 
 
 def test_searchmenu_attributes(search_html):
-    with mock.patch("scraper.menu.MangaReaderSearch.metadata") as mocked:
-        mocked.return_value = METADATA
-        search_menu = SearchMenu("dragon-ball")
-        expected_choices = (
-            "+----+---------------------------------+-----------+--------+\n"
-            "|    | Title                           |   Volumes | Type   |\n"
-            "|----+---------------------------------+-----------+--------|\n"
-            "|  1 | Dragon Ball                     |       520 | Manga  |\n"
-            "|  2 | Dragon Ball SD                  |        34 | Manga  |\n"
-            "|  3 | Dragon Ball: Episode of Bardock |         3 | Manga  |\n"
-            "|  4 | DragonBall Next Gen             |         4 | Manga  |\n"
-            "|  5 | Dragon Ball Z - Rebirth of F    |         3 | Manga  |\n"
-            "|  6 | Dragon Ball Super               |        54 | Manga  |\n"
-            "+----+---------------------------------+-----------+--------+"
-        )
-        exepected_options = {
-            "1": "dragon-ball",
-            "2": "dragon-ball-sd",
-            "3": "dragon-ball-episode-of-bardock",
-            "4": "dragonball-next-gen",
-            "5": "dragon-ball-z-rebirth-of-f",
-            "6": "dragon-ball-super",
-        }
-        assert search_menu.choices == expected_choices
-        assert search_menu.options == exepected_options
+    search_menu = SearchMenu("dragon-ball", MockedSearch)
+    exepected_options = {
+        "1": "dragon-ball",
+        "2": "dragon-ball-sd",
+        "3": "dragon-ball-episode-of-bardock",
+        "4": "dragonball-next-gen",
+        "5": "dragon-ball-z-rebirth-of-f",
+        "6": "dragon-ball-super",
+    }
+    assert search_menu.choices == TABLE
+    assert search_menu.options == exepected_options
 
 
 @pytest.mark.parametrize(

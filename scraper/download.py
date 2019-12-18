@@ -16,11 +16,7 @@ from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
 from scraper.manga import MangaBuilder, Volume
-
-# from scraper.parsers.base import BaseSiteParser
 from scraper.parsers.types import SiteParserClass
-
-# from scraper.new_types import SiteParserClass
 from scraper.utils import download_timer, get_adapter, settings
 
 logger = logging.getLogger(__name__)
