@@ -63,8 +63,10 @@ class Download:
         """
         self.adapter.info(f"volume saved to {volume.file_path}")
         with zipfile.ZipFile(volume.file_path, "w") as cbz:
-            for num, page in enumerate(volume.pages):
-                jpgfilename = f"{self.manga_name}_{volume.number}_page_{num}.jpg"
+            for page in volume.pages:
+                jpgfilename = (
+                    f"{self.manga_name}_{volume.number}_page_{page.number}.jpg"
+                )
                 tmp_jpg = Path(tempfile.gettempdir()) / jpgfilename
                 tmp_jpg.write_bytes(page.img)
                 cbz.write(tmp_jpg)
