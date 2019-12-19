@@ -16,7 +16,7 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="MangaReaderScraper",
     # should correlate with git tag
-    version="0.3",
+    version="0.31",
     author="superDross",
     author_email="dross78375@gmail.com",
     description="Manga scraper",
@@ -39,5 +39,7 @@ setuptools.setup(
         "reportlab==3.5.23",
         "requests==2.22.0",
         "tabulate==0.8.1",
+        "dropbox==9.4.0",
+        "mega.py==1.0.5",
     ],
 )
