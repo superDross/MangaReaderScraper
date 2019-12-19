@@ -16,7 +16,7 @@ with open("README.md", "r") as fh:
 setuptools.setup(
     name="MangaReaderScraper",
     # should correlate with git tag
-    version="0.31",
+    version="0.33",
     author="superDross",
     author_email="dross78375@gmail.com",
     description="Manga scraper",
