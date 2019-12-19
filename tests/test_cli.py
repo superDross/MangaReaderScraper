@@ -10,7 +10,7 @@ PATAMETERS = [
     (
         ["--manga", "dragonball"],
         {
-            "cbz": False,
+            "filetype": "pdf",
             "manga": "dragonball",
             "output": "/tmp",
             "search": None,
@@ -22,7 +22,7 @@ PATAMETERS = [
     (
         ["--manga", "dragonball", "--volumes", "1", "2"],
         {
-            "cbz": False,
+            "filetype": "pdf",
             "manga": "dragonball",
             "output": "/tmp",
             "search": None,
@@ -32,9 +32,9 @@ PATAMETERS = [
         },
     ),
     (
-        ["--manga", "one-piece", "--volumes", "231", "--cbz"],
+        ["--manga", "one-piece", "--volumes", "231", "--filetype", "cbz"],
         {
-            "cbz": True,
+            "filetype": "cbz",
             "manga": "one-piece",
             "output": "/tmp",
             "search": None,
@@ -46,7 +46,7 @@ PATAMETERS = [
     (
         ["--manga", "something", "--output", "/home/me/Downloads"],
         {
-            "cbz": False,
+            "filetype": "pdf",
             "manga": "something",
             "output": "/home/me/Downloads",
             "search": None,
@@ -58,7 +58,7 @@ PATAMETERS = [
     (
         ["--manga", "something", "--volumes", "1-5", "40"],
         {
-            "cbz": False,
+            "filetype": "pdf",
             "manga": "something",
             "output": "/tmp",
             "search": None,
@@ -79,7 +79,7 @@ SEARCH_PARAMETERS = [
             "source": "mangareader",
             "volumes": [5],
             "output": "/tmp",
-            "cbz": False,
+            "filetype": "pdf",
             "upload": None,
         },
     ),
@@ -92,7 +92,7 @@ SEARCH_PARAMETERS = [
             "source": "mangareader",
             "volumes": [8, 9],
             "output": "/tmp",
-            "cbz": False,
+            "filetype": "pdf",
             "upload": None,
         },
     ),
@@ -105,7 +105,7 @@ SEARCH_PARAMETERS = [
             "source": "mangareader",
             "volumes": [6, 7, 8, 9, 10],
             "output": "/tmp",
-            "cbz": False,
+            "filetype": "pdf",
             "upload": None,
         },
     ),
@@ -118,7 +118,7 @@ SEARCH_PARAMETERS = [
             "source": "mangareader",
             "volumes": None,
             "output": "/tmp",
-            "cbz": False,
+            "filetype": "pdf",
             "upload": None,
         },
     ),
@@ -131,7 +131,7 @@ SEARCH_PARAMETERS = [
             "source": "mangareader",
             "volumes": [6, 7, 8, 9, 10, 12],
             "output": "/tmp",
-            "cbz": False,
+            "filetype": "pdf",
             "upload": None,
         },
     ),
@@ -180,7 +180,7 @@ def test_search_if_failed_manga_match(monkeypatch, search_html):
                 "source": "mangareader",
                 "volumes": [2],
                 "output": "/tmp",
-                "cbz": False,
+                "filetype": "pdf",
                 "upload": None,
             }
             assert args == expected

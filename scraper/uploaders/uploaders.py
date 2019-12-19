@@ -48,7 +48,7 @@ class MegaUploader(BaseUploader):
         mega = Mega()
         return mega.login(self.config["email"], self.config["password"])
 
-    def _set_dirname(self, manga: Manga):
+    def _set_dirname(self, manga: Manga) -> None:
         """
         Sets the directory key. The name you give a directory is not
         how Mega store it, its a bunch of random letters instead.
@@ -62,7 +62,7 @@ class MegaUploader(BaseUploader):
         else:
             self.dirname = dir_metadata[0]
 
-    def upload_volume(self, volume: Volume):
+    def upload_volume(self, volume: Volume) -> None:
         if self.api.find(volume.file_path.name):
             logger.warning(f"volume {volume.upload_path} already exists in Mega")
             return None

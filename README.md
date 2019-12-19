@@ -23,7 +23,7 @@ export PYTHONPATH=$PYTHONPATH:/path/to/MangaReaderScraper/
 `--search` Search mangareader.net for a given query and select to download one of the mangas from the parsed searched results. <br />
 `--manga` Manga series name to download. <br />
 `--volumes` Manga series volume number to download. <br />
-`--cbz` Store in CBZ format instead of PDF. <br />
+`--filetype` Format to store manga as {PDF/CBZ}. <br />
 `--output` Directory to save downloads (defaults to `~/Downloads`) <br />
 `--source` Website to scrape from <br />
 `--upload` Upload mangas to a cloud storage service <br />

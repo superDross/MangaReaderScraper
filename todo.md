@@ -1,12 +1,12 @@
 # TODO
 
-- override dir to upload the mangas to
 
 - add different parsers for different websites; MangaRock
 - rent space on digital ocean to run this and upload to dropbox
 
 - support Windows
 - complete test coverage
+- override dir to upload the mangas to
 
 ## GUI
 

@@ -99,7 +99,6 @@ def upload(manga: Manga, service: str) -> Uploader:
 def cli(arguments: List[str]) -> dict:
     parser = get_parser()
     args = vars(parser.parse_args(arguments))
-    filetype = "cbz" if args["cbz"] else "pdf"
     manga_parser = get_manga_parser(args["source"])
 
     if args["search"]:
@@ -120,7 +119,7 @@ def cli(arguments: List[str]) -> dict:
         manga = download_manga(
             manga_name=args["manga"],
             volumes=args["volumes"],
-            filetype=filetype,
+            filetype=args["filetype"],
             parser=manga_parser,
         )
     except MangaDoesNotExist:
@@ -157,12 +156,28 @@ def get_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--output", "-o", default=MANGA_DIR)
     parser.add_argument(
-        "--cbz", action="store_true", help="output in cbz format instead of pdf"
+        "--filetype",
+        "-f",
+        type=str,
+        choices={"pdf", "cbz"},
+        default="pdf",
+        help="format to store manga as",
     )
     parser.add_argument(
-        "--source", "-z", type=str, choices={"mangareader"}, default=SOURCE
+        "--source",
+        "-z",
+        type=str,
+        choices={"mangareader"},
+        default=SOURCE,
+        help="website to scrape data from",
     )
-    parser.add_argument("--upload", "-u", type=str, choices={"dropbox", "mega"})
+    parser.add_argument(
+        "--upload",
+        "-u",
+        type=str,
+        choices={"dropbox", "mega"},
+        help="upload manga to a cloud storage service",
+    )
     return parser
 
 
