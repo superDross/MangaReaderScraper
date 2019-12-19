@@ -5,6 +5,7 @@ Manga building blocks & factories
 import logging
 from dataclasses import dataclass, field
 from multiprocessing.pool import Pool, ThreadPool
+from pathlib import Path
 from typing import Dict, Generator, List, Optional
 
 from scraper.exceptions import PageAlreadyPresent, VolumeAlreadyPresent
@@ -45,7 +46,8 @@ class Volume:
     """
 
     number: int
-    file_path: str
+    file_path: Path
+    upload_path: Path
     _pages: Dict[int, Page] = field(default_factory=dict, repr=False)
 
     def __repr__(self) -> str:
@@ -53,6 +55,12 @@ class Volume:
 
     def __str__(self) -> str:
         return self._str()
+
+    def __eq__(self, other):
+        attrs = [attr for attr in self.__dict__.keys()]
+        return all(
+            str(getattr(self, attr)) == str(getattr(other, attr)) for attr in attrs
+        )
 
     def __iter__(self) -> Generator:
         for page in self.pages:
@@ -113,11 +121,15 @@ class Manga:
     def _str(self) -> str:
         return f"Manga(name={self.name}, volumes={len(self.volumes)})"
 
-    def _volume_path(self, volume_number: int) -> str:
-        return (
+    def _volume_path(self, volume_number: int) -> Path:
+        return Path(
             f"{MANGA_DIR}/{self.name}/{self.name}"
             f"_volume_{volume_number}.{self.filetype}"
         )
+
+    def _volume_upload_path(self, volume_number: int) -> Path:
+        # TODO: add preferred root directory
+        return Path(f"/{self.name}/{self.name}_volume_{volume_number}.{self.filetype}")
 
     @property
     def volume(self) -> Dict[int, Volume]:
@@ -139,7 +151,10 @@ class Manga:
         if self.volume.get(volume_number):
             raise VolumeAlreadyPresent(f"Volume {volume_number} is already present")
         vol_path = self._volume_path(volume_number)
-        volume = Volume(number=volume_number, file_path=vol_path)
+        vol_upload_path = self._volume_upload_path(volume_number)
+        volume = Volume(
+            number=volume_number, file_path=vol_path, upload_path=vol_upload_path
+        )
         self._volumes[volume.number] = volume
 
 

@@ -26,6 +26,28 @@ export PYTHONPATH=$PYTHONPATH:/path/to/MangaReaderScraper/
 `--cbz` Store in CBZ format instead of PDF. <br />
 `--output` Directory to save downloads (defaults to `~/Downloads`) <br />
 `--source` Website to scrape from <br />
+`--upload` Upload mangas to a cloud storage service <br />
+
+## Uploading
+
+### Dropbox
+
+Follow this [guide](https://blogs.dropbox.com/developers/2014/05/generate-an-access-token-for-your-own-account/) to create a token. Then place the token into your config (`~/.config/mangarscraper.ini`):
+
+```
+[dropbox]
+token = hdkd87799jjjj
+```
+
+### Mega
+
+Add your email and password to the config file:
+
+```
+[mega]
+email = email@email.com
+password = notapassword123
+```
 
 ## Example Usage
 
@@ -57,8 +79,8 @@ Which volume do you want to download (Enter alone to download all volumes)?
 To download a manga directly:
 
 ```
-# Download all Dragon Ball volumes
-manga-scraper --manga dragon-ball
+# Download all Dragon Ball volumes & upload to dropbox
+manga-scraper --manga dragon-ball --upload dropbox
 
 # Download volume 2 of the Final Fantasy XII manga
 manga-scraper --manga final-fantasy-xii --volumes 2

@@ -16,6 +16,7 @@ PATAMETERS = [
             "search": None,
             "source": "mangareader",
             "volumes": None,
+            "upload": None,
         },
     ),
     (
@@ -27,6 +28,7 @@ PATAMETERS = [
             "search": None,
             "source": "mangareader",
             "volumes": [1, 2],
+            "upload": None,
         },
     ),
     (
@@ -38,6 +40,7 @@ PATAMETERS = [
             "search": None,
             "source": "mangareader",
             "volumes": [231],
+            "upload": None,
         },
     ),
     (
@@ -49,6 +52,7 @@ PATAMETERS = [
             "search": None,
             "source": "mangareader",
             "volumes": None,
+            "upload": None,
         },
     ),
     (
@@ -60,6 +64,7 @@ PATAMETERS = [
             "search": None,
             "source": "mangareader",
             "volumes": [1, 2, 3, 4, 5, 40],
+            "upload": None,
         },
     ),
 ]
@@ -75,6 +80,7 @@ SEARCH_PARAMETERS = [
             "volumes": [5],
             "output": "/tmp",
             "cbz": False,
+            "upload": None,
         },
     ),
     (
@@ -87,6 +93,7 @@ SEARCH_PARAMETERS = [
             "volumes": [8, 9],
             "output": "/tmp",
             "cbz": False,
+            "upload": None,
         },
     ),
     (
@@ -99,6 +106,7 @@ SEARCH_PARAMETERS = [
             "volumes": [6, 7, 8, 9, 10],
             "output": "/tmp",
             "cbz": False,
+            "upload": None,
         },
     ),
     (
@@ -111,6 +119,7 @@ SEARCH_PARAMETERS = [
             "volumes": None,
             "output": "/tmp",
             "cbz": False,
+            "upload": None,
         },
     ),
     (
@@ -123,6 +132,7 @@ SEARCH_PARAMETERS = [
             "volumes": [6, 7, 8, 9, 10, 12],
             "output": "/tmp",
             "cbz": False,
+            "upload": None,
         },
     ),
 ]
@@ -171,5 +181,6 @@ def test_search_if_failed_manga_match(monkeypatch, search_html):
                 "volumes": [2],
                 "output": "/tmp",
                 "cbz": False,
+                "upload": None,
             }
             assert args == expected

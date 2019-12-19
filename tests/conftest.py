@@ -112,7 +112,7 @@ def page():
 def volume():
     img1, img2 = get_images()
     page_data = [(1, img1), (2, img2)]
-    volume = Volume(1, "/Some/path")
+    volume = Volume(1, "/Some/path", "/some/path")
     volume.pages = page_data
     return volume
 

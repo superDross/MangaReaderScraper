@@ -15,7 +15,7 @@ from PIL import Image
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
-from scraper.manga import MangaBuilder, Volume
+from scraper.manga import Manga, MangaBuilder, Volume
 from scraper.parsers.types import SiteParserClass
 from scraper.utils import download_timer, get_adapter, settings
 
@@ -46,7 +46,7 @@ class Download:
         Save all pages to a PDF file
         """
         self.adapter.info(f"volume saved to {volume.file_path}")
-        c = canvas.Canvas(volume.file_path)
+        c = canvas.Canvas(str(volume.file_path))
         for page in volume.pages:
             img = BytesIO(page.img)
             cover = Image.open(img)
@@ -62,7 +62,7 @@ class Download:
         Save all pages to a CBZ file
         """
         self.adapter.info(f"volume saved to {volume.file_path}")
-        with zipfile.ZipFile(volume.file_path, "w") as cbz:
+        with zipfile.ZipFile(str(volume.file_path), "w") as cbz:
             for page in volume.pages:
                 jpgfilename = (
                     f"{self.manga_name}_{volume.number}_page_{page.number}.jpg"
@@ -80,7 +80,7 @@ class Download:
         return conversion_method.get(self.type)
 
     @download_timer
-    def download_volumes(self, vol_nums: Optional[List[int]] = None) -> None:
+    def download_volumes(self, vol_nums: Optional[List[int]] = None) -> Manga:
         """
         Download all pages and volumes
         """
@@ -91,10 +91,12 @@ class Download:
         with Pool() as pool:
             pool.map(save_method, manga.volumes)
         self.adapter.info(f"All volumes downloaded")
+        return manga
 
 
 def download_manga(
     manga_name: str, volumes: Optional[int], filetype: str, parser: SiteParserClass
-) -> None:
+) -> Manga:
     downloader = Download(manga_name, filetype, parser)
-    downloader.download_volumes(volumes)
+    manga = downloader.download_volumes(volumes)
+    return manga

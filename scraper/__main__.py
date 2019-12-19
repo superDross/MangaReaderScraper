@@ -10,6 +10,7 @@ from scraper.exceptions import MangaDoesNotExist
 from scraper.menu import SearchMenu
 from scraper.parsers.mangareader import MangaReader
 from scraper.parsers.types import SiteParserClass
+from scraper.uploaders import upload
 from scraper.utils import settings
 
 # PyQt5 is broken, requires to install PyQt5-sip then PyQt5
@@ -97,7 +98,7 @@ def cli(arguments: List[str]) -> dict:
         args["volumes"] = None
 
     try:
-        download_manga(
+        manga = download_manga(
             manga_name=args["manga"],
             volumes=args["volumes"],
             filetype=filetype,
@@ -108,6 +109,9 @@ def cli(arguments: List[str]) -> dict:
             f"No manga found for {args['manga']}. Searching for closest match."
         )
         return cli(["--search", args["manga"]])
+
+    if args["upload"]:
+        upload(manga, args["upload"])
 
     return args
 
@@ -139,6 +143,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--source", "-z", type=str, choices={"mangareader"}, default=SOURCE
     )
+    parser.add_argument("--upload", "-u", type=str, choices={"dropbox", "mega"})
     return parser
 
 
