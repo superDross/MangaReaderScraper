@@ -4,7 +4,8 @@ from pathlib import Path
 
 import pytest
 
-from scraper.download import Download, download_manga
+from scraper.__main__ import download_manga
+from scraper.download import Download
 from tests.helpers import MockedSiteParser
 
 

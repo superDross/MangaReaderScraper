@@ -92,11 +92,3 @@ class Download:
             pool.map(save_method, manga.volumes)
         self.adapter.info(f"All volumes downloaded")
         return manga
-
-
-def download_manga(
-    manga_name: str, volumes: Optional[int], filetype: str, parser: SiteParserClass
-) -> Manga:
-    downloader = Download(manga_name, filetype, parser)
-    manga = downloader.download_volumes(volumes)
-    return manga

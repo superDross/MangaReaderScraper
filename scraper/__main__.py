@@ -1,16 +1,18 @@
 import argparse
 import logging
 import sys
-from typing import List, Tuple
+from typing import Dict, List, Optional, Tuple, Type
 
-from scraper.download import download_manga
+from scraper.download import Download
 from scraper.exceptions import MangaDoesNotExist
+from scraper.manga import Manga
 
 # from scraper.gui import AppGui
 from scraper.menu import SearchMenu
 from scraper.parsers.mangareader import MangaReader
 from scraper.parsers.types import SiteParserClass
-from scraper.uploaders import upload
+from scraper.uploaders.types import Uploader
+from scraper.uploaders.uploaders import DropboxUploader, MegaUploader
 from scraper.utils import settings
 
 # PyQt5 is broken, requires to install PyQt5-sip then PyQt5
@@ -75,6 +77,23 @@ def get_manga_parser(source: str) -> SiteParserClass:
     if not parser:
         raise ValueError(f"{source} is not supported try {', '.join(sources.keys())}")
     return parser
+
+
+def download_manga(
+    manga_name: str, volumes: Optional[int], filetype: str, parser: SiteParserClass
+) -> Manga:
+    downloader = Download(manga_name, filetype, parser)
+    manga = downloader.download_volumes(volumes)
+    return manga
+
+
+def upload(manga: Manga, service: str) -> Uploader:
+    services: Dict[str, Type[Uploader]] = {
+        "dropbox": DropboxUploader,
+        "mega": MegaUploader,
+    }
+    uploader = services[service]()
+    return uploader(manga)
 
 
 def cli(arguments: List[str]) -> dict:
