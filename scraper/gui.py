@@ -5,7 +5,7 @@ import PyQt5.QtCore as qtc
 import PyQt5.QtWidgets as qtw
 from PyQt5.QtWidgets import QCheckBox, QComboBox
 
-from scraper.download import download_manga
+from scraper.__main__ import download_manga
 from scraper.parsers.mangareader import MangaReader
 from scraper.tables import TableProducer
 
