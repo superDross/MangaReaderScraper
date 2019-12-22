@@ -7,6 +7,7 @@ lxml==4.2.5
 mega.py==1.0.5
 mypy==0.750
 mypy-extensions==0.4.3
+pcloud==1.0a6
 Pillow==6.2.1
 PyQt5==5.13.2
 pytest==5.3.1

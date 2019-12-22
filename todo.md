@@ -1,12 +1,17 @@
 # TODO
 
+## Soon
+
+- remove module wide vars like `MANGA_DIR`
+- override dir to upload the mangas to
 
 - add different parsers for different websites; MangaRock
+
+- support Windows (will need to fix windows boot partition first)
+
 - rent space on digital ocean to run this and upload to dropbox
 
-- support Windows
 - complete test coverage
-- override dir to upload the mangas to
 
 ## GUI
 

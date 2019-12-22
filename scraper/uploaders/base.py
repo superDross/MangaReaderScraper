@@ -1,10 +1,11 @@
 import abc
 import logging
+from configparser import SectionProxy
 from multiprocessing.pool import ThreadPool
-from typing import Any
+from typing import Any, Optional
 
 from scraper.manga import Manga, Volume
-from scraper.utils import settings
+from scraper.utils import CustomAdapter, get_adapter, settings
 
 logger = logging.getLogger(__name__)
 
@@ -15,9 +16,10 @@ class BaseUploader:
     """
 
     def __init__(self, service: str) -> None:
-        self.service = service
-        self.config = settings()[service]
-        self.api = self._get_api_object()
+        self.service: str = service
+        self.config: SectionProxy = settings()[service]
+        self.api: Any = self._get_api_object()
+        self.adapter: Optional[CustomAdapter] = None
 
     def __call__(self, manga: Manga):
         return self.upload(manga)
@@ -40,6 +42,7 @@ class BaseUploader:
         """
         Uploads all volumes in a given Manga object
         """
-        logger.info(f"Uploading to {self.service.title()}")
+        self.adapter = get_adapter(logger, manga.name)
+        self.adapter.info(f"Uploading to {self.service.title()}")
         with ThreadPool() as pool:
             pool.map(self.upload_volume, manga.volumes)

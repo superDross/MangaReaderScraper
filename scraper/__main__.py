@@ -12,17 +12,13 @@ from scraper.menu import SearchMenu
 from scraper.parsers.mangareader import MangaReader
 from scraper.parsers.types import SiteParserClass
 from scraper.uploaders.types import Uploader
-from scraper.uploaders.uploaders import DropboxUploader, MegaUploader
+from scraper.uploaders.uploaders import DropboxUploader, MegaUploader, PcloudUploader
 from scraper.utils import settings
 
 # PyQt5 is broken, requires to install PyQt5-sip then PyQt5
 # however there is no way to specify install order in setup.py
 # so this nasty hack will have to do now
 # from PyQt5.QtWidgets import QApplication
-
-
-MANGA_DIR = settings()["config"]["manga_directory"]
-SOURCE = settings()["config"]["source"]
 
 
 logging.basicConfig(
@@ -91,6 +87,7 @@ def upload(manga: Manga, service: str) -> Uploader:
     services: Dict[str, Type[Uploader]] = {
         "dropbox": DropboxUploader,
         "mega": MegaUploader,
+        "pcloud": PcloudUploader,
     }
     uploader = services[service]()
     return uploader(manga)
@@ -126,12 +123,27 @@ def cli(arguments: List[str]) -> dict:
         logging.info(
             f"No manga found for {args['manga']}. Searching for closest match."
         )
-        return cli(["--search", args["manga"]])
+        updated_args = change_args_to_search(args)
+        return cli(updated_args)
 
     if args["upload"]:
         upload(manga, args["upload"])
 
     return args
+
+
+def change_args_to_search(args):
+    """
+    Alters arguments to use --search
+    """
+    updated_args = []
+    args.update({"manga": None, "volumes": None, "search": args["manga"]})
+    for k, v in args.items():
+        if k == "upload" and not v:
+            continue
+        updated_args.append(f"--{k}")
+        updated_args.append(v)
+    return updated_args
 
 
 def cli_entry() -> None:
@@ -144,6 +156,8 @@ def cli_entry() -> None:
 
 
 def get_parser() -> argparse.ArgumentParser:
+    config = settings()["config"]
+
     parser = argparse.ArgumentParser(
         description="downloads and converts manga volumes to pdf or cbz format"
     )
@@ -154,7 +168,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--volumes", "-v", nargs="+", type=str, help="manga volume to download"
     )
-    parser.add_argument("--output", "-o", default=MANGA_DIR)
+    parser.add_argument("--output", "-o", default=config["manga_directory"])
     parser.add_argument(
         "--filetype",
         "-f",
@@ -168,14 +182,14 @@ def get_parser() -> argparse.ArgumentParser:
         "-z",
         type=str,
         choices={"mangareader"},
-        default=SOURCE,
+        default=config["source"],
         help="website to scrape data from",
     )
     parser.add_argument(
         "--upload",
         "-u",
         type=str,
-        choices={"dropbox", "mega"},
+        choices={"dropbox", "mega", "pcloud"},
         help="upload manga to a cloud storage service",
     )
     return parser

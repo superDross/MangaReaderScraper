@@ -35,6 +35,8 @@ class MangaReaderMangaParser(BaseMangaParser):
         """
         try:
             volume_html = get_html_from_url(f"{self.base_url}/{self.name}/{volume}")
+            if not volume_html.text:
+                raise MangaDoesNotExist(self.name)
             string = re.compile(".*not published.*")
             matches = volume_html.find_all(string=string, recursive=True)
             if matches:
