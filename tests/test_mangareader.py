@@ -1,9 +1,8 @@
 from unittest import mock
 
 import pytest
-import requests
 
-from scraper.exceptions import MangaDoesNotExist, MangaParserNotSet, VolumeDoesntExist
+from scraper.exceptions import VolumeDoesntExist
 from scraper.parsers.mangareader import (
     MangaReader,
     MangaReaderMangaParser,
@@ -82,49 +81,6 @@ def test_get_search_results_with_invalid_query(caplog, mangareader_invalid_searc
             mangasearch = MangaReaderSearch("gibbersish")
             mangasearch.search()
             assert caplog.text == "No search results found for gibberish"
-
-
-@mock.patch("scraper.utils.requests.get")
-def test_404_errors(mock_request):
-    mock_resp = requests.models.Response()
-    mock_resp.status_code = 404
-    mock_request.return_value = mock_resp
-    parser = MangaReaderMangaParser("blahblahblah")
-    with pytest.raises(MangaDoesNotExist):
-        parser.all_volume_numbers()
-    with pytest.raises(MangaDoesNotExist):
-        parser.page_urls(1)
-
-
-@mock.patch("scraper.utils.requests.get")
-def test_non_404_errors(mock_request):
-    mock_resp = requests.models.Response()
-    mock_resp.status_code = 403
-    mock_request.return_value = mock_resp
-    parser = MangaReaderMangaParser("blahblahblah")
-    with pytest.raises(requests.exceptions.HTTPError):
-        parser.all_volume_numbers()
-
-
-def test_mangareader_manga_not_set_error():
-    mr = MangaReader()
-    with pytest.raises(MangaParserNotSet):
-        mr.manga
-
-
-def test_mangareader_initialises_manga_parser():
-    mr = MangaReader("dragon-ball")
-    manga_parser = mr.manga
-    assert isinstance(manga_parser, MangaReaderMangaParser)
-    assert manga_parser.name == "dragon-ball"
-
-
-def test_mangareader_set_manga_parser():
-    mr = MangaReader()
-    mr.manga = "dragon-ball"
-    manga_parser = mr.manga
-    assert isinstance(manga_parser, MangaReaderMangaParser)
-    assert manga_parser.name == "dragon-ball"
 
 
 def test_mangareader_test_search_parser(mangareader_search_html):

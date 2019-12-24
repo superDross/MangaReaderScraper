@@ -112,6 +112,12 @@ class MangaKakaSearch(BaseSearchParser):
 
 
 class MangaKaka(BaseSiteParser):
+    """
+    Seems to be the same as manganelo.com
+
+    Can probably use this class for manganelo too
+    """
+
     def __init__(self, manga_name: Optional[str] = None) -> None:
         super().__init__(
             manga_name=manga_name,

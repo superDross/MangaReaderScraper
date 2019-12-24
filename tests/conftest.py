@@ -60,11 +60,31 @@ def mangareader_search_html() -> BeautifulSoup:
 
 
 @pytest.fixture
+def mangakaka_search_html() -> BeautifulSoup:
+    """
+    HTML result after searching for query 'dragonball'
+    """
+    html_path = "tests/test_files/mangakaka/dragonball_search.html"
+    html = get_bs4_tree(html_path)
+    return html
+
+
+@pytest.fixture
 def mangareader_invalid_search_html() -> BeautifulSoup:
     """
     HTML result after searching for something that has no matches
     """
     html_path = "tests/test_files/mangareader/no_search_results_found.html"
+    html = get_bs4_tree(html_path)
+    return html
+
+
+@pytest.fixture
+def mangakaka_invalid_search_html() -> BeautifulSoup:
+    """
+    HTML result after searching for something that has no matches
+    """
+    html_path = "tests/test_files/mangakaka/no_search_results_found.html"
     html = get_bs4_tree(html_path)
     return html
 
@@ -87,6 +107,13 @@ def mangareader_manga_title_page_html() -> BeautifulSoup:
 
 
 @pytest.fixture
+def mangakaka_manga_title_page_html() -> BeautifulSoup:
+    html_path = f"tests/test_files/mangakaka/dragonball_super_page.html"
+    html = get_bs4_tree(html_path)
+    return html
+
+
+@pytest.fixture
 def mangareader_volume_html() -> BeautifulSoup:
     """
     Returns the HTML to a specfic manga volume
@@ -97,11 +124,31 @@ def mangareader_volume_html() -> BeautifulSoup:
 
 
 @pytest.fixture
+def mangakaka_volume_html() -> BeautifulSoup:
+    """
+    Returns the HTML to a specfic manga volume
+    """
+    html_path = "tests/test_files/mangakaka/dragonball_super_volume_1.html"
+    html = get_bs4_tree(html_path)
+    return html
+
+
+@pytest.fixture
 def mangareader_invalid_volume_html() -> BeautifulSoup:
     """
     Returns the HTML to an invalid manga volume request
     """
     html_path = "tests/test_files/mangareader/dragonball_bardock_volume_100.html"
+    html = get_bs4_tree(html_path)
+    return html
+
+
+@pytest.fixture
+def mangakaka_invalid_volume_html() -> BeautifulSoup:
+    """
+    Returns the HTML to an invalid manga volume request
+    """
+    html_path = "tests/test_files/mangakaka/dragonball_super_volume_999.html"
     html = get_bs4_tree(html_path)
     return html
 
