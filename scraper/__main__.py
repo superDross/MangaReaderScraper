@@ -9,8 +9,10 @@ from scraper.manga import Manga
 
 # from scraper.gui import AppGui
 from scraper.menu import SearchMenu
+from scraper.parsers.mangakaka import MangaKaka
+from scraper.parsers.mangaowl import MangaOwl
 from scraper.parsers.mangareader import MangaReader
-from scraper.parsers.types import SiteParserClass
+from scraper.parsers.types import SiteParser
 from scraper.uploaders.types import Uploader
 from scraper.uploaders.uploaders import DropboxUploader, MegaUploader, PcloudUploader
 from scraper.utils import settings
@@ -49,7 +51,7 @@ def get_volume_values(volume: str) -> List[int]:
     return [int(x) for x in volume.split()]
 
 
-def manga_search(query: List[str], parser: SiteParserClass) -> Tuple[str, List[str]]:
+def manga_search(query: List[str], parser: Type[SiteParser]) -> Tuple[str, List[str]]:
     """
     Search for a manga and return the manga name and volumes
     selected by user input
@@ -64,11 +66,11 @@ def manga_search(query: List[str], parser: SiteParserClass) -> Tuple[str, List[s
     return (manga.strip(), volumes.split())
 
 
-def get_manga_parser(source: str) -> SiteParserClass:
+def get_manga_parser(source: str) -> Type[SiteParser]:
     """
     Use the string to return correct parser class
     """
-    sources = {"mangareader": MangaReader}
+    sources = {"mangareader": MangaReader, "mangaowl": MangaOwl, "mangakaka": MangaKaka}
     parser = sources.get(source)
     if not parser:
         raise ValueError(f"{source} is not supported try {', '.join(sources.keys())}")
@@ -76,10 +78,14 @@ def get_manga_parser(source: str) -> SiteParserClass:
 
 
 def download_manga(
-    manga_name: str, volumes: Optional[int], filetype: str, parser: SiteParserClass
+    manga_name: str,
+    volumes: Optional[int],
+    filetype: str,
+    parser: Type[SiteParser],
+    preferred_name: Optional[str] = None,
 ) -> Manga:
     downloader = Download(manga_name, filetype, parser)
-    manga = downloader.download_volumes(volumes)
+    manga = downloader.download_volumes(volumes, preferred_name)
     return manga
 
 
@@ -118,6 +124,7 @@ def cli(arguments: List[str]) -> dict:
             volumes=args["volumes"],
             filetype=args["filetype"],
             parser=manga_parser,
+            preferred_name=args["override_name"],
         )
     except MangaDoesNotExist:
         logging.info(
@@ -132,7 +139,7 @@ def cli(arguments: List[str]) -> dict:
     return args
 
 
-def change_args_to_search(args):
+def change_args_to_search(args: Dict[str, Optional[str]]) -> List[Optional[str]]:
     """
     Alters arguments to use --search
     """
@@ -181,7 +188,7 @@ def get_parser() -> argparse.ArgumentParser:
         "--source",
         "-z",
         type=str,
-        choices={"mangareader"},
+        choices={"mangareader", "mangakaka", "mangaowl"},
         default=config["source"],
         help="website to scrape data from",
     )
@@ -191,6 +198,12 @@ def get_parser() -> argparse.ArgumentParser:
         type=str,
         choices={"dropbox", "mega", "pcloud"},
         help="upload manga to a cloud storage service",
+    )
+    parser.add_argument(
+        "--override_name",
+        "-n",
+        type=str,
+        help="change manga name for all saved/uploaded files",
     )
     return parser
 

@@ -2,9 +2,10 @@
 Abstract base classes for all parsers
 """
 
+import re
 import abc
 from functools import lru_cache
-from typing import List, Optional, Tuple, Type
+from typing import List, Optional, Tuple, Type, Iterable
 
 from scraper.exceptions import MangaParserNotSet
 from scraper.new_types import SearchResults
@@ -34,7 +35,7 @@ class BaseMangaParser:
         pass
 
     @abc.abstractmethod
-    def all_volume_numbers(self) -> List[int]:
+    def all_volume_numbers(self) -> Iterable[int]:
         """
         All volume numbers for a manga
         """

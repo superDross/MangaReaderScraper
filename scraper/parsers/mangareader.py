@@ -5,7 +5,7 @@ HTML parsers that scrape and parse data from MangaReader.net
 import logging
 import re
 import sys
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Iterable
 
 import requests
 from bs4 import BeautifulSoup
@@ -40,11 +40,11 @@ class MangaReaderMangaParser(BaseMangaParser):
             string = re.compile(".*not published.*")
             matches = volume_html.find_all(string=string, recursive=True)
             if matches:
-                raise VolumeDoesntExist(self.name, volume)
+                raise VolumeDoesntExist(f"manga volume {volume} does not exist")
             return volume_html
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 404:
-                raise MangaDoesNotExist(self.name)
+                raise MangaDoesNotExist(f"manga {self.name} does not exist")
 
     def page_urls(self, volume: int) -> List[str]:
         """
@@ -67,7 +67,7 @@ class MangaReaderMangaParser(BaseMangaParser):
         img_data = requests.get(img_url).content
         return (int(page_num), img_data)
 
-    def all_volume_numbers(self) -> List[int]:
+    def all_volume_numbers(self) -> Iterable[int]:
         """
         All volume numbers for a manga
         """
@@ -81,7 +81,7 @@ class MangaReaderMangaParser(BaseMangaParser):
             return volume_numbers
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 404:
-                raise MangaDoesNotExist(self.name)
+                raise MangaDoesNotExist(f"manga {self.name} does not exist")
             raise e
 
 
@@ -97,7 +97,7 @@ class MangaReaderSearch(BaseSearchParser):
         self.order: int = 0
         self.genre: str = "0000000000000000000000000000000000000"
 
-        self.results: List[Tag]
+        self.results: List[Tag] = []
 
     def _scrape_results(self) -> List[Tag]:
         """
@@ -114,7 +114,7 @@ class MangaReaderSearch(BaseSearchParser):
             # TODO: raise error instead, then catch in __main__ and sys.exit?
             sys.exit()
 
-        self.results = search_results
+        self.results += search_results
         return search_results
 
     def _extract_text(self, result: Tag) -> Dict[str, str]:

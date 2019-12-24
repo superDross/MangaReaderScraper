@@ -8,7 +8,11 @@ from multiprocessing.pool import Pool, ThreadPool
 from pathlib import Path
 from typing import Dict, Generator, List, Optional
 
-from scraper.exceptions import PageAlreadyPresent, VolumeAlreadyPresent
+from scraper.exceptions import (
+    PageAlreadyPresent,
+    VolumeAlreadyPresent,
+    VolumeDoesntExist,
+)
 from scraper.new_types import PageData, VolumeData
 from scraper.parsers.types import SiteParser
 from scraper.utils import get_adapter, settings
@@ -172,7 +176,10 @@ class MangaBuilder:
         """
         adapter = get_adapter(logger, self.parser.manga.name, volume_number)
         adapter.info("downloading pages")
-        urls = self.parser.manga.page_urls(volume_number)
+        try:
+            urls = self.parser.manga.page_urls(volume_number)
+        except VolumeDoesntExist as e:
+            adapter.warning(e)
         with ThreadPool() as pool:
             pages_data = pool.map(self.parser.manga.page_data, urls)
         return (volume_number, pages_data)
@@ -189,13 +196,17 @@ class MangaBuilder:
             return pool.map(self._get_volume_data, vol_nums)
 
     def get_manga_volumes(
-        self, vol_nums: Optional[List[int]] = None, filetype: str = "pdf"
+        self,
+        vol_nums: Optional[List[int]] = None,
+        filetype: str = "pdf",
+        preferred_name: Optional[str] = None,
     ) -> Manga:
         """
         Returns a Manga object containing the requested volumes
         """
         volumes_data = self._get_volumes_data(vol_nums)
-        manga = Manga(self.parser.manga.name, filetype)
+        manga_name = preferred_name if preferred_name else self.parser.manga.name
+        manga = Manga(manga_name, filetype)
         for volume_data in volumes_data:
             volume_number, pages_data = volume_data
             manga.add_volume(volume_number)

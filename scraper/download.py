@@ -9,14 +9,14 @@ from io import BytesIO
 from logging import LoggerAdapter
 from multiprocessing.pool import Pool
 from pathlib import Path
-from typing import Callable, List, Optional
+from typing import Callable, List, Optional, Type
 
 from PIL import Image
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
 from scraper.manga import Manga, MangaBuilder, Volume
-from scraper.parsers.types import SiteParserClass
+from scraper.parsers.types import SiteParser
 from scraper.utils import download_timer, get_adapter, settings
 
 logger = logging.getLogger(__name__)
@@ -27,7 +27,9 @@ class Download:
     Downloads the manga in the desired format
     """
 
-    def __init__(self, manga_name: str, filetype: str, parser: SiteParserClass) -> None:
+    def __init__(
+        self, manga_name: str, filetype: str, parser: Type[SiteParser]
+    ) -> None:
         self.manga_name: str = manga_name
         self.factory: MangaBuilder = MangaBuilder(parser=parser(manga_name))
         self.adapter: LoggerAdapter = get_adapter(logger, manga_name)
@@ -60,13 +62,19 @@ class Download:
     def _to_cbz(self, volume: Volume) -> None:
         """
         Save all pages to a CBZ file
+
+        The naming schema is important. If too much info is
+        within the jpg file name the page order can be read
+        wrong in some CBZ readers. The best way is for a format
+        like 001_1.jpg (<pag_num>_<vol_num>.jpg).
+
+        See forum post for more details:
+            https://tinyurl.com/uu5kvjf
         """
         self.adapter.info(f"volume saved to {volume.file_path}")
         with zipfile.ZipFile(str(volume.file_path), "w") as cbz:
             for page in volume.pages:
-                jpgfilename = (
-                    f"{self.manga_name}_{volume.number}_page_{page.number}.jpg"
-                )
+                jpgfilename = f"{page.number:03d}_{volume.number}.jpg"
                 tmp_jpg = Path(tempfile.gettempdir()) / jpgfilename
                 tmp_jpg.write_bytes(page.img)
                 cbz.write(tmp_jpg)
@@ -80,12 +88,14 @@ class Download:
         return conversion_method.get(self.type)
 
     @download_timer
-    def download_volumes(self, vol_nums: Optional[List[int]] = None) -> Manga:
+    def download_volumes(
+        self, vol_nums: Optional[List[int]] = None, preferred_name: Optional[str] = None
+    ) -> Manga:
         """
         Download all pages and volumes
         """
         self.adapter.info(f"Starting Downloads")
-        manga = self.factory.get_manga_volumes(vol_nums, self.type)
+        manga = self.factory.get_manga_volumes(vol_nums, self.type, preferred_name)
         self._create_manga_dir(manga.name)
         save_method = self._get_save_method()
         with Pool() as pool:

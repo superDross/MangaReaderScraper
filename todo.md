@@ -1,9 +1,20 @@
 # TODO
 
+- TEST override manga name
+
+- integrate new parsers
+- test with a bunch of search queries
+- allow `--source all` to search all sources
+- parser `multi` for multiple parser
+
+- new config options that override default options:
+    - `type` for --filetype
+    - `source` for --source
+
 ## Soon
 
 - remove module wide vars like `MANGA_DIR`
-- override dir to upload the mangas to
+- change the dir to save mangas to in uploader (perhaps by adding something to config)
 
 - add different parsers for different websites; MangaRock
 

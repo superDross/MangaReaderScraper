@@ -23,19 +23,27 @@ class DropboxUploader(BaseUploader):
     def _get_api_object(self) -> dropbox.Dropbox:
         return dropbox.Dropbox(self.config["token"])
 
+    def volume_exists(self, volume: Volume) -> bool:
+        try:
+            volume_search = self.api.files_search(
+                path=str(volume.upload_path.parent), query=str(volume.upload_path.name),
+            )
+            return True if volume_search.matches else False
+        except dropbox.exceptions.ApiError as e:
+            actual_error = str(e.error._value)
+            if "not_found" in actual_error:
+                return False
+            raise e
+
     def upload_volume(self, volume: Volume) -> None:
+        if self.volume_exists(volume):
+            self.adapter.warning(
+                f"Volume {volume.upload_path} already exists in Dropbox"
+            )
+            return None
         with open(volume.file_path, "rb") as cbz:
-            try:
-                response = self.api.files_upload(cbz.read(), str(volume.upload_path))
-                self.adapter.info(f"Uploaded to {response.path_lower}")
-            except dropbox.exceptions.ApiError as e:
-                actual_error = e.error._value
-                if actual_error.reason.is_conflict:
-                    self.adapter.warning(
-                        f"Volume {volume.upload_path} already exists in Dropbox"
-                    )
-                    return None
-                raise e
+            response = self.api.files_upload(cbz.read(), str(volume.upload_path))
+            self.adapter.info(f"Uploaded to {response.path_lower}")
 
 
 class MegaUploader(BaseUploader):

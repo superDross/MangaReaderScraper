@@ -1,10 +1,10 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Type
 
 from tabulate import tabulate
 
 from scraper.exceptions import InvalidOption
 from scraper.new_types import SearchResults
-from scraper.parsers.types import SiteParser, SiteParserClass
+from scraper.parsers.types import SiteParser
 
 
 class Menu:
@@ -70,7 +70,7 @@ class Menu:
 
 
 class SearchMenu(Menu):
-    def __init__(self, query: List[str], parser: SiteParserClass) -> None:
+    def __init__(self, query: List[str], parser: Type[SiteParser]) -> None:
         self.parser: SiteParser = parser()
         self.search_results: SearchResults = self._search(query)
         choices: str = self.table()
@@ -85,6 +85,7 @@ class SearchMenu(Menu):
         return search_results
 
     def table(self) -> str:
+        # TODO: apply maximum restriction for title length
         columns = ["", "Title", "Volumes", "Type"]
         data = [
             [k, x["title"], x["chapters"], x["type"]]

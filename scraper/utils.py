@@ -1,3 +1,4 @@
+import re
 import configparser
 import functools
 import logging
@@ -5,6 +6,7 @@ import time
 from logging import Logger, LoggerAdapter
 from pathlib import Path
 from typing import Any, Callable, MutableMapping, Optional, Tuple, Union
+from scraper.exceptions import CannotExtractChapter
 
 import bs4
 import requests
@@ -94,3 +96,26 @@ def settings() -> configparser.ConfigParser:
         create_base_config()
     config.read(str(user_config))
     return config
+
+
+def extract_chapter_number(chapter_string: str) -> str:
+    """
+    Extracts the chapter digit substring in a string that
+    details manga chapter number
+    """
+    chapter_split = chapter_string.lower().split()
+    if "chapter" not in chapter_split:
+        raise CannotExtractChapter(
+            f"Can't find chapter substring in {chapter_string.split()}"
+        )
+    chapter_name_index = chapter_split.index("chapter") + 1
+    chapter_string = chapter_split[chapter_name_index]
+    chapter_string_split = re.split(r"\D", chapter_string)
+    if "" in chapter_string_split:
+        chapter_string_split.remove("")
+    chapter_number = chapter_string_split[0]
+    if not chapter_number.isdigit():
+        raise CannotExtractChapter(f"Cannot find chapter digit in {chapter_number}")
+    if len(chapter_number) > 1 and chapter_number.startswith("0"):
+        chapter_number = chapter_number.lstrip("0")
+    return chapter_number
