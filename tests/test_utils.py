@@ -2,7 +2,39 @@ import shutil
 from pathlib import Path
 from unittest import mock
 
-from scraper.utils import CustomAdapter, create_base_config, get_adapter, settings
+import pytest
+
+from scraper.exceptions import CannotExtractChapter
+from scraper.utils import (
+    CustomAdapter,
+    create_base_config,
+    extract_chapter_number,
+    get_adapter,
+    settings,
+)
+
+CHAPTER_PARAMETERS = [
+    ("Chapter 1", "1"),
+    ("this hwer      \nCHAPTER 99 HERE", "99"),
+    ("chapter 00000099", "99"),
+    ("chapter .99", "99"),
+    ("chapter 99.5", "99"),
+    ("chapter 99b", "99"),
+]
+
+FAILED_CHAPTER_PARAMETERS = ["story 1", "nothing here", "chapter ahfhh"]
+
+
+@pytest.mark.parametrize("inval,expected", CHAPTER_PARAMETERS)
+def test_extract_chapter_number(inval, expected):
+    chapter_number = extract_chapter_number(inval)
+    assert chapter_number == expected
+
+
+@pytest.mark.parametrize("inval", FAILED_CHAPTER_PARAMETERS)
+def test_failed_extract_chapter_number(inval):
+    with pytest.raises(CannotExtractChapter):
+        extract_chapter_number(inval)
 
 
 def test_case_adapter(caplog, logger):

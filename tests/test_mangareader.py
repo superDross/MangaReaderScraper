@@ -12,17 +12,17 @@ from scraper.parsers.mangareader import (
 from tests.helpers import METADATA
 
 
-def test_all_volume_numbers(manga_title_page_html):
+def test_all_volume_numbers(mangareader_manga_title_page_html):
     with mock.patch("scraper.parsers.mangareader.get_html_from_url") as mocked_func:
-        mocked_func.return_value = manga_title_page_html
+        mocked_func.return_value = mangareader_manga_title_page_html
         parser = MangaReaderMangaParser("dragon-ball")
         all_vols = parser.all_volume_numbers()
         assert all_vols == [1, 2, 3]
 
 
-def test_page_urls(volume_html):
+def test_page_urls(mangareader_volume_html):
     with mock.patch("scraper.parsers.mangareader.get_html_from_url") as mocked_func:
-        mocked_func.return_value = volume_html
+        mocked_func.return_value = mangareader_volume_html
         parser = MangaReaderMangaParser("dragon-ball")
         page_urls = parser.page_urls(1)
         expected = [
@@ -45,18 +45,18 @@ def test_page_urls(volume_html):
         assert page_urls == expected
 
 
-def test_invalid_volume_parser(invalid_volume_html):
+def test_invalid_volume_parser(mangareader_invalid_volume_html):
     with mock.patch("scraper.parsers.mangareader.get_html_from_url") as mocked_func:
-        mocked_func.return_value = invalid_volume_html
+        mocked_func.return_value = mangareader_invalid_volume_html
         parser = MangaReaderMangaParser("dragon-ball")
         with pytest.raises(VolumeDoesntExist):
             parser.page_urls(2000)
 
 
 @pytest.mark.parametrize("url_suffix,expected_num", [("2/2", 2), ("2", 1)])
-def test_page_data(url_suffix, expected_num, page_html):
+def test_page_data(url_suffix, expected_num, mangareader_page_html):
     with mock.patch("scraper.parsers.mangareader.get_html_from_url") as mocked_func:
-        mocked_func.return_value = page_html
+        mocked_func.return_value = mangareader_page_html
         parser = MangaReaderMangaParser("dragon-ball")
         page_data = parser.page_data(
             f"http://mangareader.net/dragon-ball-episode-of-bardock/{url_suffix}"
@@ -67,17 +67,17 @@ def test_page_data(url_suffix, expected_num, page_html):
         assert "JFIF" in str(img_data[:15])
 
 
-def test_get_search_results(search_html):
+def test_get_search_results(mangareader_search_html):
     with mock.patch("scraper.parsers.mangareader.get_html_from_url") as mocked_func:
-        mocked_func.return_value = search_html
+        mocked_func.return_value = mangareader_search_html
         mangasearch = MangaReaderSearch("Dragon Ball")
         results = mangasearch.search()
         assert METADATA == results
 
 
-def test_get_search_results_with_invalid_query(caplog, invalid_search_html):
+def test_get_search_results_with_invalid_query(caplog, mangareader_invalid_search_html):
     with mock.patch("scraper.parsers.mangareader.get_html_from_url") as mocked_func:
-        mocked_func.return_value = invalid_search_html
+        mocked_func.return_value = mangareader_invalid_search_html
         with pytest.raises(SystemExit):
             mangasearch = MangaReaderSearch("gibbersish")
             mangasearch.search()
@@ -127,9 +127,9 @@ def test_mangareader_set_manga_parser():
     assert manga_parser.name == "dragon-ball"
 
 
-def test_mangareader_test_search_parser(search_html):
+def test_mangareader_test_search_parser(mangareader_search_html):
     with mock.patch("scraper.parsers.mangareader.get_html_from_url") as mocked_func:
-        mocked_func.return_value = search_html
+        mocked_func.return_value = mangareader_search_html
         mr = MangaReader()
         results = mr.search("a query")
         assert METADATA == results

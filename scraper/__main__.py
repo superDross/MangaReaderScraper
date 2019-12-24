@@ -10,9 +10,8 @@ from scraper.manga import Manga
 # from scraper.gui import AppGui
 from scraper.menu import SearchMenu
 from scraper.parsers.mangakaka import MangaKaka
-from scraper.parsers.mangaowl import MangaOwl
 from scraper.parsers.mangareader import MangaReader
-from scraper.parsers.types import SiteParser
+from scraper.parsers.types import SiteParserClass
 from scraper.uploaders.types import Uploader
 from scraper.uploaders.uploaders import DropboxUploader, MegaUploader, PcloudUploader
 from scraper.utils import settings
@@ -51,7 +50,7 @@ def get_volume_values(volume: str) -> List[int]:
     return [int(x) for x in volume.split()]
 
 
-def manga_search(query: List[str], parser: Type[SiteParser]) -> Tuple[str, List[str]]:
+def manga_search(query: List[str], parser: SiteParserClass) -> Tuple[str, List[str]]:
     """
     Search for a manga and return the manga name and volumes
     selected by user input
@@ -66,11 +65,14 @@ def manga_search(query: List[str], parser: Type[SiteParser]) -> Tuple[str, List[
     return (manga.strip(), volumes.split())
 
 
-def get_manga_parser(source: str) -> Type[SiteParser]:
+def get_manga_parser(source: str) -> SiteParserClass:
     """
     Use the string to return correct parser class
     """
-    sources = {"mangareader": MangaReader, "mangaowl": MangaOwl, "mangakaka": MangaKaka}
+    sources: Dict[str, SiteParserClass] = {
+        "mangareader": MangaReader,
+        "mangakaka": MangaKaka,
+    }
     parser = sources.get(source)
     if not parser:
         raise ValueError(f"{source} is not supported try {', '.join(sources.keys())}")
@@ -81,7 +83,7 @@ def download_manga(
     manga_name: str,
     volumes: Optional[int],
     filetype: str,
-    parser: Type[SiteParser],
+    parser: SiteParserClass,
     preferred_name: Optional[str] = None,
 ) -> Manga:
     downloader = Download(manga_name, filetype, parser)
@@ -188,7 +190,7 @@ def get_parser() -> argparse.ArgumentParser:
         "--source",
         "-z",
         type=str,
-        choices={"mangareader", "mangakaka", "mangaowl"},
+        choices={"mangareader", "mangakaka"},
         default=config["source"],
         help="website to scrape data from",
     )

@@ -5,13 +5,13 @@ from scraper.menu import Menu, SearchMenu
 from tests.helpers import TABLE, MockedSearch
 
 
-def test_generate_search_menu_table(search_html):
+def test_generate_search_menu_table(mangareader_search_html):
     search_menu = SearchMenu("dragon-ball", MockedSearch)
     table = search_menu.table()
     assert table == TABLE
 
 
-def test_searchmenu_attributes(search_html):
+def test_searchmenu_attributes(mangareader_search_html):
     search_menu = SearchMenu("dragon-ball", MockedSearch)
     exepected_options = {
         "1": "dragon-ball",

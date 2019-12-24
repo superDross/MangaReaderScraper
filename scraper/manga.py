@@ -190,10 +190,9 @@ class MangaBuilder:
         """
         Returns list of raw volume data
         """
-        if not vol_nums:
-            vol_nums = self.parser.manga.all_volume_numbers()
+        volumes = self.parser.manga.all_volume_numbers() if not vol_nums else vol_nums
         with Pool() as pool:
-            return pool.map(self._get_volume_data, vol_nums)
+            return pool.map(self._get_volume_data, volumes)
 
     def get_manga_volumes(
         self,

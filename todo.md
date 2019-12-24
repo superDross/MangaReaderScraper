@@ -2,8 +2,6 @@
 
 - TEST override manga name
 
-- integrate new parsers
-- test with a bunch of search queries
 - allow `--source all` to search all sources
 - parser `multi` for multiple parser
 

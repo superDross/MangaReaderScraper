@@ -1,21 +1,18 @@
-from typing import Union
+from typing import Type, Union
 
 from scraper.parsers.mangareader import (
     MangaReader,
     MangaReaderMangaParser,
     MangaReaderSearch,
 )
-from scraper.parsers.mangakaka import (
-    MangaKaka,
-    MangaKakaMangaParser,
-    MangaKakaSearch,
-)
-from scraper.parsers.mangaowl import (
-    MangaOwl,
-    MangaOwlParser,
-    MangaOwlSearch,
-)
+from scraper.parsers.mangakaka import MangaKaka, MangaKakaMangaParser, MangaKakaSearch
 
-MangaParser = Union[MangaReaderMangaParser, MangaKakaMangaParser, MangaOwlParser]
-SearchParser = Union[MangaReaderSearch, MangaKakaSearch, MangaOwlSearch]
-SiteParser = Union[MangaReader, MangaKaka, MangaOwl]
+
+MangaParser = Union[MangaReaderMangaParser, MangaKakaMangaParser]
+SearchParser = Union[MangaReaderSearch, MangaKakaSearch]
+SiteParser = Union[MangaReader, MangaKaka]
+
+
+MangaParserClass = Union[Type[MangaReaderMangaParser], Type[MangaKakaMangaParser]]
+SearchParserClass = Union[Type[MangaReaderSearch], Type[MangaKakaSearch]]
+SiteParserClass = Union[Type[MangaReader], Type[MangaKaka]]

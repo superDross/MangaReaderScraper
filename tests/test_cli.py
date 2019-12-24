@@ -17,6 +17,7 @@ PATAMETERS = [
             "source": "mangareader",
             "volumes": None,
             "upload": None,
+            "override_name": None,
         },
     ),
     (
@@ -29,6 +30,7 @@ PATAMETERS = [
             "source": "mangareader",
             "volumes": [1, 2],
             "upload": None,
+            "override_name": None,
         },
     ),
     (
@@ -41,6 +43,7 @@ PATAMETERS = [
             "source": "mangareader",
             "volumes": [231],
             "upload": None,
+            "override_name": None,
         },
     ),
     (
@@ -53,6 +56,7 @@ PATAMETERS = [
             "source": "mangareader",
             "volumes": None,
             "upload": None,
+            "override_name": None,
         },
     ),
     (
@@ -65,6 +69,7 @@ PATAMETERS = [
             "source": "mangareader",
             "volumes": [1, 2, 3, 4, 5, 40],
             "upload": None,
+            "override_name": None,
         },
     ),
 ]
@@ -81,6 +86,7 @@ SEARCH_PARAMETERS = [
             "output": "/tmp",
             "filetype": "pdf",
             "upload": None,
+            "override_name": None,
         },
     ),
     (
@@ -93,6 +99,7 @@ SEARCH_PARAMETERS = [
             "volumes": [8, 9],
             "output": "/tmp",
             "filetype": "pdf",
+            "override_name": None,
             "upload": None,
         },
     ),
@@ -107,6 +114,7 @@ SEARCH_PARAMETERS = [
             "output": "/tmp",
             "filetype": "pdf",
             "upload": None,
+            "override_name": None,
         },
     ),
     (
@@ -120,6 +128,7 @@ SEARCH_PARAMETERS = [
             "output": "/tmp",
             "filetype": "pdf",
             "upload": None,
+            "override_name": None,
         },
     ),
     (
@@ -133,6 +142,7 @@ SEARCH_PARAMETERS = [
             "output": "/tmp",
             "filetype": "pdf",
             "upload": None,
+            "override_name": None,
         },
     ),
 ]
@@ -147,7 +157,9 @@ def test_download_via_cli(arguments, expected):
 
 @pytest.mark.parametrize("arguments,inputs,expected", SEARCH_PARAMETERS)
 @mock.patch("scraper.__main__.download_manga", mock.Mock(return_value=1))
-def test_search_via_cli(arguments, inputs, expected, monkeypatch, search_html):
+def test_search_via_cli(
+    arguments, inputs, expected, monkeypatch, mangareader_search_html
+):
     with mock.patch("scraper.__main__.get_manga_parser", return_value=MockedSiteParser):
         gen = (x for x in inputs)
         monkeypatch.setattr("builtins.input", lambda x: next(gen))
@@ -155,7 +167,7 @@ def test_search_via_cli(arguments, inputs, expected, monkeypatch, search_html):
         assert args == expected
 
 
-def test_search_if_failed_manga_match(monkeypatch, search_html):
+def test_search_if_failed_manga_match(monkeypatch, mangareader_search_html):
     def fake_downloader(*args, **kwargs):
         """
         Will raise an error, which should trigger the manga_search
@@ -182,5 +194,6 @@ def test_search_if_failed_manga_match(monkeypatch, search_html):
                 "output": "/tmp",
                 "filetype": "pdf",
                 "upload": None,
+                "override_name": "None",
             }
             assert args == expected

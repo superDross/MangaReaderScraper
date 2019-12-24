@@ -2,7 +2,7 @@ import logging
 import re
 import sys
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Iterable
 
 import requests
 from bs4 import BeautifulSoup
@@ -55,7 +55,7 @@ class MangaKakaMangaParser(BaseMangaParser):
         vol_text = vol_tag.split("/")[-1].split("_")[-1]
         return int(round(float(vol_text)))
 
-    def all_volume_numbers(self):
+    def all_volume_numbers(self) -> Iterable[int]:
         """
         All volume numbers for a manga
         """

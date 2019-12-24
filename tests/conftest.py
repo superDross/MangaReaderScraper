@@ -50,58 +50,58 @@ def parser():
 
 
 @pytest.fixture
-def search_html() -> BeautifulSoup:
+def mangareader_search_html() -> BeautifulSoup:
     """
     HTML result after searching for query 'dragonball'
     """
-    html_path = "tests/test_files/dragonball_search.html"
+    html_path = "tests/test_files/mangareader/dragonball_search.html"
     html = get_bs4_tree(html_path)
     return html
 
 
 @pytest.fixture
-def invalid_search_html() -> BeautifulSoup:
+def mangareader_invalid_search_html() -> BeautifulSoup:
     """
     HTML result after searching for something that has no matches
     """
-    html_path = "tests/test_files/no_search_results_found.html"
+    html_path = "tests/test_files/mangareader/no_search_results_found.html"
     html = get_bs4_tree(html_path)
     return html
 
 
 @pytest.fixture
-def page_html() -> BeautifulSoup:
+def mangareader_page_html() -> BeautifulSoup:
     """
     Returns the HTML to a specfic manga volume page
     """
-    html_path = "tests/test_files/dragonball_bardock_volume_2_page.html"
+    html_path = "tests/test_files/mangareader/dragonball_bardock_volume_2_page.html"
     html = get_bs4_tree(html_path)
     return html
 
 
 @pytest.fixture
-def manga_title_page_html() -> BeautifulSoup:
-    html_path = f"tests/test_files/dragonball_bardock_page.html"
+def mangareader_manga_title_page_html() -> BeautifulSoup:
+    html_path = f"tests/test_files/mangareader/dragonball_bardock_page.html"
     html = get_bs4_tree(html_path)
     return html
 
 
 @pytest.fixture
-def volume_html() -> BeautifulSoup:
+def mangareader_volume_html() -> BeautifulSoup:
     """
     Returns the HTML to a specfic manga volume
     """
-    html_path = "tests/test_files/dragonball_bardock_volume_2.html"
+    html_path = "tests/test_files/mangareader/dragonball_bardock_volume_2.html"
     html = get_bs4_tree(html_path)
     return html
 
 
 @pytest.fixture
-def invalid_volume_html() -> BeautifulSoup:
+def mangareader_invalid_volume_html() -> BeautifulSoup:
     """
     Returns the HTML to an invalid manga volume request
     """
-    html_path = "tests/test_files/dragonball_bardock_volume_100.html"
+    html_path = "tests/test_files/mangareader/dragonball_bardock_volume_100.html"
     html = get_bs4_tree(html_path)
     return html
 
