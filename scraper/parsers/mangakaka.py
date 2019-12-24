@@ -2,7 +2,7 @@ import logging
 import re
 import sys
 from pathlib import Path
-from typing import Optional, Iterable
+from typing import Iterable, Optional
 
 import requests
 from bs4 import BeautifulSoup

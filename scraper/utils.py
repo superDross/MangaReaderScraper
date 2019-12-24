@@ -1,15 +1,16 @@
-import re
 import configparser
 import functools
 import logging
+import re
 import time
 from logging import Logger, LoggerAdapter
 from pathlib import Path
 from typing import Any, Callable, MutableMapping, Optional, Tuple, Union
-from scraper.exceptions import CannotExtractChapter
 
 import bs4
 import requests
+
+from scraper.exceptions import CannotExtractChapter
 
 logger = logging.getLogger(__name__)
 

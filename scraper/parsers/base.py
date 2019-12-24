@@ -2,10 +2,9 @@
 Abstract base classes for all parsers
 """
 
-import re
 import abc
 from functools import lru_cache
-from typing import List, Optional, Tuple, Type, Iterable
+from typing import Iterable, List, Optional, Tuple, Type
 
 from scraper.exceptions import MangaParserNotSet
 from scraper.new_types import SearchResults

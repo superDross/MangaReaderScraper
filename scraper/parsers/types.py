@@ -1,12 +1,11 @@
 from typing import Type, Union
 
+from scraper.parsers.mangakaka import MangaKaka, MangaKakaMangaParser, MangaKakaSearch
 from scraper.parsers.mangareader import (
     MangaReader,
     MangaReaderMangaParser,
     MangaReaderSearch,
 )
-from scraper.parsers.mangakaka import MangaKaka, MangaKakaMangaParser, MangaKakaSearch
-
 
 MangaParser = Union[MangaReaderMangaParser, MangaKakaMangaParser]
 SearchParser = Union[MangaReaderSearch, MangaKakaSearch]

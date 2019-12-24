@@ -5,7 +5,7 @@ HTML parsers that scrape and parse data from MangaReader.net
 import logging
 import re
 import sys
-from typing import Dict, List, Optional, Tuple, Iterable
+from typing import Dict, Iterable, List, Optional, Tuple
 
 import requests
 from bs4 import BeautifulSoup
