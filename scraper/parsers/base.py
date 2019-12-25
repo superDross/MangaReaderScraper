@@ -51,7 +51,7 @@ class BaseSearchParser:
         self.base_url: str = base_url
 
     @abc.abstractmethod
-    def search(self) -> SearchResults:
+    def search(self, start: int = 1) -> SearchResults:
         """
         Extract each mangas metadata from the search results
         """

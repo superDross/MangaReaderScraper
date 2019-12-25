@@ -102,10 +102,10 @@ class MangaKakaSearch(BaseSearchParser):
             "source": "mangakaka",
         }
 
-    def search(self):
+    def search(self, start: int = 1):
         results = self._scrape_results()
         metadata = {}
-        for key, result in enumerate(results, start=1):
+        for key, result in enumerate(results, start=start):
             manga_metadata = self._extract_text(result)
             metadata[str(key)] = manga_metadata
         return metadata

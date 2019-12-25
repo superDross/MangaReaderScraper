@@ -1,13 +1,7 @@
 # TODO
 
-- TEST override manga name
-
 - allow `--source all` to search all sources
 - parser `multi` for multiple parser
-
-- new config options that override default options:
-  - `type` for --filetype
-  - `source` for --source
 
 ## Soon
 
@@ -22,5 +16,4 @@
 
 ## Features
 
-- allow to search for genres & type?
 - colour the cli?
