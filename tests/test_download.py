@@ -22,6 +22,20 @@ def test_download_manga(filetype, file_signature):
 
 
 def test_download_manga_helper_function(parser):
+    download_manga(
+        manga_name="dragon-ball",
+        volumes=[1, 2],
+        filetype="pdf",
+        parser=MockedSiteParser,
+        preferred_name="cool_mo_deep",
+    )
+    expected_path = "/tmp/cool_mo_deep/cool_mo_deep_volume_1.pdf"
+    expected_path2 = "/tmp/cool_mo_deep/cool_mo_deep_volume_2.pdf"
+    assert os.path.exists(expected_path)
+    assert os.path.exists(expected_path2)
+
+
+def test_download_manga_helper_function_preffered_name(parser):
     download_manga("dragon-ball", [1, 2], "pdf", MockedSiteParser)
     expected_path = "/tmp/dragon-ball/dragon-ball_volume_1.pdf"
     expected_path2 = "/tmp/dragon-ball/dragon-ball_volume_2.pdf"

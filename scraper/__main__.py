@@ -6,8 +6,6 @@ from typing import Dict, List, Optional, Tuple, Type
 from scraper.download import Download
 from scraper.exceptions import MangaDoesNotExist
 from scraper.manga import Manga
-
-# from scraper.gui import AppGui
 from scraper.menu import SearchMenu
 from scraper.parsers.mangakaka import MangaKaka
 from scraper.parsers.mangareader import MangaReader
@@ -16,28 +14,12 @@ from scraper.uploaders.types import Uploader
 from scraper.uploaders.uploaders import DropboxUploader, MegaUploader, PcloudUploader
 from scraper.utils import settings
 
-# PyQt5 is broken, requires to install PyQt5-sip then PyQt5
-# however there is no way to specify install order in setup.py
-# so this nasty hack will have to do now
-# from PyQt5.QtWidgets import QApplication
-
-
 logging.basicConfig(
-    level=logging.INFO,
-    # format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-    format="%(message)s",
+    level=logging.INFO, format="%(message)s",
 )
 
 
 logger = logging.getLogger(__name__)
-
-
-# TODO: fix broken gui
-# def gui() -> None:
-#     app = QApplication(sys.argv)
-#     window = AppGui()
-#     window.show()
-#     sys.exit(app.exec_())
 
 
 def get_volume_values(volume: str) -> List[int]:
@@ -211,7 +193,4 @@ def get_parser() -> argparse.ArgumentParser:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        cli_entry()
-    # else:
-    #     gui()
+    cli_entry()

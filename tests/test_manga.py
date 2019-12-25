@@ -223,3 +223,19 @@ def test_mangabuilder_get_single_volumes(parser):
     assert manga.volumes == [v1]
     assert manga.volume[1] == v1
     assert manga.volume[1].page[1] == v1.page[1]
+
+
+def test_manga_builder_preferred_name(parser):
+    parser = MockedSiteParser()
+    builder = MangaBuilder(parser)
+    manga = builder.get_manga_volumes(vol_nums=[1], preferred_name="smelly_pancakes")
+    v1 = Volume(
+        number=1,
+        file_path="/tmp/smelly_pancakes/smelly_pancakes_volume_1.pdf",
+        upload_path=Path("/smelly_pancakes/smelly_pancakes_volume_1.pdf"),
+    )
+    img1 = open("tests/test_files/jpgs/test-manga_1_1.jpg", "rb")
+    img2 = open("tests/test_files/jpgs/test-manga_1_2.jpg", "rb")
+    pages = [(1, img1.read()), (2, img2.read())]
+    v1.pages = pages
+    assert manga.volume[1] == v1

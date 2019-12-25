@@ -35,11 +35,11 @@ setuptools.setup(
         "beautifulsoup4==4.8.1",
         "lxml==4.2.5",
         "Pillow==6.2.1",
-        "PyQt5==5.13.2",
         "reportlab==3.5.23",
         "requests==2.22.0",
         "tabulate==0.8.1",
         "dropbox==9.4.0",
         "mega.py==1.0.5",
+        "pcloud==1.0a6",
     ],
 )

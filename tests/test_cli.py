@@ -60,6 +60,27 @@ PATAMETERS = [
         },
     ),
     (
+        [
+            "--manga",
+            "something",
+            "--volumes",
+            "1-5",
+            "40",
+            "--override_name",
+            "dragon_kin",
+        ],
+        {
+            "filetype": "pdf",
+            "manga": "something",
+            "output": "/tmp",
+            "search": None,
+            "source": "mangareader",
+            "volumes": [1, 2, 3, 4, 5, 40],
+            "upload": None,
+            "override_name": "dragon_kin",
+        },
+    ),
+    (
         ["--manga", "something", "--volumes", "1-5", "40"],
         {
             "filetype": "pdf",
