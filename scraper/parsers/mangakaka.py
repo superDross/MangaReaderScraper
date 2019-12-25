@@ -2,12 +2,14 @@ import logging
 import re
 import sys
 from pathlib import Path
-from typing import Iterable, Optional
+from typing import Dict, List, Iterable, Optional, Tuple
 
 import requests
 from bs4 import BeautifulSoup
+from bs4.element import Tag
 
 from scraper.exceptions import MangaDoesNotExist, VolumeDoesntExist
+from scraper.new_types import SearchResults
 from scraper.parsers.base import BaseMangaParser, BaseSearchParser, BaseSiteParser
 from scraper.utils import get_html_from_url
 
@@ -15,6 +17,10 @@ logger = logging.getLogger(__name__)
 
 
 class MangaKakaMangaParser(BaseMangaParser):
+    """
+    Scrapes & parses a specific manga page on mangakakalot.com
+    """
+
     def __init__(
         self, manga_name: str, base_url: str = "https://mangakakalot.com"
     ) -> None:
@@ -36,19 +42,25 @@ class MangaKakaMangaParser(BaseMangaParser):
             if e.response.status_code == 404:
                 raise MangaDoesNotExist(f"manga {self.name} does not exist")
 
-    def page_urls(self, volume: int):
+    def page_urls(self, volume: int) -> List[str]:
+        """
+        Return a list of urls for every page in a given volume
+        """
         volume_html = self._scrape_volume(volume)
         container = volume_html.find("div", {"class": "container-chapter-reader"})
         all_img_tags = container.find_all("img")
         all_page_urls = [img.get("src") for img in all_img_tags]
         return all_page_urls
 
-    def page_data(self, page_url: str):
+    def page_data(self, page_url: str) -> Tuple[int, bytes]:
+        """
+        Extracts a manga pages data
+        """
         page_num = Path(page_url).stem
         img_data = requests.get(page_url).content
         return (int(page_num), img_data)
 
-    def _extract_number(self, vol_tag) -> int:
+    def _extract_number(self, vol_tag: Tag) -> int:
         """
         Sanitises a number from scraped chapter tag
         """
@@ -75,10 +87,17 @@ class MangaKakaMangaParser(BaseMangaParser):
 
 
 class MangaKakaSearch(BaseSearchParser):
+    """
+    Parses search queries from mangakakaalot
+    """
+
     def __init__(self, query: str, base_url: str = "https://mangakakalot.com") -> None:
         super().__init__(query, base_url)
 
-    def _scrape_results(self):
+    def _scrape_results(self) -> List[Tag]:
+        """
+        Scrape and return HTML list with search results
+        """
         url = f"{self.base_url}/search/{self.query.replace(' ', '_')}"
         html_response = get_html_from_url(url)
         search_results = html_response.find_all("div", {"class": "story_item"})
@@ -90,7 +109,10 @@ class MangaKakaSearch(BaseSearchParser):
         self.results = search_results
         return search_results
 
-    def _extract_text(self, result):
+    def _extract_text(self, result: Tag) -> Dict[str, str]:
+        """
+        Extract the desired text from a HTML search result
+        """
         manga_name = result.find("img").get("alt")
         manga_url = result.find("a").get("href")
         last_chapter = result.find("em", {"class": "story_chapter"}).find("a")
@@ -98,11 +120,14 @@ class MangaKakaSearch(BaseSearchParser):
         return {
             "title": manga_name,
             "manga_url": Path(manga_url).stem,
-            "chapters": round(float(chapters)),
+            "chapters": str(round(float(chapters))),
             "source": "mangakaka",
         }
 
-    def search(self, start: int = 1):
+    def search(self, start: int = 1) -> SearchResults:
+        """
+        Extract each mangas metadata from the search results
+        """
         results = self._scrape_results()
         metadata = {}
         for key, result in enumerate(results, start=start):
