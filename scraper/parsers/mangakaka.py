@@ -99,7 +99,7 @@ class MangaKakaSearch(BaseSearchParser):
             "title": manga_name,
             "manga_url": Path(manga_url).stem,
             "chapters": round(float(chapters)),
-            "type": "-",
+            "source": "mangakaka",
         }
 
     def search(self):

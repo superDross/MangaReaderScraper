@@ -27,6 +27,8 @@ export PYTHONPATH=$PYTHONPATH:/path/to/MangaReaderScraper/
 `--output` Directory to save downloads (defaults to `~/Downloads`) <br />
 `--source` Website to scrape from <br />
 `--upload` Upload mangas to a cloud storage service <br />
+`--override_name` Change manga name used to store volume(s) locally or in the cloud <br />
+
 
 ## Uploading
 

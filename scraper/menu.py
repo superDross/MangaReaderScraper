@@ -86,9 +86,9 @@ class SearchMenu(Menu):
 
     def table(self) -> str:
         # TODO: apply maximum restriction for title length
-        columns = ["", "Title", "Volumes", "Type"]
+        columns = ["", "Title", "Volumes", "Source"]
         data = [
-            [k, x["title"], x["chapters"], x["type"]]
+            [k, x["title"], x["chapters"], x["source"]]
             for k, x in self.search_results.items()
         ]
         table = tabulate(data, headers=columns, tablefmt="psql")

@@ -10,52 +10,52 @@ METADATA = {
         "title": "Dragon Ball",
         "manga_url": "dragon-ball",
         "chapters": "520",
-        "type": "Manga ",
+        "source": "mangareader",
     },
     "2": {
         "title": "Dragon Ball SD",
         "manga_url": "dragon-ball-sd",
         "chapters": "34",
-        "type": "Manga ",
+        "source": "mangareader",
     },
     "3": {
         "title": "Dragon Ball: Episode of Bardock",
         "manga_url": "dragon-ball-episode-of-bardock",
         "chapters": "3",
-        "type": "Manga ",
+        "source": "mangareader",
     },
     "4": {
         "title": "DragonBall Next Gen",
         "manga_url": "dragonball-next-gen",
         "chapters": "4",
-        "type": "Manga ",
+        "source": "mangareader",
     },
     "5": {
         "title": "Dragon Ball Z - Rebirth of F",
         "manga_url": "dragon-ball-z-rebirth-of-f",
         "chapters": "3",
-        "type": "Manga ",
+        "source": "mangareader",
     },
     "6": {
         "title": "Dragon Ball Super",
         "manga_url": "dragon-ball-super",
         "chapters": "54",
-        "type": "Manga ",
+        "source": "mangareader",
     },
 }
 
 
 TABLE = (
-    "+----+---------------------------------+-----------+--------+\n"
-    "|    | Title                           |   Volumes | Type   |\n"
-    "|----+---------------------------------+-----------+--------|\n"
-    "|  1 | Dragon Ball                     |       520 | Manga  |\n"
-    "|  2 | Dragon Ball SD                  |        34 | Manga  |\n"
-    "|  3 | Dragon Ball: Episode of Bardock |         3 | Manga  |\n"
-    "|  4 | DragonBall Next Gen             |         4 | Manga  |\n"
-    "|  5 | Dragon Ball Z - Rebirth of F    |         3 | Manga  |\n"
-    "|  6 | Dragon Ball Super               |        54 | Manga  |\n"
-    "+----+---------------------------------+-----------+--------+"
+    "+----+---------------------------------+-----------+-------------+\n"
+    "|    | Title                           |   Volumes | Source      |\n"
+    "|----+---------------------------------+-----------+-------------|\n"
+    "|  1 | Dragon Ball                     |       520 | mangareader |\n"
+    "|  2 | Dragon Ball SD                  |        34 | mangareader |\n"
+    "|  3 | Dragon Ball: Episode of Bardock |         3 | mangareader |\n"
+    "|  4 | DragonBall Next Gen             |         4 | mangareader |\n"
+    "|  5 | Dragon Ball Z - Rebirth of F    |         3 | mangareader |\n"
+    "|  6 | Dragon Ball Super               |        54 | mangareader |\n"
+    "+----+---------------------------------+-----------+-------------+"
 )
 
 

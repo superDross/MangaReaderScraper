@@ -125,12 +125,11 @@ class MangaReaderSearch(BaseSearchParser):
         title = manga_name.text
         manga_url = manga_name.find("a").get("href")
         chapters = result.find("div", {"class": "chapter_count"}).text
-        manga_type = result.find("div", {"class": "manga_type"}).text
         return {
             "title": title.replace("\n", ""),
             "manga_url": manga_url[1:],
             "chapters": re.sub(r"\D", "", chapters),
-            "type": manga_type.split("(")[0],
+            "source": "mangareader",
         }
 
     def search(self) -> SearchResults:
