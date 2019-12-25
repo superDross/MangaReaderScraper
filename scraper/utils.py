@@ -81,6 +81,7 @@ def create_base_config() -> None:
 
     config["config"]["manga_directory"] = str(downloaddir)
     config["config"]["source"] = "mangareader"
+    config["config"]["filetype"] = "pdf"
 
     configfile = configdir / "mangascraper.ini"
     with configfile.open("w") as cf:

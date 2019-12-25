@@ -14,6 +14,8 @@ from scraper.uploaders.types import Uploader
 from scraper.uploaders.uploaders import DropboxUploader, MegaUploader, PcloudUploader
 from scraper.utils import settings
 
+CONFIG = settings()["config"]
+
 logging.basicConfig(
     level=logging.INFO, format="%(message)s",
 )
@@ -147,7 +149,6 @@ def cli_entry() -> None:
 
 
 def get_parser() -> argparse.ArgumentParser:
-    config = settings()["config"]
 
     parser = argparse.ArgumentParser(
         description="downloads and converts manga volumes to pdf or cbz format"
@@ -159,13 +160,13 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--volumes", "-v", nargs="+", type=str, help="manga volume to download"
     )
-    parser.add_argument("--output", "-o", default=config["manga_directory"])
+    parser.add_argument("--output", "-o", default=CONFIG["manga_directory"])
     parser.add_argument(
         "--filetype",
         "-f",
         type=str,
         choices={"pdf", "cbz"},
-        default="pdf",
+        default=CONFIG["filetype"],
         help="format to store manga as",
     )
     parser.add_argument(
@@ -173,7 +174,7 @@ def get_parser() -> argparse.ArgumentParser:
         "-z",
         type=str,
         choices={"mangareader", "mangakaka"},
-        default=config["source"],
+        default=CONFIG["source"],
         help="website to scrape data from",
     )
     parser.add_argument(

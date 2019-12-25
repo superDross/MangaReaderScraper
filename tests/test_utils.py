@@ -69,6 +69,7 @@ def test_settings():
         config = settings()
         assert config["config"]["manga_directory"] == "/tmp/Downloads"
         assert config["config"]["source"] == "mangareader"
+        assert config["config"]["filetype"] == "pdf"
 
 
 def test_settings_creates_base_config():

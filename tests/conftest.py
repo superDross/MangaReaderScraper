@@ -36,11 +36,13 @@ def mocked_download_settings():
 
 @pytest.fixture(scope="session", autouse=True)
 def mocked_manga_env_var_cli():
-    mock_settings = mock.MagicMock(
-        return_value={"config": {"manga_directory": "/tmp", "source": "mangareader"}}
-    )
+    mock_settings = {
+        "manga_directory": "/tmp",
+        "source": "mangareader",
+        "filetype": "pdf",
+    }
 
-    with mock.patch("scraper.__main__.settings", mock_settings) as mocked_settings:
+    with mock.patch("scraper.__main__.CONFIG", mock_settings) as mocked_settings:
         yield mocked_settings
 
 
