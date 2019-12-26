@@ -2,7 +2,7 @@ from unittest import mock
 
 import pytest
 
-from scraper.__main__ import cli
+from scraper.__main__ import cli, get_manga_parser
 from scraper.exceptions import MangaDoesNotExist
 from tests.helpers import MockedSiteParser
 
@@ -18,6 +18,7 @@ PATAMETERS = [
             "volumes": None,
             "upload": None,
             "override_name": None,
+            "remove": False,
         },
     ),
     (
@@ -31,6 +32,7 @@ PATAMETERS = [
             "volumes": [1, 2],
             "upload": None,
             "override_name": None,
+            "remove": False,
         },
     ),
     (
@@ -44,6 +46,7 @@ PATAMETERS = [
             "volumes": [231],
             "upload": None,
             "override_name": None,
+            "remove": False,
         },
     ),
     (
@@ -57,6 +60,7 @@ PATAMETERS = [
             "volumes": None,
             "upload": None,
             "override_name": None,
+            "remove": False,
         },
     ),
     (
@@ -78,6 +82,7 @@ PATAMETERS = [
             "volumes": [1, 2, 3, 4, 5, 40],
             "upload": None,
             "override_name": "dragon_kin",
+            "remove": False,
         },
     ),
     (
@@ -91,6 +96,7 @@ PATAMETERS = [
             "volumes": [1, 2, 3, 4, 5, 40],
             "upload": None,
             "override_name": None,
+            "remove": False,
         },
     ),
 ]
@@ -108,6 +114,7 @@ SEARCH_PARAMETERS = [
             "filetype": "pdf",
             "upload": None,
             "override_name": None,
+            "remove": False,
         },
     ),
     (
@@ -121,6 +128,7 @@ SEARCH_PARAMETERS = [
             "output": "/tmp",
             "filetype": "pdf",
             "override_name": None,
+            "remove": False,
             "upload": None,
         },
     ),
@@ -136,6 +144,7 @@ SEARCH_PARAMETERS = [
             "filetype": "pdf",
             "upload": None,
             "override_name": None,
+            "remove": False,
         },
     ),
     (
@@ -150,6 +159,7 @@ SEARCH_PARAMETERS = [
             "filetype": "pdf",
             "upload": None,
             "override_name": None,
+            "remove": False,
         },
     ),
     (
@@ -164,6 +174,7 @@ SEARCH_PARAMETERS = [
             "filetype": "pdf",
             "upload": None,
             "override_name": None,
+            "remove": False,
         },
     ),
 ]
@@ -174,6 +185,11 @@ SEARCH_PARAMETERS = [
 def test_download_via_cli(arguments, expected):
     args = cli(arguments)
     assert args == expected
+
+
+def test_get_invalid_manga_parser():
+    with pytest.raises(ValueError):
+        get_manga_parser("nothing")
 
 
 @pytest.mark.parametrize("arguments,inputs,expected", SEARCH_PARAMETERS)
@@ -216,5 +232,6 @@ def test_search_if_failed_manga_match(monkeypatch, mangareader_search_html):
                 "filetype": "pdf",
                 "upload": None,
                 "override_name": "None",
+                "remove": False,
             }
             assert args == expected

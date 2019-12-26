@@ -90,6 +90,9 @@ def cli(arguments: List[str]) -> dict:
     args = vars(parser.parse_args(arguments))
     manga_parser = get_manga_parser(args["source"])
 
+    if args["remove"] and not args["upload"]:
+        raise IOError("Cannot use --remove without --upload")
+
     if args["search"]:
         args["manga"], args["volumes"] = manga_search(args["search"], manga_parser)
 
@@ -122,6 +125,10 @@ def cli(arguments: List[str]) -> dict:
     if args["upload"]:
         upload(manga, args["upload"])
 
+    if args["remove"]:
+        for volume in manga.volumes:
+            volume.file_path.unlink()
+
     return args
 
 
@@ -131,8 +138,14 @@ def change_args_to_search(args: Dict[str, Optional[str]]) -> List[Optional[str]]
     """
     updated_args = []
     args.update({"manga": None, "volumes": None, "search": args["manga"]})
+
+    flags = ["remove"]
+
     for k, v in args.items():
-        if k == "upload" and not v:
+        if (k == "upload" and not v) or (k in flags and v is False):
+            continue
+        if k in flags and v is True:
+            updated_args.append(f"--{k}")
             continue
         updated_args.append(f"--{k}")
         updated_args.append(v)
@@ -189,6 +202,12 @@ def get_parser() -> argparse.ArgumentParser:
         "-n",
         type=str,
         help="change manga name for all saved/uploaded files",
+    )
+    parser.add_argument(
+        "--remove",
+        "-r",
+        action="store_true",
+        help="delete downloaded volumes aftering uploading to a cloud service",
     )
     return parser
 
