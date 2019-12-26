@@ -19,6 +19,10 @@ class VolumeAlreadyPresent(Exception):
     pass
 
 
+class VolumeAlreadyExists(Exception):
+    pass
+
+
 class InvalidOption(Exception):
     pass
 

@@ -10,6 +10,7 @@ from typing import Dict, Generator, List, Optional
 
 from scraper.exceptions import (
     PageAlreadyPresent,
+    VolumeAlreadyExists,
     VolumeAlreadyPresent,
     VolumeDoesntExist,
 )
@@ -153,6 +154,8 @@ class Manga:
         if self.volume.get(volume_number):
             raise VolumeAlreadyPresent(f"Volume {volume_number} is already present")
         vol_path = self._volume_path(volume_number)
+        if vol_path.exists():
+            raise VolumeAlreadyExists(f"{str(vol_path)} already saved to disk")
         vol_upload_path = self._volume_upload_path(volume_number)
         volume = Volume(
             number=volume_number, file_path=vol_path, upload_path=vol_upload_path
@@ -205,9 +208,12 @@ class MangaBuilder:
         manga_name = preferred_name if preferred_name else self.parser.manga.name
         manga = Manga(manga_name, filetype)
         for volume_data in volumes_data:
-            volume_number, pages_data = volume_data
-            manga.add_volume(volume_number)
-            # properties cause an error in mypy when getter/setters input
-            # differ, mypy thinks they should be the same
-            manga.volume[volume_number].pages = pages_data  # type: ignore
+            try:
+                volume_number, pages_data = volume_data
+                manga.add_volume(volume_number)
+                # properties cause an error in mypy when getter/setters input
+                # differ, mypy thinks they should be the same
+                manga.volume[volume_number].pages = pages_data  # type: ignore
+            except (VolumeAlreadyExists, VolumeAlreadyPresent) as e:
+                logger.warning(e)
         return manga
