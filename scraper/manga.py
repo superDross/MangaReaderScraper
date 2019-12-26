@@ -19,9 +19,6 @@ from scraper.utils import get_adapter, settings
 
 logger = logging.getLogger(__name__)
 
-# TODO: place inside Manga class where used, it is not used anywhere else
-MANGA_DIR = settings()["config"]["manga_directory"]
-
 
 @dataclass(frozen=True, repr=False)
 class Page:
@@ -126,8 +123,9 @@ class Manga:
         return f"Manga(name={self.name}, volumes={len(self.volumes)})"
 
     def _volume_path(self, volume_number: int) -> Path:
+        manga_dir = settings()["config"]["manga_directory"]
         return Path(
-            f"{MANGA_DIR}/{self.name}/{self.name}"
+            f"{manga_dir}/{self.name}/{self.name}"
             f"_volume_{volume_number}.{self.filetype}"
         )
 

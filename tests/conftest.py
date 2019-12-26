@@ -16,13 +16,21 @@ from tests.helpers import MockedMangaReaderParser, get_bs4_tree, get_images
 @pytest.fixture(scope="session", autouse=True)
 def mocked_manga_env_var():
     """
-    Mock MANGA_DIR env var in manga module to point to /tmp/ dir
+    Mock settings config in manga module to point to /tmp/ dir
 
     This will be applied to every single test prior to execution
     """
-    mock_dir = f"/tmp"
-    with mock.patch("scraper.manga.MANGA_DIR", mock_dir) as mocked_dir:
-        yield mocked_dir
+    mock_config = mock.MagicMock(
+        return_value={
+            "config": {
+                "manga_directory": "/tmp",
+                "source": "mangareader",
+                "filetype": "pdf",
+            }
+        }
+    )
+    with mock.patch("scraper.manga.settings", mock_config) as mocked_config:
+        yield mocked_config
 
 
 @pytest.fixture(scope="session", autouse=True)
