@@ -9,6 +9,8 @@ from typing import Any, Callable, MutableMapping, Optional, Tuple, Union
 
 import bs4
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 from scraper.exceptions import CannotExtractChapter
 
@@ -122,3 +124,17 @@ def extract_chapter_number(chapter_string: str) -> str:
     if len(chapter_number) > 1 and chapter_number.startswith("0"):
         chapter_number = chapter_number.lstrip("0")
     return chapter_number
+
+
+def request_session(max_attempts=10, intervals=0.2):
+    """
+    Requests session with custom max reattempts and time intervals
+
+    Usage:
+      req = request_session()
+      req.get(<url>)
+    """
+    req = requests.Session()
+    retries = Retry(total=max_attempts, backoff_factor=intervals)
+    req.mount("http://", HTTPAdapter(max_retries=retries))
+    return req

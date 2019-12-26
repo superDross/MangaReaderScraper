@@ -65,7 +65,7 @@ class Download:
 
         The naming schema is important. If too much info is
         within the jpg file name the page order can be read
-        wrong in some CBZ readers. The best way is for a format
+        wrong in some CBZ readers. The most reliable format is
         like 001_1.jpg (<pag_num>_<vol_num>.jpg).
 
         See forum post for more details:
