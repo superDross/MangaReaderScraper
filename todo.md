@@ -12,6 +12,7 @@
 ## ???
 
 - support Windows (will need to fix windows boot partition first)
+- support a comic website
 
 ## Run On Mobile
 

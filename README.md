@@ -28,7 +28,27 @@ export PYTHONPATH=$PYTHONPATH:/path/to/MangaReaderScraper/
 `--source` Website to scrape from <br />
 `--upload` Upload mangas to a cloud storage service <br />
 `--override_name` Change manga name used to store volume(s) locally or in the cloud <br />
+`--remove` Delete the manga(s) after they have downloaded & uploaded <br />
 
+## Config
+
+The default config file lives in `$HOME/.config/mangascraper.ini` and is as below:
+
+```ini
+[config]
+
+# directory to save downloaded files to
+manga_directory = /home/dir/Download
+
+# default website to download from
+source = mangareader
+
+# defaulta filetype to store mangas as
+filetype = pdf
+
+# root cloud directory to upload the manga to
+upload_root = /
+```
 
 ## Uploading
 
