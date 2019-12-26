@@ -131,8 +131,8 @@ class Manga:
         )
 
     def _volume_upload_path(self, volume_number: int) -> Path:
-        # TODO: add preferred root directory
-        return Path(f"/{self.name}/{self.name}_volume_{volume_number}.{self.filetype}")
+        root = Path(settings()["config"]["upload_root"])
+        return root / f"{self.name}/{self.name}_volume_{volume_number}.{self.filetype}"
 
     @property
     def volume(self) -> Dict[int, Volume]:

@@ -180,6 +180,14 @@ SEARCH_PARAMETERS = [
 ]
 
 
+def test_ioerror_remove_upload_args():
+    """
+    Ensure --remove causes error if --upload arg not present
+    """
+    with pytest.raises(IOError):
+        cli(["--search", "x", "--remove"])
+
+
 @pytest.mark.parametrize("arguments,expected", PATAMETERS)
 @mock.patch("scraper.__main__.download_manga", mock.Mock(return_value=1))
 def test_download_via_cli(arguments, expected):

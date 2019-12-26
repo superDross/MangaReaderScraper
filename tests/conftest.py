@@ -26,6 +26,7 @@ def mocked_manga_env_var():
                 "manga_directory": "/tmp",
                 "source": "mangareader",
                 "filetype": "pdf",
+                "upload_root": "/",
             }
         }
     )
@@ -48,6 +49,7 @@ def mocked_manga_env_var_cli():
         "manga_directory": "/tmp",
         "source": "mangareader",
         "filetype": "pdf",
+        "upload_root": "/",
     }
 
     with mock.patch("scraper.__main__.CONFIG", mock_settings) as mocked_settings:

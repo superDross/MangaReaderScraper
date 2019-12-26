@@ -1,4 +1,5 @@
 from pathlib import Path
+from unittest import mock
 
 from bs4 import BeautifulSoup
 
@@ -112,6 +113,21 @@ class MockedSiteParser(BaseSiteParser):
             manga_parser=MockedMangaReaderParser,
             search_parser=MockedSearch,
         )
+
+
+class MockedDropbox:
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def files_search(self, *args, **kwargs):
+        searcher = mock.MagicMock()
+        searcher.matches = mock.Mock(return_value=True)
+        return searcher
+
+    def files_upload(self, *args, **kwargs):
+        response = mock.MagicMock()
+        response.path_lower = mock.Mock(return_value="/some/path/")
+        return response
 
 
 def get_bs4_tree(filepath):
