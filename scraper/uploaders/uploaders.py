@@ -1,4 +1,5 @@
 import logging
+from pathlib import Path
 from typing import Any, Dict
 
 import dropbox
@@ -101,7 +102,7 @@ class PcloudUploader(BaseUploader):
 
     def create_directory(self, dirname: str) -> Dict[str, Any]:
         """
-        Creates directory in pCloud to save file to
+        Creates directory in pCloud
         """
         res = self.api.listfolder(path=dirname)
         if res.get("error"):
@@ -111,11 +112,19 @@ class PcloudUploader(BaseUploader):
                 return response
         return {}
 
+    def create_directories_recursively(self, filename: Path) -> None:
+        """
+        Splits a path up and creates each subdirectory down the path tree
+        """
+        for i in reversed(range(1, len(filename.parts) - 1)):
+            directory = filename.parents[i - 1]
+            res = self.create_directory(str(directory))
+            if res.get("error"):
+                raise IOError(res.get("error"))
+
     def upload_volume(self, volume: Volume) -> None:
+        self.create_directories_recursively(volume.upload_path)
         parent_dir = str(volume.upload_path.parent)
-        res = self.create_directory(parent_dir)
-        if res.get("error"):
-            raise IOError(res.get("error"))
         response = self.api.uploadfile(
             data=volume.file_path.read_bytes(),
             filename=str(volume.upload_path),

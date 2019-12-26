@@ -56,7 +56,7 @@ upload_root = /
 
 Follow this [guide](https://blogs.dropbox.com/developers/2014/05/generate-an-access-token-for-your-own-account/) to create a token. Then place the token into your config (`~/.config/mangarscraper.ini`):
 
-```
+```ini
 [dropbox]
 token = hdkd87799jjjj
 ```
@@ -65,7 +65,7 @@ token = hdkd87799jjjj
 
 Add your email and password to the config file:
 
-```
+```ini
 [mega]
 email = email@email.com
 password = notapassword123
@@ -75,7 +75,7 @@ password = notapassword123
 
 Add you email and password to the config file:
 
-```
+```ini
 [pcloud]
 email = email@email.con
 password = notapassword123
@@ -110,7 +110,7 @@ Which volume do you want to download (Enter alone to download all volumes)?
 
 To download a manga directly:
 
-```
+```bash
 # Download all Dragon Ball volumes & upload to dropbox
 manga-scraper --manga dragon-ball --upload dropbox
 
