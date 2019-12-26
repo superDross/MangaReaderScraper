@@ -2,6 +2,8 @@
 
 ## 0.4
 
+- get mega working with `upload_root` directory (create recursive subdirs)
+
 - test coverage, increase --> Release 0.4
 
 ## 0.45
@@ -13,6 +15,7 @@
 
 - support Windows (will need to fix windows boot partition first)
 - support a comic website
+- support uploading to Google Drive
 
 ## Run On Mobile
 

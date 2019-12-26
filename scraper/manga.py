@@ -154,9 +154,12 @@ class Manga:
         if self.volume.get(volume_number):
             raise VolumeAlreadyPresent(f"Volume {volume_number} is already present")
         vol_path = self._volume_path(volume_number)
+        vol_upload_path = self._volume_upload_path(volume_number)
+        # TODO: causes problems with uploading an already existant file
+        #       it should logger.warning then return instead
+        # TODO: MAYBE EASIER TO REMOVE THE EXCEPTION HANDELLING HERE
         if vol_path.exists():
             raise VolumeAlreadyExists(f"{str(vol_path)} already saved to disk")
-        vol_upload_path = self._volume_upload_path(volume_number)
         volume = Volume(
             number=volume_number, file_path=vol_path, upload_path=vol_upload_path
         )

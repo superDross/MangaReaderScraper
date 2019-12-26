@@ -64,12 +64,12 @@ class MegaUploader(BaseUploader):
         Sets the directory key. The name you give a directory is not
         how Mega store it, its a bunch of random letters instead.
         """
-        dirname = f"/{manga.name}/"
+        dirname = manga.volumes[0].upload_path.parent
         dir_metadata = self.api.find(dirname)
         if not dir_metadata:
             self.adapter.info(f"Creating directory {dirname}")
             response = self.api.create_folder(dirname)
-            self.dirname = list(response.values())[0]
+            self.dirname = list(response.values())[-1]
         else:
             self.dirname = dir_metadata[0]
 
@@ -85,6 +85,7 @@ class MegaUploader(BaseUploader):
         self.adapter.info(f"Uploaded to {volume.upload_path}")
 
     def upload(self, manga: Manga) -> None:
+        self._setup_adapter(manga)
         self._set_dirname(manga)
         super().upload(manga)
 

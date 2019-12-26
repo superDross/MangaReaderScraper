@@ -38,11 +38,14 @@ class BaseUploader:
         """
         pass
 
+    def _setup_adapter(self, manga: Manga) -> None:
+        self.adapter = get_adapter(logger, manga.name)
+
     def upload(self, manga: Manga) -> None:
         """
         Uploads all volumes in a given Manga object
         """
-        self.adapter = get_adapter(logger, manga.name)
+        self._setup_adapter(manga)
         self.adapter.info(f"Uploading to {self.service.title()}")
         with ThreadPool() as pool:
             pool.map(self.upload_volume, manga.volumes)
