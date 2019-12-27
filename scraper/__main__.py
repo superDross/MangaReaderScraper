@@ -213,7 +213,7 @@ def get_parser() -> argparse.ArgumentParser:
         "--version",
         "-v",
         action="version",
-        version="0.4",
+        version="v0.4",
         help="display the installed version number of the application",
     )
     return parser

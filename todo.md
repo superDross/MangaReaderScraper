@@ -2,8 +2,6 @@
 
 ## 0.41
 
-- apply maximum title length in search table
-- remove all TODO stuff in code
 - async/await instead of multithreading
 
 ## 0.45
