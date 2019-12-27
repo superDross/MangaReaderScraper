@@ -12,7 +12,7 @@ from scraper.parsers.mangareader import MangaReader
 from scraper.parsers.types import SiteParserClass
 from scraper.uploaders.types import Uploader
 from scraper.uploaders.uploaders import DropboxUploader, MegaUploader, PcloudUploader
-from scraper.utils import settings
+from scraper.utils import settings, menu_input
 
 CONFIG = settings()["config"]
 
@@ -43,9 +43,9 @@ def manga_search(query: List[str], parser: SiteParserClass) -> Tuple[str, List[s
     manga = menu.handle_options()
     msg = (
         "Which volume(s) do you want to download "
-        "(Enter alone to download all volumes)?\n>> "
+        "(Enter alone to download all volumes)?"
     )
-    volumes = input(msg)
+    volumes = menu_input(msg)
     return (manga.strip(), volumes.split())
 
 

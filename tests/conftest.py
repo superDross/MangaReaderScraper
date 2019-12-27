@@ -15,7 +15,7 @@ from tests.helpers import MockedMangaReaderParser, get_bs4_tree, get_images
 
 
 @pytest.fixture(scope="session", autouse=True)
-def mocked_manga_env_var():
+def mocked_manga_settings():
     """
     Mock settings config in manga module to point to /tmp/ dir
 
@@ -42,6 +42,20 @@ def mocked_download_settings():
     )
     with mock.patch("scraper.download.settings", mocked_settings) as mocked_dir:
         yield mocked_dir
+
+
+@pytest.fixture(scope="session", autouse=True)
+def mocked_uploader_settings():
+    config = {
+        "email": True,
+        "password": True,
+        "token": True,
+    }
+
+    with mock.patch(
+        "scraper.uploaders.base.BaseUploader._get_config", return_value=config
+    ) as cfg:
+        yield cfg
 
 
 @pytest.fixture(scope="session", autouse=True)

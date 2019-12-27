@@ -2,6 +2,7 @@ import configparser
 import functools
 import logging
 import re
+import sys
 import time
 from logging import Logger, LoggerAdapter
 from pathlib import Path
@@ -139,3 +140,18 @@ def request_session(max_attempts: int = 10, intervals: float = 0.2) -> requests.
     for protocol in ["http", "https"]:
         req.mount(f"{protocol}://", HTTPAdapter(max_retries=retries))
     return req
+
+
+def menu_input(msg="", prompt=">> "):
+    """
+    Custom input with error handeling
+    """
+    try:
+        text = f"\n{msg}\n\n{prompt}" if msg else f"\n{prompt}"
+        choice = input(text)
+        if choice.lower() in ["q", "quit"]:
+            raise KeyboardInterrupt
+        return choice
+    except KeyboardInterrupt:
+        print("\nExiting...\n")
+        sys.exit()

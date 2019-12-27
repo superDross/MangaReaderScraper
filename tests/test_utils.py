@@ -10,6 +10,7 @@ from scraper.utils import (
     create_base_config,
     extract_chapter_number,
     get_adapter,
+    menu_input,
     request_session,
     settings,
 )
@@ -90,6 +91,14 @@ def test_requests_session():
     https = req.adapters["https://"]
     assert https.max_retries.total == 34
     assert https.max_retries.backoff_factor == 0.5
+
+
+@pytest.mark.parametrize("inputs", ["q", "Q", "quit", "QUit"])
+def test_menu_input_quit(inputs, monkeypatch):
+    gen = (x for x in inputs)
+    monkeypatch.setattr("builtins.input", lambda x: next(gen))
+    with pytest.raises(SystemExit):
+        menu_input()
 
 
 def teardown_module(module):

@@ -17,9 +17,12 @@ class BaseUploader:
 
     def __init__(self, service: str) -> None:
         self.service: str = service
-        self.config: SectionProxy = settings()[service]
+        self.config: SectionProxy = self._get_config()
         self.api: Any = self._get_api_object()
         self.adapter: Optional[CustomAdapter] = None
+
+    def _get_config(self):
+        return settings()[self.service]
 
     def __call__(self, manga: Manga):
         return self.upload(manga)

@@ -5,6 +5,7 @@ from tabulate import tabulate
 from scraper.exceptions import InvalidOption
 from scraper.new_types import SearchResults
 from scraper.parsers.types import SiteParser
+from scraper.utils import menu_input
 
 
 class Menu:
@@ -28,7 +29,7 @@ class Menu:
         """
         try:
             print(self.choices)
-            choice = input(">> ")
+            choice = menu_input()
             item = self.options[choice]
             return item
         except KeyError:
