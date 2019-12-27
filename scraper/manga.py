@@ -181,6 +181,7 @@ class MangaBuilder:
             urls = self.parser.manga.page_urls(volume_number)
         except VolumeDoesntExist as e:
             self.adapter.warning(e)
+            return (volume_number, None)
         with ThreadPool() as pool:
             pages_data = pool.map(self.parser.manga.page_data, urls)
         return (volume_number, pages_data)
@@ -210,6 +211,8 @@ class MangaBuilder:
         for volume_data in volumes_data:
             try:
                 volume_number, pages_data = volume_data
+                if not pages_data:
+                    continue
                 manga.add_volume(volume_number)
                 # properties cause an error in mypy when getter/setters input
                 # differ, mypy thinks they should be the same

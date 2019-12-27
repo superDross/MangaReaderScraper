@@ -40,11 +40,11 @@ class MangaReaderMangaParser(BaseMangaParser):
             string = re.compile(".*not published.*")
             matches = volume_html.find_all(string=string, recursive=True)
             if matches:
-                raise VolumeDoesntExist(f"manga volume {volume} does not exist")
+                raise VolumeDoesntExist(f"Manga volume {volume} does not exist")
             return volume_html
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 404:
-                raise MangaDoesNotExist(f"manga {self.name} does not exist")
+                raise MangaDoesNotExist(f"Manga {self.name} does not exist")
 
     def page_urls(self, volume: int) -> List[str]:
         """
@@ -81,7 +81,7 @@ class MangaReaderMangaParser(BaseMangaParser):
             return volume_numbers
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 404:
-                raise MangaDoesNotExist(f"manga {self.name} does not exist")
+                raise MangaDoesNotExist(f"Manga {self.name} does not exist")
             raise e
 
 
