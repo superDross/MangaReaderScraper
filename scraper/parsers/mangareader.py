@@ -110,8 +110,7 @@ class MangaReaderSearch(BaseSearchParser):
         html_response = get_html_from_url(url)
         search_results = html_response.find_all("div", {"class": "mangaresultitem"})
         if not search_results:
-            logging.warning(f"No search results found for {self.query}")
-            # TODO: raise error instead, then catch in __main__ and sys.exit?
+            logging.warning(f"No search results found for {self.query}\nExiting...")
             sys.exit()
 
         self.results += search_results
