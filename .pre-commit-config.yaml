@@ -16,7 +16,7 @@ repos:
     hooks:
     -   id: isort
         # third-party libs are not being recognised as third party
-        args: [--diff, -ws, -tc, -o=tabulate, -o=bs4, -o=requests, -o=pytest, -o=urllib3, -w, "88"]
+        args: [--check-only, --diff, -ws, -tc, -o=tabulate, -o=bs4, -o=requests, -o=pytest, -o=urllib3, -w, "88"]
 
 -   repo: https://gitlab.com/pycqa/flake8
     rev: 3.7.9
