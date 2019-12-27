@@ -12,7 +12,7 @@ from scraper.parsers.mangareader import MangaReader
 from scraper.parsers.types import SiteParserClass
 from scraper.uploaders.types import Uploader
 from scraper.uploaders.uploaders import DropboxUploader, MegaUploader, PcloudUploader
-from scraper.utils import settings, menu_input
+from scraper.utils import menu_input, settings
 
 CONFIG = settings()["config"]
 
