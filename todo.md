@@ -2,9 +2,8 @@
 
 ## 0.4
 
-- get mega working with `upload_root` directory (create recursive subdirs)
-
 - test coverage, increase --> Release 0.4
+- async/await instead of multithreading
 
 ## 0.45
 
