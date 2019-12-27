@@ -3,6 +3,7 @@ Pytest fixtures
 """
 
 import logging
+from pathlib import Path
 from unittest import mock
 
 import pytest
@@ -174,7 +175,7 @@ def page():
 def volume():
     img1, img2 = get_images()
     page_data = [(1, img1), (2, img2)]
-    volume = Volume(1, "/Some/path", "/some/path")
+    volume = Volume(1, Path("/Some/path"), Path("/some/path"))
     volume.pages = page_data
     return volume
 

@@ -1,10 +1,11 @@
 import logging
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any, Dict, List, Optional
 
 import dropbox
 from mega import Mega
 from pcloud import PyCloud
+from dropbox.files import FileMetadata
 
 from scraper.manga import Manga, Volume
 from scraper.uploaders.base import BaseUploader
@@ -35,7 +36,7 @@ class DropboxUploader(BaseUploader):
                 return False
             raise e
 
-    def upload_volume(self, volume: Volume) -> None:
+    def upload_volume(self, volume: Volume) -> Optional[FileMetadata]:
         if self.volume_exists(volume):
             self.adapter.warning(
                 f"Volume {volume.upload_path} already exists in Dropbox"
@@ -44,6 +45,7 @@ class DropboxUploader(BaseUploader):
         with open(volume.file_path, "rb") as cbz:
             response = self.api.files_upload(cbz.read(), str(volume.upload_path))
             self.adapter.info(f"Uploaded to {response.path_lower}")
+            return response
 
 
 class MegaUploader(BaseUploader):
@@ -59,7 +61,7 @@ class MegaUploader(BaseUploader):
         mega = Mega()
         return mega.login(self.config["email"], self.config["password"])
 
-    def _set_dirname(self, manga: Manga) -> None:
+    def set_dirname(self, manga: Manga) -> None:
         """
         Sets the directory key. The name you give a directory is not
         how Mega store it, its a bunch of random letters instead.
@@ -73,21 +75,22 @@ class MegaUploader(BaseUploader):
         else:
             self.dirname = dir_metadata[0]
 
-    def upload_volume(self, volume: Volume) -> None:
+    def upload_volume(self, volume: Volume) -> Optional[Dict[str, Any]]:
         if self.api.find(volume.file_path.name):
             self.adapter.warning(f"volume {volume.upload_path} already exists in Mega")
             return None
-        self.api.upload(
+        response = self.api.upload(
             filename=volume.file_path,
             dest=self.dirname,
             dest_filename=volume.file_path.name,
         )
         self.adapter.info(f"Uploaded to {volume.upload_path}")
+        return response
 
-    def upload(self, manga: Manga) -> None:
+    def upload(self, manga: Manga) -> List[Optional[Dict[str, Any]]]:
         self._setup_adapter(manga)
-        self._set_dirname(manga)
-        super().upload(manga)
+        self.set_dirname(manga)
+        return super().upload(manga)
 
 
 class PcloudUploader(BaseUploader):
@@ -113,17 +116,20 @@ class PcloudUploader(BaseUploader):
                 return response
         return {}
 
-    def create_directories_recursively(self, filename: Path) -> None:
+    def create_directories_recursively(self, filename: Path) -> List[Dict[str, Any]]:
         """
         Splits a path up and creates each subdirectory down the path tree
         """
+        responses: List[Dict[str, Any]] = []
         for i in reversed(range(1, len(filename.parts) - 1)):
             directory = filename.parents[i - 1]
             res = self.create_directory(str(directory))
             if res.get("error"):
                 raise IOError(res.get("error"))
+            responses.append(res)
+        return responses
 
-    def upload_volume(self, volume: Volume) -> None:
+    def upload_volume(self, volume: Volume) -> Dict[str, Any]:
         self.create_directories_recursively(volume.upload_path)
         parent_dir = str(volume.upload_path.parent)
         response = self.api.uploadfile(
@@ -134,3 +140,4 @@ class PcloudUploader(BaseUploader):
         if response.get("error"):
             raise IOError(response.get("error"))
         self.adapter.info(f"Uploaded to {volume.upload_path}")
+        return response

@@ -115,19 +115,90 @@ class MockedSiteParser(BaseSiteParser):
         )
 
 
-class MockedDropbox:
+class MockedPyCloud:
+    listed = {"error": True, "result": 2005}
+
     def __init__(self, *args, **kwargs):
         pass
 
+    def createfolder(self, *args, **kwargs):
+        return {"result": 0, "metadata": "path"}
+
+    def listfolder(self, *args, **kwargs):
+        return self.listed
+
+    def uploadfile(self, *args, **kwargs):
+        return {"status": "success"}
+
+
+class MockedPyCloudFail(MockedPyCloud):
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+
+    def createfolder(self, *args, **kwargs):
+        return {"error": "directory already exists"}
+
+    def uploadfile(self, *args, **kwargs):
+        return {"error": "something happened"}
+
+
+class MockedMega:
+    def __init__(self, *args, **kwargs):
+        self.found = ["start", "finish"]
+
+    def login(self, *args, **kwargs):
+        return self
+
+    def find(self, *args, **kwargs):
+        return self.found
+
+    def create_folder(self, *args, **kwargs):
+        return {"dir": "one", "subdir": "two"}
+
+    def upload(self, *args, **kwargs):
+        return {"status": "success"}
+
+
+class MockedMegaNotFound(MockedMega):
+    """
+    Causes self.find to return False
+    """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+        self.found = False
+
+
+class MockedDropbox:
+    def __init__(self, *args, **kwargs):
+        self.match_found = True
+        self.file = "/non-existing/file.txt"
+
     def files_search(self, *args, **kwargs):
         searcher = mock.MagicMock()
-        searcher.matches = mock.Mock(return_value=True)
+        searcher.matches = self.match_found
         return searcher
 
     def files_upload(self, *args, **kwargs):
         response = mock.MagicMock()
-        response.path_lower = mock.Mock(return_value="/some/path/")
+        response.path_lower = self.file
+        response.text = "success"
         return response
+
+
+class MockedDropboxRealFile(MockedDropbox):
+    def __init__(self, *args, **kwargs):
+        super().__init__()
+        self.match_found = False
+        self.file = "tests/test_files/mangakaka/dragonball_super_page.html"
+
+
+def setup_uploader(uploader):
+    upl = uploader()
+    manga = mock.MagicMock()
+    manga.name = mock.Mock(return_value="hiya")
+    upl._setup_adapter(manga)
+    return upl
 
 
 def get_bs4_tree(filepath):

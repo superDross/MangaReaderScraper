@@ -2,7 +2,7 @@ import abc
 import logging
 from configparser import SectionProxy
 from multiprocessing.pool import ThreadPool
-from typing import Any, Optional
+from typing import Any, List, Optional
 
 from scraper.manga import Manga, Volume
 from scraper.utils import CustomAdapter, get_adapter, settings
@@ -32,7 +32,7 @@ class BaseUploader:
         pass
 
     @abc.abstractmethod
-    def upload_volume(self, volume: Volume) -> None:
+    def upload_volume(self, volume: Volume) -> Any:
         """
         Uploads a given volume
         """
@@ -41,11 +41,12 @@ class BaseUploader:
     def _setup_adapter(self, manga: Manga) -> None:
         self.adapter = get_adapter(logger, manga.name)
 
-    def upload(self, manga: Manga) -> None:
+    def upload(self, manga: Manga) -> List[Any]:
         """
         Uploads all volumes in a given Manga object
         """
         self._setup_adapter(manga)
         self.adapter.info(f"Uploading to {self.service.title()}")
         with ThreadPool() as pool:
-            pool.map(self.upload_volume, manga.volumes)
+            responses = pool.map(self.upload_volume, manga.volumes)
+        return responses

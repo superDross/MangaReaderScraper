@@ -10,6 +10,7 @@ from scraper.utils import (
     create_base_config,
     extract_chapter_number,
     get_adapter,
+    request_session,
     settings,
 )
 
@@ -76,6 +77,19 @@ def test_settings_creates_base_config():
     with mock.patch("scraper.utils.Path.home", lambda: Path("/tmp")):
         settings()
         assert Path("/tmp/.config/mangascraper.ini").exists()
+
+
+def test_requests_session():
+    req = request_session(max_attempts=34, intervals=0.5)
+    assert len(req.adapters) == 2
+
+    http = req.adapters["http://"]
+    assert http.max_retries.total == 34
+    assert http.max_retries.backoff_factor == 0.5
+
+    https = req.adapters["https://"]
+    assert https.max_retries.total == 34
+    assert https.max_retries.backoff_factor == 0.5
 
 
 def teardown_module(module):

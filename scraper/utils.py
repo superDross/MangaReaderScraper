@@ -126,7 +126,7 @@ def extract_chapter_number(chapter_string: str) -> str:
     return chapter_number
 
 
-def request_session(max_attempts=10, intervals=0.2):
+def request_session(max_attempts: int = 10, intervals: float = 0.2) -> requests.Session:
     """
     Requests session with custom max reattempts and time intervals
 
@@ -136,5 +136,6 @@ def request_session(max_attempts=10, intervals=0.2):
     """
     req = requests.Session()
     retries = Retry(total=max_attempts, backoff_factor=intervals)
-    req.mount("http://", HTTPAdapter(max_retries=retries))
+    for protocol in ["http", "https"]:
+        req.mount(f"{protocol}://", HTTPAdapter(max_retries=retries))
     return req
