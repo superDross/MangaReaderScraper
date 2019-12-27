@@ -3,9 +3,9 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 import dropbox
+from dropbox.files import FileMetadata
 from mega import Mega
 from pcloud import PyCloud
-from dropbox.files import FileMetadata
 
 from scraper.manga import Manga, Volume
 from scraper.uploaders.base import BaseUploader

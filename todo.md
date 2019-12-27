@@ -1,8 +1,6 @@
 # TODO
 
-## 0.4
-
-- test coverage, increase --> Release 0.4
+## 0.41
 - async/await instead of multithreading
 
 ## 0.45

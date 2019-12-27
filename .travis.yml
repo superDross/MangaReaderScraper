@@ -33,7 +33,7 @@ jobs:
 
     - stage: code-style
       install: pip install isort==4.3.21
-      script: isort --check-only --diff -ws -tc -o=tabulate -o=bs4 -o=requests -o=pytest -w 88
+      script: isort --check-only --diff -ws -tc -o=tabulate -o=bs4 -o=requests -o=pytest -o=urllib3 -w 88
 
     - stage: code-style
       install: pip install black==19.10b0
