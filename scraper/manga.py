@@ -155,15 +155,12 @@ class Manga:
             raise VolumeAlreadyPresent(f"Volume {volume_number} is already present")
         vol_path = self._volume_path(volume_number)
         vol_upload_path = self._volume_upload_path(volume_number)
-        # TODO: causes problems with uploading an already existant file
-        #       it should logger.warning then return instead
-        # TODO: MAYBE EASIER TO REMOVE THE EXCEPTION HANDELLING HERE
-        if vol_path.exists():
-            raise VolumeAlreadyExists(f"{str(vol_path)} already saved to disk")
         volume = Volume(
             number=volume_number, file_path=vol_path, upload_path=vol_upload_path
         )
         self._volumes[volume.number] = volume
+        if vol_path.exists():
+            raise VolumeAlreadyExists(f"Volume {volume_number} already saved to disk")
 
 
 class MangaBuilder:
@@ -173,17 +170,17 @@ class MangaBuilder:
 
     def __init__(self, parser: SiteParser) -> None:
         self.parser: SiteParser = parser
+        self.adapter = get_adapter(logger, self.parser.manga.name)
 
     def _get_volume_data(self, volume_number: int) -> VolumeData:
         """
         Returns volume number & each pages raw data
         """
-        adapter = get_adapter(logger, self.parser.manga.name, volume_number)
-        adapter.info("downloading pages")
+        self.adapter.info(f"Downloading volume {volume_number}")
         try:
             urls = self.parser.manga.page_urls(volume_number)
         except VolumeDoesntExist as e:
-            adapter.warning(e)
+            self.adapter.warning(e)
         with ThreadPool() as pool:
             pages_data = pool.map(self.parser.manga.page_data, urls)
         return (volume_number, pages_data)
@@ -218,5 +215,7 @@ class MangaBuilder:
                 # differ, mypy thinks they should be the same
                 manga.volume[volume_number].pages = pages_data  # type: ignore
             except (VolumeAlreadyExists, VolumeAlreadyPresent) as e:
-                logger.warning(e)
+                self.adapter.warning(e)
+                # no need to download pages so continue
+                continue
         return manga

@@ -171,7 +171,7 @@ def get_parser() -> argparse.ArgumentParser:
         "--search", "-s", type=str, help="search manga reader", nargs="*"
     )
     parser.add_argument(
-        "--volumes", "-v", nargs="+", type=str, help="manga volume to download"
+        "--volumes", "-q", nargs="+", type=str, help="manga volume to download"
     )
     parser.add_argument("--output", "-o", default=CONFIG["manga_directory"])
     parser.add_argument(
@@ -208,6 +208,13 @@ def get_parser() -> argparse.ArgumentParser:
         "-r",
         action="store_true",
         help="delete downloaded volumes aftering uploading to a cloud service",
+    )
+    parser.add_argument(
+        "--version",
+        "-v",
+        action="version",
+        version="0.4",
+        help="display the installed version number of the application",
     )
     return parser
 

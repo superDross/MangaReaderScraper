@@ -47,7 +47,9 @@ class Download:
         """
         Save all pages to a PDF file
         """
-        self.adapter.info(f"volume saved to {volume.file_path}")
+        if not volume.pages:
+            return None
+        self.adapter.info(f"Volume {volume.number} saved to {volume.file_path}")
         c = canvas.Canvas(str(volume.file_path))
         for page in volume.pages:
             img = BytesIO(page.img)
@@ -71,7 +73,9 @@ class Download:
         See forum post for more details:
             https://tinyurl.com/uu5kvjf
         """
-        self.adapter.info(f"volume saved to {volume.file_path}")
+        if not volume.pages:
+            return None
+        self.adapter.info(f"Volume {volume.number} saved to {volume.file_path}")
         with zipfile.ZipFile(str(volume.file_path), "w") as cbz:
             for page in volume.pages:
                 jpgfilename = f"{page.number:03d}_{volume.number}.jpg"
@@ -96,6 +100,8 @@ class Download:
         """
         self.adapter.info(f"Starting Downloads")
         manga = self.factory.get_manga_volumes(vol_nums, self.type, preferred_name)
+        if not manga.volumes:
+            return manga
         self._create_manga_dir(manga.name)
         save_method = self._get_save_method()
         with Pool() as pool:

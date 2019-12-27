@@ -38,9 +38,7 @@ class DropboxUploader(BaseUploader):
 
     def upload_volume(self, volume: Volume) -> Optional[FileMetadata]:
         if self.volume_exists(volume):
-            self.adapter.warning(
-                f"Volume {volume.upload_path} already exists in Dropbox"
-            )
+            self.adapter.warning(f"Volume {volume.number} already exists in Dropbox")
             return None
         with open(volume.file_path, "rb") as cbz:
             response = self.api.files_upload(cbz.read(), str(volume.upload_path))
@@ -77,14 +75,14 @@ class MegaUploader(BaseUploader):
 
     def upload_volume(self, volume: Volume) -> Optional[Dict[str, Any]]:
         if self.api.find(volume.file_path.name):
-            self.adapter.warning(f"volume {volume.upload_path} already exists in Mega")
+            self.adapter.warning(f"Volume {volume.number} already exists in Mega")
             return None
         response = self.api.upload(
             filename=volume.file_path,
             dest=self.dirname,
             dest_filename=volume.file_path.name,
         )
-        self.adapter.info(f"Uploaded to {volume.upload_path}")
+        self.adapter.info(f"Volume {volume.number} uploaded to {volume.upload_path}")
         return response
 
     def upload(self, manga: Manga) -> List[Optional[Dict[str, Any]]]:
@@ -111,7 +109,7 @@ class PcloudUploader(BaseUploader):
         res = self.api.listfolder(path=dirname)
         if res.get("error"):
             if res["result"] == 2005:
-                self.adapter.info(f"creatind directory {dirname}")
+                self.adapter.info(f"Creating directory {dirname}")
                 response = self.api.createfolder(path=dirname)
                 return response
         return {}
@@ -139,5 +137,5 @@ class PcloudUploader(BaseUploader):
         )
         if response.get("error"):
             raise IOError(response.get("error"))
-        self.adapter.info(f"Uploaded to {volume.upload_path}")
+        self.adapter.info(f"Volume {volume.number} uploaded to {volume.upload_path}")
         return response

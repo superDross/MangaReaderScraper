@@ -48,6 +48,8 @@ class BaseUploader:
         """
         Uploads all volumes in a given Manga object
         """
+        if not manga.volumes:
+            return None
         self._setup_adapter(manga)
         self.adapter.info(f"Uploading to {self.service.title()}")
         with ThreadPool() as pool:
