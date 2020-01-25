@@ -29,6 +29,7 @@ repos:
     rev: v1.3
     hooks:
     -   id: autoflake
+        # TODO: fix non-working --recursive flag
         args: ['--remove-all-unused-imports', '--in-place', '--remove-unused-variable', '--exclude', 'base.py', '--recursive', '.']
 
 -   repo: https://github.com/timothycrosley/isort
