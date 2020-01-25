@@ -20,7 +20,7 @@ jobs:
   include:
     - stage: security
       install: pip install safety
-      script: safety check
+      script: safety check -r requirements.txt
 
     - stage: security
       install: pip install bandit
