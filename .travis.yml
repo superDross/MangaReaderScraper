@@ -11,43 +11,42 @@ sudo: true
 install:
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
 
-# stages:
-#   - name: security
-#   - name: linter
-#   - name: code-style
-#   - name: type-checking
-#   - name: tests
+stages:
+  - name: security
+  - name: linter
+  - name: code-style
+  - name: type-checking
+  - name: tests
 
+# prefer to run tox instead, duplication
 jobs:
   include:
-    - install: pip install -r requirements.txt
-      script: tox
-    # - stage: security
-    #   install: pip install safety
-    #   script: safety check -r requirements.txt
+    - stage: security
+      install: pip install safety
+      script: safety check -r requirements.txt
 
-    # - stage: security
-    #   install: pip install bandit
-    #   # allow bare try/except and disable input warning
-    #   script: bandit -ii -s B322,B110 -r scraper/
+    - stage: security
+      install: pip install bandit
+      # allow bare try/except and disable input warning
+      script: bandit -ii -s B322,B110 -r scraper/
 
-    # - stage: linter
-    #   install: pip install flake8==3.7.9
-    #   script: flake8 --max-line-length=88 scraper/*.py
+    - stage: linter
+      install: pip install flake8==3.7.9
+      script: flake8 --max-line-length=88 scraper/*.py
 
-    # - stage: code-style
-    #   install: pip install isort==4.3.21
-    #   script: isort --check-only --diff -ws -tc -o=tabulate -o=bs4 -o=requests -o=pytest -o=urllib3 -w 88
+    - stage: code-style
+      install: pip install isort==4.3.21
+      script: isort --check-only --diff -ws -tc -o=tabulate -o=bs4 -o=requests -o=pytest -o=urllib3 -w 88
 
-    # - stage: code-style
-    #   install: pip install black==19.10b0
-    #   script: black --check --diff
+    - stage: code-style
+      install: pip install black==19.10b0
+      script: black --check --diff
 
-    # - stage: type-checking
-    #   install: pip install mypy==0.750
-    #   script: mypy --no-strict-optional --ignore-missing-imports scraper/
+    - stage: type-checking
+      install: pip install mypy==0.750
+      script: mypy --no-strict-optional --ignore-missing-imports scraper/
 
-    # - stage: tests
-    #   env: PYTHONPATH=$PYTHONPATH:$(pwd)
-    #   install: pip install -r requirements.txt
-    #   script: pytest
+    - stage: tests
+      env: PYTHONPATH=$PYTHONPATH:$(pwd)
+      install: pip install -r requirements.txt
+      script: pytest
