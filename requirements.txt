@@ -17,3 +17,4 @@ reportlab==3.5.23
 requests==2.22.0
 safety==1.8.5
 tabulate==0.8.1
+tox==3.14.3
