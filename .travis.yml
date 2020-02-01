@@ -11,12 +11,12 @@ sudo: true
 install:
   - export PYTHONPATH=$PYTHONPATH:$(pwd)
 
-stages:
-  - name: security
-  - name: linter
-  - name: code-style
-  - name: type-checking
-  - name: tests
+# stages:
+#   - name: security
+#   - name: linter
+#   - name: code-style
+#   - name: type-checking
+#   - name: tests
 
 jobs:
   include:
