@@ -21,6 +21,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
+          sudo apt-get build-dep python3-lxml
           python -m pip install --upgrade pip
           pip install tox
 
