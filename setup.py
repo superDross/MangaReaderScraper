@@ -13,10 +13,13 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+with open("VERSION", "r") as version_file:
+    version = version_file.read().strip()
+
 setuptools.setup(
     name="MangaReaderScraper",
     # should correlate with git tag
-    version="0.4",
+    version=version,
     author="superDross",
     author_email="dross78375@gmail.com",
     description="Manga scraper",
