@@ -5,6 +5,9 @@ on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
+    # TODO: versions are executed concurrently, find a way to have both them
+    #       in the same build
+    # NOTE: py3.8 fails die to lxml error
     # strategy:
     #   fail-fast: false
     #   matrix:
