@@ -13,6 +13,9 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+with open("requirements.txt", "r") as req:
+    requirments = req.read().strip().split("\n")
+
 setuptools.setup(
     name="MangaReaderScraper",
     # should correlate with git tag
@@ -31,15 +34,5 @@ setuptools.setup(
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
     ],
     entry_points={"console_scripts": ["manga-scraper = scraper.__main__:cli_entry"]},
-    install_requires=[
-        "beautifulsoup4==4.8.1",
-        "lxml==4.2.5",
-        "Pillow==6.2.1",
-        "reportlab==3.5.23",
-        "requests==2.22.0",
-        "tabulate==0.8.1",
-        "dropbox==9.4.0",
-        "mega.py==1.0.5",
-        "pcloud==1.0a6",
-    ],
+    install_requires=requirments,
 )
