@@ -11,13 +11,13 @@ repos:
     -   id: detect-private-key
     -   id: requirements-txt-fixer
 
--   repo: https://github.com/Lucas-C/pre-commit-hooks-safety
-    rev: master
-    hooks:
-    -   id: python-safety-dependencies-check
-        entry: safety
-        args: [check, -r]
-        language: system
+# -   repo: https://github.com/Lucas-C/pre-commit-hooks-safety
+#     rev: master
+#     hooks:
+#     -   id: python-safety-dependencies-check
+#         entry: safety
+#         args: [check, -r]
+#         language: system
 
 -   repo: https://github.com/PyCQA/bandit
     rev: master
@@ -38,12 +38,6 @@ repos:
     -   id: isort
         # third-party libs are not being recognised as third party
         args: [--check-only, --diff, -ws, -tc, -o=tabulate, -o=bs4, -o=requests, -o=pytest, -o=urllib3, -w, "88"]
-
--   repo: https://gitlab.com/pycqa/flake8
-    rev: 3.7.9
-    hooks:
-    -   id: flake8
-        language_version: python3.7
 
 -   repo: https://github.com/psf/black
     rev: 19.10b0

@@ -1,6 +1,6 @@
 # TODO
 
-## 0.41
+## 0.43
 
 - async/await instead of multithreading
 

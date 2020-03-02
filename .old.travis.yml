@@ -1,3 +1,4 @@
+# NOTE: No longer in use, now using GitHub Actions
 language: python
 
 python: 3.7
