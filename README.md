@@ -4,17 +4,19 @@ Search & download mangas from the command line.
 
 ## Install
 
+Requires Python3.7+
+
 To install:
 
 ```bash
-pip install --user MangaReaderScraper
+pip3 install --user MangaReaderScraper
 ```
 
 For development:
 
 ```bash
 git clone https://github.com/superDross/MangaReaderScraper
-pip install -r MangaReaderScraper/requirements.txt
+pip install -r MangaReaderScraper/dev_requirements.txt
 export PYTHONPATH=$PYTHONPATH:/path/to/MangaReaderScraper/
 ```
 
