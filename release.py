@@ -81,7 +81,7 @@ def update_version_number(version_number: str) -> None:
 def push_tags() -> None:
     commands = [
         ["git", "add", "VERSION"],
-        ["git", "commit", "-m", "Updated version number"],
+        ["git", "commit", "--no-verify", "-m", "Updated version number"],
         ["git", "push", "origin", "master"],
         ["git", "push", "--tags"],
     ]
