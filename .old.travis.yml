@@ -27,7 +27,7 @@ jobs:
     - stage: security
       install: pip install bandit
       # allow bare try/except and disable input warning
-      script: bandit -ii -s B322,B110 -r scraper/
+      script: bandit -ll -ii -s B322,B110 -r scraper/
 
     - stage: linter
       install: pip install flake8==3.7.9
