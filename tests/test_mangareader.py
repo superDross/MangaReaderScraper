@@ -8,7 +8,7 @@ from scraper.parsers.mangareader import (
     MangaReaderMangaParser,
     MangaReaderSearch,
 )
-from tests.helpers import METADATA
+from tests.helpers import METADATA, MockedImgResponse
 
 
 def test_all_volume_numbers(mangareader_manga_title_page_html):
@@ -52,8 +52,10 @@ def test_invalid_volume_parser(mangareader_invalid_volume_html):
             parser.page_urls(2000)
 
 
+@mock.patch("scraper.parsers.mangakaka.requests.get")
 @pytest.mark.parametrize("url_suffix,expected_num", [("2/2", 2), ("2", 1)])
-def test_page_data(url_suffix, expected_num, mangareader_page_html):
+def test_page_data(mocked_get, url_suffix, expected_num, mangareader_page_html):
+    mocked_get.return_value = MockedImgResponse()
     with mock.patch("scraper.parsers.mangareader.get_html_from_url") as mocked_func:
         mocked_func.return_value = mangareader_page_html
         parser = MangaReaderMangaParser("dragon-ball")

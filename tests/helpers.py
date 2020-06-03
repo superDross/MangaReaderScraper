@@ -60,6 +60,16 @@ TABLE = (
 )
 
 
+class MockedImgResponse:
+    """
+    Returns a mocked response with manga img as content
+    """
+
+    def __init__(self):
+        with open("tests/test_files/jpgs/test-manga_1_1.jpg", "rb") as f:
+            self.content = f.read()
+
+
 class MockedMangaReaderParser:
     """
     Mocks MangaReaderMangaParser

@@ -4,6 +4,8 @@ import pytest
 
 from scraper.exceptions import VolumeDoesntExist
 from scraper.parsers.mangakaka import MangaKaka, MangaKakaMangaParser, MangaKakaSearch
+from tests.helpers import MockedImgResponse
+
 
 METADATA = {
     "1": {
@@ -195,7 +197,9 @@ def test_invalid_volume_parser(mangakaka_invalid_volume_html):
             parser.page_urls(2000)
 
 
-def test_page_data(mangakaka_volume_html):
+@mock.patch("scraper.parsers.mangakaka.requests.get")
+def test_page_data(mocked_get, mangakaka_volume_html):
+    mocked_get.return_value = MockedImgResponse()
     with mock.patch("scraper.parsers.mangakaka.get_html_from_url") as mocked_func:
         mocked_func.return_value = mangakaka_volume_html
         parser = MangaKakaMangaParser("dragon-ball")
