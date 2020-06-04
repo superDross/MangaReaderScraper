@@ -1,0 +1,3 @@
+[bandit]
+targets: /scraper
+skips: B322,B110
