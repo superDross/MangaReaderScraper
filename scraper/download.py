@@ -98,7 +98,7 @@ class Download:
         """
         Download all pages and volumes
         """
-        self.adapter.info(f"Starting Downloads")
+        self.adapter.info("Starting Downloads")
         manga = self.factory.get_manga_volumes(vol_nums, self.type, preferred_name)
         if not manga.volumes:
             return manga
@@ -106,5 +106,5 @@ class Download:
         save_method = self._get_save_method()
         with Pool() as pool:
             pool.map(save_method, manga.volumes)
-        self.adapter.info(f"All volumes downloaded")
+        self.adapter.info("All volumes downloaded")
         return manga
