@@ -2,6 +2,8 @@
 
 Search & download mangas from the command line.
 
+![](docs/demo.gif)
+
 ## Install
 
 Requires Python3.7+

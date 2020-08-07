@@ -11,7 +11,6 @@ from typing import Dict, Iterable, List, Optional, Tuple
 import requests
 from bs4 import BeautifulSoup
 from bs4.element import Tag
-
 from scraper.exceptions import MangaDoesNotExist, VolumeDoesntExist
 from scraper.new_types import SearchResults
 from scraper.parsers.base import BaseMangaParser, BaseSearchParser, BaseSiteParser
@@ -54,11 +53,7 @@ class MangaReaderMangaParser(BaseMangaParser):
         volume_html = self._scrape_volume(volume)
         scripts = volume_html.find_all("script")
         script = scripts[1]
-        clean_script = (
-            script.text.replace("\n", "")
-            .replace(" ", "")
-            .replace('document["mj"]=', "")
-        )
+        clean_script = script.text.replace('document["mj"]=', "")
         page_metadata = json.loads(clean_script)
         image_urls = [(int(x["p"]), "https:" + x["u"]) for x in page_metadata["im"]]
         return image_urls
