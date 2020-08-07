@@ -6,7 +6,6 @@ from scraper.exceptions import VolumeDoesntExist
 from scraper.parsers.mangakaka import MangaKaka, MangaKakaMangaParser, MangaKakaSearch
 from tests.helpers import MockedImgResponse
 
-
 METADATA = {
     "1": {
         "title": "Dragon Ball",
@@ -89,38 +88,70 @@ def test_page_urls(mangakaka_volume_html):
         parser = MangaKakaMangaParser("dragon-ball")
         page_urls = parser.page_urls(1)
         expected = [
-            "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super"
-            "/chapter_1_the_god_of_destructions_prophetic_dream/1.jpg",
-            "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super"
-            "/chapter_1_the_god_of_destructions_prophetic_dream/2.jpg",
-            "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super"
-            "/chapter_1_the_god_of_destructions_prophetic_dream/3.jpg",
-            "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super"
-            "/chapter_1_the_god_of_destructions_prophetic_dream/4.jpg",
-            "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/"
-            "chapter_1_the_god_of_destructions_prophetic_dream/5.jpg",
-            "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/"
-            "chapter_1_the_god_of_destructions_prophetic_dream/6.jpg",
-            "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/"
-            "chapter_1_the_god_of_destructions_prophetic_dream/7.jpg",
-            "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/"
-            "chapter_1_the_god_of_destructions_prophetic_dream/8.jpg",
-            "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/"
-            "chapter_1_the_god_of_destructions_prophetic_dream/9.jpg",
-            "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/"
-            "chapter_1_the_god_of_destructions_prophetic_dream/10.jpg",
-            "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/"
-            "chapter_1_the_god_of_destructions_prophetic_dream/11.jpg",
-            "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/"
-            "chapter_1_the_god_of_destructions_prophetic_dream/12.jpg",
-            "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/"
-            "chapter_1_the_god_of_destructions_prophetic_dream/13.jpg",
-            "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/"
-            "chapter_1_the_god_of_destructions_prophetic_dream/14.jpg",
-            "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/"
-            "chapter_1_the_god_of_destructions_prophetic_dream/15.jpg",
-            "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/"
-            "chapter_1_the_god_of_destructions_prophetic_dream/16.jpg",
+            (
+                1,
+                "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/chapter_1_the_god_of_destructions_prophetic_dream/1.jpg",
+            ),
+            (
+                2,
+                "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/chapter_1_the_god_of_destructions_prophetic_dream/2.jpg",
+            ),
+            (
+                3,
+                "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/chapter_1_the_god_of_destructions_prophetic_dream/3.jpg",
+            ),
+            (
+                4,
+                "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/chapter_1_the_god_of_destructions_prophetic_dream/4.jpg",
+            ),
+            (
+                5,
+                "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/chapter_1_the_god_of_destructions_prophetic_dream/5.jpg",
+            ),
+            (
+                6,
+                "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/chapter_1_the_god_of_destructions_prophetic_dream/6.jpg",
+            ),
+            (
+                7,
+                "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/chapter_1_the_god_of_destructions_prophetic_dream/7.jpg",
+            ),
+            (
+                8,
+                "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/chapter_1_the_god_of_destructions_prophetic_dream/8.jpg",
+            ),
+            (
+                9,
+                "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/chapter_1_the_god_of_destructions_prophetic_dream/9.jpg",
+            ),
+            (
+                10,
+                "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/chapter_1_the_god_of_destructions_prophetic_dream/10.jpg",
+            ),
+            (
+                11,
+                "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/chapter_1_the_god_of_destructions_prophetic_dream/11.jpg",
+            ),
+            (
+                12,
+                "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/chapter_1_the_god_of_destructions_prophetic_dream/12.jpg",
+            ),
+            (
+                13,
+                "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/chapter_1_the_god_of_destructions_prophetic_dream/13.jpg",
+            ),
+            (
+                14,
+                "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/chapter_1_the_god_of_destructions_prophetic_dream/14.jpg",
+            ),
+            (
+                15,
+                "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/chapter_1_the_god_of_destructions_prophetic_dream/15.jpg",
+            ),
+            (
+                16,
+                "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/chapter_1_the_god_of_destructions_prophetic_dream/16.jpg",
+            ),
         ]
 
         assert page_urls == expected
@@ -204,8 +235,11 @@ def test_page_data(mocked_get, mangakaka_volume_html):
         mocked_func.return_value = mangakaka_volume_html
         parser = MangaKakaMangaParser("dragon-ball")
         page_data = parser.page_data(
-            "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/"
-            "chapter_1_the_god_of_destructions_prophetic_dream/16.jpg",
+            (
+                16,
+                "https://s5.mkklcdnv5.com/mangakakalot/d2/dragon_ball_super/"
+                "chapter_1_the_god_of_destructions_prophetic_dream/16.jpg",
+            ),
         )
         page_num, img_data = page_data
         assert page_num == 16

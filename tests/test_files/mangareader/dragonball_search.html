@@ -1,525 +1,2182 @@
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en" xml:lang="en">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="description" content="Search for your favorite mangas scans and scanlations online at Manga Reader. Read Manga Online - Absolutely Free, Updated Daily" />
-<meta name="keywords" content="search manga,search manga online,search online manga" />
-<title>Read Manga Online for Free. Search Manga</title>
-<link rel="preconnect" href="//s6.mangareader.net" crossorigin="" />
-<!--[if lte IE 7]>
-        <link rel="stylesheet" type="text/css" href="/styles/ie.css">
-<![endif]-->
-<link rel="shortcut icon" href="https://s3.mangareader.net/favicon.ico" />
-<link href="https://s2.mangareader.net/sup/styles/1347525063_4a5dac86d362bbdfc722474372017117.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript">
-(function() {
-var s = document.createElement('script'); s.type = 'text/javascript'; s.async = true;
-s.src = 'https://s2.mangareader.net/sup/js/1347525063_616d5347d3ab6a3532ce25c40419adb9.js';
-var x = document.getElementsByTagName('script')[0];
-x.parentNode.insertBefore(s, x);
-})();
-</script>
-<script type="text/javascript">
-
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-ga('create', 'UA-75338985-1', 'auto');
-ga('send', 'pageview');
-</script>
-</head>
-<body>
-<div id="container">
-<div id="wrapper_header">
-<div class="top">
-<div class="logo"><a href="/"></a>
-<div id="logoimg"></div>
-</div>
-<div id="top_navigation">
-<ul>
-<li class="topnav-first topnav-current"><a href="/"><span>Home</span></a></li>
-<li><a href="/search"><span>Advanced Search</span></a></li>
-<li><a href="/popular"><span>Popular Manga</span></a></li>
-<li><a href="/alphabetical"><span>A-Z List</span></a></li>
-<li><a href="https://eroges.com" alt="Hentai Games" target="_blank">Hentai Games</a><span class="c1">HOT</span></li>
-<li class="topnav-last"><a href="/latest"><span>Latest</span></a></li>
-</ul>
-</div>
-<div id="sec_navigation">
-<ul>
-<li class="aftersearch"><input type="text" id="searchbox" /></li>
-<li class="secnav"><a rel="nofollow" href="/random">Surprise Me!</a></li>
-<li class="secnav"><a href="http://www.animefreak.tv" target="_blank" title="Anime">Anime</a></li>
-<li class="secnav-last"><a href="mailto:&#105;&#110;&#102;&#111;&#064;&#109;&#097;&#110;&#103;&#097;&#114;&#101;&#097;&#100;&#101;&#114;&#046;&#110;&#101;&#116;" title="Contact">Contact Us</a></li>
-</ul>
-</div>
-</div>
-<div class="clear"></div>
-</div>
-
-<!-- BEGIN BEBI SKIN JS TAG -->
-<script type="text/javascript">
-    if(!window.BB_ind) { BB_ind = 0; }
-    if(!window.BB_r) { BB_r = Math.floor(Math.random()*1000000000)}
-    BB_ind++;
-    window.BB_skin = {
-        centerWidth: 960,
-        centerDomId: '',
-        leftOffset: 0,
-        rightOffset: 0,
-        topPos: 0,
-        deferLoading: false,
-        fixed: true,
-        fixedStickTopOnScroll: false,
-        fixedScrollSecondaryTop: 0,
-        adjustSkinOnDynamicCenter: true,
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      content="Search for your favorite mangas scans and scanlations online at Manga Reader. Read Manga Online - Absolutely Free, Updated Daily"
+      name="description"
+    />
+    <meta
+      content="search manga,search manga online,search online manga"
+      name="keywords"
+    />
+    <title>Mangareader - Search Manga</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta content="black" name="apple-mobile-web-app-status-bar-style" />
+    <meta content="Manga Reader" name="apple-mobile-web-app-title" />
+    <meta content="yes" name="apple-mobile-web-app-capable" />
+    <meta content="#13679e" name="theme-color" />
+    <link href="/manifest.json" rel="manifest" />
+    <link crossorigin="" href="//go.bebi.com" rel="preconnect" />
+    <link as="script" href="https://st.bebi.com/bebi_v3.js" rel="preload" />
+    <link crossorigin="" href="//s1.mangareader.net" rel="preconnect" />
+    <link crossorigin="" href="//s2.mangareader.net" rel="preconnect" />
+    <style>
+      @font-face {
+        font-family: "fa";
+        src: url("//s11.mangareader.net/fonts/fa.eot");
+        src: url("//s11.mangareader.net/fonts/fa.eot#iefix")
+            format("embedded-opentype"),
+          url("//s11.mangareader.net/fonts/fa.woff2") format("woff2"),
+          url("//s11.mangareader.net/fonts/fa.woff") format("woff"),
+          url("//s11.mangareader.net/fonts/fa.ttf") format("truetype"),
+          url("//s11.mangareader.net/fonts/fa.svg#fa") format("svg");
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+      }
+      .asho,
+      .d15,
+      .d2,
+      .d25,
+      .d31,
+      .d34,
+      .d47,
+      [hidden],
+      head a {
+        display: none;
+      }
+      html,
+      select {
+        font: 100% "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+        color: #222;
+        margin: 0;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
+      }
+      .d24,
+      body,
+      div,
+      form,
+      h2,
+      html,
+      input,
+      li,
+      p,
+      td,
+      ul {
+        padding: 0;
+      }
+      button::-moz-focus-inner,
+      input::-moz-focus-inner {
+        padding: 0;
+        border: 0;
+      }
+      button,
+      input {
+        font: 100%/"Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+        color: #222;
+        margin: 0;
+      }
+      button,
+      input,
+      select {
+        vertical-align: baseline;
+        *vertical-align: middle;
+      }
+      button,
+      input[type="button"],
+      input[type="submit"] {
+        -webkit-appearance: button;
+        *overflow: visible;
+        cursor: pointer;
+      }
+      body {
+        font: 11px/1.4 "Open Sans", -apple-system, BlinkMacSystemFont,
+          "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+        background-color: black;
+        background-image: url("data:image/jpeg;base64,/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/sABFEdWNreQABAAQAAABkAAD/7gAOQWRvYmUAZMAAAAAB/9sAhAABAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAgICAgICAgICAgIDAwMDAwMDAwMDAQEBAQEBAQIBAQICAgECAgMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwP/wAARCAAFAAUDAREAAhEBAxEB/8QAWAABAAAAAAAAAAAAAAAAAAAACgEBAQAAAAAAAAAAAAAAAAAAAwQQAQACAgMBAAAAAAAAAAAAAAEREiECACIEFBEAAgMBAAAAAAAAAAAAAAAAEaEA8CFi/9oADAMBAAIRAxEAPwAZvShjX5KoAt7yW222jHrMIJWsgxLwMHFco091Mz//2Q==");
+      }
+      a {
+        text-decoration: none;
+      }
+      .genre,
+      a {
+        color: #000;
+      }
+      a,
+      a:active,
+      a:hover {
+        outline: 0;
+      }
+      a:visited {
+        color: #551a8b;
+      }
+      a:hover {
+        color: #06e;
+      }
+      a:focus {
+        outline: thin dotted;
+      }
+      .d47 h2,
+      .d53,
+      .d55,
+      .d57 a,
+      .d63,
+      .d9,
+      b {
+        font-weight: bold;
+      }
+      ul {
+        list-style: none;
+      }
+      img {
+        -ms-interpolation-mode: bicubic;
+        border: 0;
+      }
+      .d48 table tr td,
+      img {
+        vertical-align: middle;
+      }
+      button[disabled],
+      input[disabled] {
+        cursor: default;
+      }
+      table {
+        border-collapse: collapse;
+        border-spacing: 0;
+      }
+      td {
+        vertical-align: top;
+      }
+      .d16:before,
+      h2 {
+        font-weight: normal;
+      }
+      head {
+        display: block;
+      }
+      .d61 {
+        float: right !important;
+      }
+      .d14 {
+        max-width: 970px;
+        margin: 0 auto;
+      }
+      .d14,
+      .d25,
+      .d71 a {
+        padding: 0 10px;
+      }
+      .d13,
+      .d19 {
+        height: 70px;
+      }
+      .d13,
+      .d13 .d14,
+      .d27,
+      .d31,
+      .d45,
+      .d5,
+      .genre {
+        position: relative;
+      }
+      .d13:before {
+        background: #000;
+        border-bottom: 1px solid rgba(41, 139, 191, 0.26);
+        left: 0;
+        top: 0;
+      }
+      .d13:before,
+      .d6:after,
+      .d6:before,
+      .genre:after,
+      .genre:before {
+        content: " ";
+        position: absolute;
+      }
+      .d18 {
+        width: 270px;
+        height: 54px;
+        background: url("//s11.mangareader.net/images/mrlogo.svg");
+        background-size: 100% 100%;
+      }
+      .d19,
+      .d20,
+      .d22,
+      .d23,
+      .d31,
+      .d45 {
+        float: right;
+      }
+      .d19 {
+        max-width: calc(100% - 280px);
+      }
+      .d20 {
+        background: #13679e;
+        border-radius: 0 0 0 10px;
+      }
+      .d20,
+      .d27,
+      .d4,
+      .d46,
+      .d47 {
+        overflow: hidden;
+      }
+      .d21 li {
+        border-left: 1px solid rgba(255, 255, 255, 0.1);
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+      }
+      .d21 li:first-child {
+        border-left: none;
+      }
+      .d21 li:last-child,
+      .d52.d61 {
+        border-right: none;
+      }
+      .d13 .d21 li a {
+        padding: 0 13px;
+        color: rgba(255, 255, 255, 0.8);
+        float: left;
+        height: 35px;
+        width: auto;
+      }
+      .d13 .d21 li a,
+      .d55,
+      .d63 {
+        font-size: 15px;
+      }
+      .d13 .d21 li a,
+      .d5,
+      .d5 {
+        line-height: 35px;
+      }
+      .d21 li:hover a {
+        background: rgba(0, 0, 0, 0.1);
+        color: #fff;
+      }
+      .d22 {
+        height: 12px;
+        background: #d00b11;
+        font-size: 10px;
+        line-height: 12px;
+        padding: 0 3px;
+        margin-top: 3px;
+        margin-left: -18px;
+        color: #fff;
+      }
+      .d22,
+      .d27 {
+        border-radius: 2px;
+      }
+      .d23 {
+        margin-right: 5px;
+        background: #192838;
+        border-radius: 0 0 6px 6px;
+      }
+      .d10,
+      .d11 span,
+      .d13 .d23 .d21 li a,
+      .d48 table tr td,
+      .d58,
+      .d59,
+      .d71 a,
+      .pcur {
+        font-size: 13px;
+      }
+      .d27 {
+        width: 200px;
+        margin: 4px;
+        border: 1px solid #2e9eec;
+      }
+      .d25,
+      .d27 {
+        height: 27px;
+      }
+      .d27,
+      .d4,
+      .d40,
+      .d49 {
+        background: #fff;
+      }
+      .d28 {
+        width: 25px;
+        line-height: 25px;
+      }
+      .d28,
+      .d30 {
+        height: 25px;
+      }
+      .d28,
+      .d48 table tr td,
+      .d57 a,
+      .d58,
+      .d59,
+      .d60,
+      .d63,
+      .d67 a,
+      .d68,
+      .pcur {
+        color: #184575;
+      }
+      .d30,
+      .d32,
+      .d33 {
+        background: none;
+        border: none;
+      }
+      .d30,
+      .d40,
+      .d49 {
+        font: 13px "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+        width: 100%;
+        outline: none;
+      }
+      .d30 {
+        padding-left: 25px;
+      }
+      .d31 {
+        width: calc(100% - 125px);
+        margin: 12px 0 10px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding-right: 34px;
+      }
+      .d31,
+      .d34,
+      .d5 {
+        height: 36px;
+      }
+      .d31,
+      .d4 {
+        border-radius: 6px;
+      }
+      .d32,
+      .d33 {
+        height: 34px;
+      }
+      .d32 {
+        font: 14px "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+        padding-left: 12px;
+        color: rgba(255, 255, 255, 0.7);
+      }
+      .d33 {
+        width: 34px;
+        color: rgba(255, 255, 255, 0.3);
+        right: 0;
+      }
+      .d33:hover {
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .d36 {
+        background: #f6ffff;
+        padding: 45px 10px 10px;
+        margin-top: -35px;
+      }
+      .d53 {
+        margin: 7px 0;
+        color: #2d7bb1;
+      }
+      .d53,
+      .d9 {
+        font-size: 18px;
+      }
+      .d37 {
+        width: calc(100% + 20px);
+        margin: 0 -10px;
+        border-bottom: 1px solid #a6bec3;
+        background: #d6eaee;
+        background: linear-gradient(
+          0deg,
+          #d6eaee 0%,
+          rgba(255, 255, 255, 0) 100%
+        );
+      }
+      .d37,
+      .d62 {
+        padding: 7px;
+      }
+      .d38,
+      .d63 {
+        margin-bottom: 10px;
+      }
+      .d39,
+      .d48 table,
+      .d52 {
+        width: 50%;
+        float: left;
+      }
+      .d39 {
+        margin-left: 20%;
+      }
+      .d40,
+      .d42,
+      .d49,
+      .d50,
+      .d71 a {
+        height: 32px;
+        float: left;
+      }
+      .d40 {
+        border: 1px solid #85aeb6;
+        border-radius: 4px 0 0 4px;
+        padding: 0 8px;
+      }
+      .d41 {
+        width: 10%;
+      }
+      .d42 {
+        border-radius: 0 4px 4px 0;
+      }
+      .d42,
+      .d50,
+      .d71 a {
+        background: linear-gradient(#52c6ea, #0e4f8a);
+        color: #fff;
+      }
+      .d42,
+      .d50 {
+        font: 600 13px "Open Sans", -apple-system, BlinkMacSystemFont,
+          "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+      }
+      .d42:hover {
+        opacity: 0.9;
+      }
+      .d43 {
+        width: calc(100% - 360px);
+        background: rgba(205, 235, 240, 0.7);
+        border: 1px solid rgba(182, 216, 223, 0.7);
+      }
+      .d11,
+      .d43 {
+        padding: 10px;
+      }
+      .d43,
+      .d49,
+      .d50 {
+        border-radius: 4px;
+      }
+      .d44 {
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-flex-wrap: wrap;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+      }
+      .d44 li {
+        width: 20%;
+        padding-right: 5px;
+        margin: 10px 0;
+        line-height: 16px;
+      }
+      .genre {
+        padding-left: 20px;
+      }
+      .d60,
+      .genre {
+        font-size: 12px;
+      }
+      .genre:after,
+      .genre:before {
+        width: 16px;
+        height: 16px;
+        box-sizing: border-box;
+        top: 50%;
+        margin-top: -8px;
+        left: 0;
+      }
+      .d25,
+      .d34,
+      .d71 a,
+      .genre:before {
+        border-radius: 3px;
+      }
+      .genre:before {
+        background: rgba(255, 255, 255, 0.5);
+        border: 1px solid #8fc9df;
+      }
+      .d16:before,
+      .genre:after {
+        font-family: "fa";
+        text-align: center;
+      }
+      .genre:after {
+        font-weight: 900;
+        line-height: 16px;
+      }
+      .genre.r1:after {
+        content: "\f00c";
+        color: #2e9eec;
+      }
+      .genre.r2:after {
+        color: #ac363f;
+        content: "\f00d";
+      }
+      .d45 {
+        width: 353px;
+        height: 253px;
+        background: url("//s11.mangareader.net/images/asg.png");
+      }
+      .d46,
+      .d47 {
+        width: 297px;
+        height: 98px;
+        left: 51px;
+        top: 13px;
+        font-size: 11px;
+        line-height: 13px;
+        padding: 3px;
+      }
+      .d10,
+      .d47 {
+        margin-top: 5px;
+      }
+      .d48 {
+        margin-top: 10px;
+      }
+      .d49 {
+        border: 1px solid #8eabb2;
+        padding-left: 6px;
+      }
+      .d50 {
+        padding: 0 24px;
+        margin-right: 10px;
+      }
+      .d25:hover,
+      .d50:hover,
+      .d71 a:hover {
+        opacity: 0.8;
+      }
+      .d0,
+      .d48 table tr td {
+        padding: 8px;
+      }
+      .d25,
+      .d34,
+      .d48 table tr td,
+      .d67,
+      .d71 a,
+      .pcur {
+        font-weight: 600;
+      }
+      .d52 {
+        border-right: 1px dashed #a6bec3;
+        padding-right: 10px;
+      }
+      .d52.d61 {
+        padding-right: 0;
+        padding-left: 10px;
+      }
+      .d54 {
+        min-height: 135px;
+        padding: 3px;
+      }
+      .d54,
+      .d62 {
+        background: rgba(214, 234, 238, 0.8);
+        border-radius: 5px;
+        margin: 10px 0;
+      }
+      .d54,
+      .d56,
+      .d62 {
+        border: 1px solid #96bfd4;
+        float: left;
+      }
+      .d54 table tr td {
+        padding: 4px;
+      }
+      .d55 {
+        color: #333333;
+      }
+      .d56 {
+        width: 82px;
+        height: 127px;
+      }
+      .d57 a {
+        font-size: 17px;
+      }
+      .d58,
+      .d59,
+      .d60 {
+        margin: 5px 0;
+        height: auto;
+        width: 100%;
+        float: left;
+      }
+      .d60,
+      .d68 {
+        font-style: italic;
+      }
+      .d64 {
+        width: 98%;
+        padding-bottom: 10px;
+        margin: 1%;
+        border-bottom: 1px dotted #a6bec3;
+      }
+      .d65 {
+        width: 30px;
+        height: 45px;
+      }
+      .d66 {
+        margin-left: 40px;
+      }
+      .d5,
+      .d67 {
+        font-size: 14px;
+      }
+      .d67 {
+        margin-bottom: 15px;
+      }
+      .d69 {
+        margin: 12px 0;
+      }
+      .d11 span,
+      .d12,
+      .d16:before,
+      .d70 {
+        display: inline-block;
+      }
+      .d71 li {
+        margin: 6px;
+      }
+      .d71 a {
+        line-height: 32px;
+      }
+      .pcur {
+        height: 26px;
+        padding: 0 7px;
+        line-height: 26px;
+      }
+      .d25,
+      .d34 {
+        background: orange;
+        color: #321b00;
+      }
+      .d25 {
+        margin: 4px 0 4px 4px;
+        line-height: 27px;
+      }
+      .d31.aso {
+        width: calc(100% - 200px);
+        margin-left: 10px;
+      }
+      .d34 {
+        width: 72px;
+        margin: 12px 0 4px 5px;
+        line-height: 36px;
+      }
+      .d24 {
+        display: inline;
+      }
+      .d2,
+      .d3 {
+        height: 100%;
+        top: 0;
+      }
+      .d2,
+      .d3,
+      .d4 {
+        position: fixed;
+      }
+      .d2 {
+        z-index: 9997;
+      }
+      .d3 {
+        z-index: 9998;
+        background: rgba(0, 0, 0, 0.6);
+      }
+      .d4 {
+        width: 350px;
+        max-width: calc(100% - 20px);
+        transform: translate(-50%, -50%);
+        z-index: 9999;
+        left: 50%;
+        top: 50%;
+      }
+      .d5 {
+        padding-right: 36px;
+        border-bottom: 1px solid #ebebeb;
+      }
+      .d10,
+      .d5 {
+        color: #666;
+      }
+      .d5 .d6 {
+        width: 35px;
+        background: #f8f8f8;
+        right: 0;
+        top: 0;
+      }
+      .d6:after,
+      .d6:before {
+        width: 10px;
+        height: 2px;
+        background: #9f9f9f;
+        left: 50%;
+        top: 50%;
+      }
+      .d6:after {
+        transform: translate(-50%, -50%) rotate(-45deg);
+      }
+      .d6:before {
+        transform: translate(-50%, -50%) rotate(45deg);
+      }
+      .d7 {
+        padding: 15px;
+      }
+      .d8 img {
+        width: 80px;
+      }
+      .d9 {
+        margin-top: 15px;
+      }
+      .d10,
+      .d9 {
+        letter-spacing: -0.3px;
+      }
+      .d11 {
+        border-top: 1px solid #ebebeb;
+      }
+      .d11 span,
+      .d12 {
+        line-height: 20px;
+      }
+      .d11 span {
+        color: #999;
+      }
+      .d12 {
+        width: 20px;
+        height: 20px;
+      }
+      .d0 {
+        top: -40px;
+        background: #000000;
+        color: white;
+        z-index: 100;
+      }
+      .d16:before {
+        font-style: normal;
+        speak: never;
+        text-decoration: inherit;
+        width: 1em;
+        margin-right: 0.2em;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1em;
+        margin-left: 0.2em;
+      }
+      .d29:before {
+        content: "\f002";
+      }
+      .d51:before {
+        content: "\f00d";
+      }
+      .d26:before {
+        content: "\f02e";
+      }
+      .d17:before {
+        content: "\f0c9";
+      }
+      .d24,
+      body,
+      div,
+      form,
+      h2,
+      img,
+      li,
+      p,
+      td,
+      ul {
+        margin: 0;
+      }
+      .d25,
+      .d33,
+      .d34,
+      .d5 .d6,
+      .genre {
+        cursor: pointer;
+      }
+      .d0,
+      .d30,
+      .d33,
+      .d46,
+      .d47,
+      .d5 .d6 {
+        position: absolute;
+      }
+      .d13:before,
+      .d20,
+      .d21 li,
+      .d23,
+      .d5 .d6 {
+        height: 35px;
+      }
+      .d19,
+      .d20,
+      .d21,
+      .d21 li,
+      .d22,
+      .d23,
+      .d25,
+      .d50,
+      .d70,
+      .d71,
+      .d71 a,
+      .d71 li,
+      .genre,
+      .pcur {
+        width: auto;
+      }
+      .d42,
+      .d49 option,
+      .d50 {
+        border: none;
+      }
+      .d32,
+      .d49 option,
+      .d50 {
+        outline: none;
+      }
+      *,
+      input,
+      select {
+        box-sizing: border-box;
+      }
+      .d12 img {
+        margin-top: -8px;
+      }
+      .d0,
+      .d2,
+      .d3,
+      .d30 {
+        left: 0;
+      }
+      .d10,
+      .d11,
+      .d28,
+      .d34,
+      .d46,
+      .d47,
+      .d5,
+      .d69,
+      .d8,
+      .d9 {
+        text-align: center;
+      }
+      .d57 a:hover,
+      .d67 a:hover,
+      .genre:hover {
+        color: #2e9eec;
+      }
+      .d1,
+      .d10,
+      .d11,
+      .d21,
+      .d36,
+      .d38,
+      .d4,
+      .d44,
+      .d48,
+      .d53,
+      .d54,
+      .d57,
+      .d62,
+      .d63,
+      .d64,
+      .d67,
+      .d69,
+      .d7,
+      .d8,
+      .d9,
+      .genre {
+        height: auto;
+      }
+      .d1,
+      .d10,
+      .d11,
+      .d13,
+      .d13:before,
+      .d2,
+      .d3,
+      .d32,
+      .d36,
+      .d38,
+      .d42,
+      .d44,
+      .d48,
+      .d5,
+      .d53,
+      .d54,
+      .d54 table,
+      .d57,
+      .d62,
+      .d63,
+      .d67,
+      .d68,
+      .d69,
+      .d7,
+      .d8,
+      .d9 {
+        width: 100%;
+      }
+      .d1,
+      .d10,
+      .d11,
+      .d13,
+      .d18,
+      .d21,
+      .d21 li,
+      .d25,
+      .d27,
+      .d28,
+      .d31.aso,
+      .d32,
+      .d34,
+      .d36,
+      .d37,
+      .d38,
+      .d41,
+      .d43,
+      .d44,
+      .d44 li,
+      .d48,
+      .d5,
+      .d53,
+      .d54 table,
+      .d57,
+      .d63,
+      .d64,
+      .d65,
+      .d67,
+      .d68,
+      .d69,
+      .d7,
+      .d71,
+      .d71 li,
+      .d8,
+      .d9,
+      .genre,
+      .pcur {
+        float: left;
+      }
+      .d0:focus,
+      .d30,
+      .d33 {
+        top: 0;
+      }
+      @media (max-width: 1000px) {
+        .d13 .d21 li a {
+          font-size: 13px;
+        }
+        .d13 .d23 .d21 li a {
+          font-size: 11px;
+        }
+      }
+      @media (max-width: 900px) {
+        .d13:before,
+        .d27 {
+          display: none;
+        }
+        .d13,
+        .d18 {
+          height: 60px;
+        }
+        .d13 {
+          background: #000;
+        }
+        .d15,
+        .d18 {
+          width: 50px;
+        }
+        .d18 {
+          background-size: auto 60%;
+          background-position: center left;
+          background-repeat: no-repeat;
+        }
+        .d15 {
+          height: 50px;
+          margin: 5px;
+          color: rgba(255, 255, 255, 0.7);
+          font-size: 15px !important;
+          cursor: pointer;
+          text-align: center;
+          line-height: 50px;
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 4px;
+        }
+        .d15,
+        .d20,
+        .d22,
+        .d23 {
+          float: left;
+        }
+        .asho,
+        .d15,
+        .d31 {
+          display: block;
+        }
+        .d19 {
+          max-width: none;
+          height: 100vh;
+          position: absolute;
+          left: -120%;
+          top: 60px;
+          z-index: 999;
+          overflow: hidden;
+          background: black;
+          background: linear-gradient(
+            90deg,
+            rgba(0, 0, 0, 0.895396) 0%,
+            rgba(0, 0, 0, 0.595676) 100%
+          );
+          -webkit-transition: 0.2s;
+          -moz-transition: 0.2s;
+          -o-transition: 0.2s;
+          transition: 0.2s;
+        }
+        .d19.show {
+          left: 0;
+        }
+        .d20,
+        .d23 {
+          background: none;
+          height: auto;
+          width: 100%;
+        }
+        .d13 .d21 li a,
+        .d13 .d23 .d21 li a,
+        .d21 li {
+          border: none;
+          height: auto;
+          width: 100%;
+        }
+        .d13 .d21 li a,
+        .d13 .d23 .d21 li a,
+        .d25 {
+          font-size: 16px;
+        }
+        .d22 {
+          margin: 11px 3px;
+        }
+        .d44 li {
+          width: 25%;
+        }
+        .d25 {
+          background: inherit;
+          color: rgba(255, 255, 255, 0.8);
+          font-weight: 400;
+        }
+        .d19,
+        .d21 {
+          width: 100%;
+        }
+      }
+      @media (max-width: 800px) {
+        .d45 {
+          display: none;
+        }
+        .d43,
+        .d48 table {
+          width: 100%;
+        }
+        .d39 {
+          margin-left: 0;
+          width: 80%;
+        }
+        .d41 {
+          width: 20%;
+        }
+      }
+      @media (max-width: 600px) {
+        .d52 {
+          width: 100%;
+          border: none;
+          padding: 0 !important;
+          margin-bottom: 10px;
+        }
+      }
+      @media (max-width: 500px) {
+        .d39 {
+          width: calc(100% - 90px);
+        }
+        .d41 {
+          width: 90px;
+        }
+        .d44 li {
+          width: 33.3%;
+        }
+      }
+      @media (max-width: 400px) {
+        .d44 li {
+          width: 50%;
+        }
+        .d48 table tr td {
+          width: 100%;
+          float: left;
+        }
+      }
+      @media (max-width: 350px) {
+        .d31.aso {
+          width: calc(100% - 160px);
+        }
+        .d35 {
+          display: none;
+        }
+        .d34 {
+          width: 33px;
+        }
+      }
+    </style>
+    <link
+      href="//s11.mangareader.net/images/icons/appletouch.png"
+      rel="apple-touch-icon"
+    />
+    <link href="//s11.mangareader.net/favicon.ico" rel="shortcut icon" />
+  </head>
+  <body>
+    <a class="d0" href="#main">Skip to main</a>
+    <div class="d1" id="main">
+      <div class="d2" id="mmod1">
+        <div class="d3"></div>
+        <div class="d4">
+          <div class="d5">
+            Install MangaReader as an App
+            <div class="d6" id="modcls"></div>
+          </div>
+          <div class="d7">
+            <div class="d8">
+              <img src="//s11.mangareader.net/images/mrAppIcon.svg" />
+            </div>
+            <div class="d9">Install MangaReader</div>
+            <div class="d10">
+              Install this application on your home screen for quick and easy
+              access when you're on the go.
+            </div>
+          </div>
+          <div class="d11">
+            <span>Just Tap</span>
+            <div class="d12">
+              <img src="//s11.mangareader.net/images/shimg.svg" />
+            </div>
+            <span>then 'Add to Home Screen'</span>
+          </div>
+        </div>
+      </div>
+      <div class="d13" id="mtnb">
+        <form action="/search/" id="navsearch" method="GET">
+          <div class="d14">
+            <div class="d15" id="mmt"><i class="d16 d17"></i></div>
+            <a class="d18" href="/" title="Homepage"></a>
+            <div class="d19" id="dhr">
+              <div class="d20">
+                <ul class="d21">
+                  <li><a href="/">Home</a></li>
+                  <li><a href="/search">Advanced Search</a></li>
+                  <li><a href="/popular">Popular Manga</a></li>
+                  <li><a href="/alphabetical">A-Z List</a></li>
+                  <li>
+                    <a
+                      href="https://erogames.com"
+                      rel="noopener"
+                      target="_blank"
+                      >Hentai Games <span class="d22">HOT</span></a
+                    >
+                  </li>
+                  <li><a href="/latest">Latest</a></li>
+                </ul>
+              </div>
+              <div class="d23">
+                <div class="d24">
+                  <div class="d25" id="dinsPWA">
+                    Install <i class="d16 d26"></i>
+                  </div>
+                </div>
+                <div class="d27">
+                  <div class="d28"><i class="d16 d29"></i></div>
+                  <input
+                    aria-label="Search Box"
+                    class="d30"
+                    name="nsearch"
+                    placeholder="Search"
+                    type="text"
+                  />
+                </div>
+                <ul class="d21">
+                  <li><a href="/random">Surprise Me!</a></li>
+                  <li>
+                    <a
+                      href="http://www.animefreak.tv"
+                      rel="noopener"
+                      target="_blank"
+                      >Anime</a
+                    >
+                  </li>
+                  <li>
+                    <a href="mailto:info@mangareader.net" title="Contact"
+                      >Contact Us</a
+                    >
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="d31" id="sboa">
+              <input
+                aria-label="Search Box"
+                class="d32"
+                name="msearch"
+                placeholder="Search"
+                type="text"
+              /><button aria-label="Search" class="d33" type="submit">
+                <i aria-hidden="true" class="d16 d29"></i>
+              </button>
+            </div>
+            <div class="d34" id="minsPWA">
+              <span class="d35">Install </span><i class="d16 d26"></i>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="d14">
+        <div class="d36">
+          <div class="d37">
+            <form action="/search/" id="searchform" method="GET">
+              <div class="d38">
+                <div class="d39">
+                  <input
+                    aria-label="Search Box"
+                    class="d40"
+                    id="sinp"
+                    name="w"
+                    placeholder="You can search both manga and mangaka here"
+                    type="text"
+                    value="dragon ball"
+                  />
+                </div>
+                <div class="d41">
+                  <button class="d42" type="submit">
+                    <i class="d16 d29"></i> Search
+                  </button>
+                </div>
+              </div>
+              <div class="d43" id="genreselect">
+                <ul class="d44">
+                  <li><div class="genre r0" id="dgenre0">Action</div></li>
+                  <li><div class="genre r0" id="dgenre1">Adventure</div></li>
+                  <li><div class="genre r0" id="dgenre2">Comedy</div></li>
+                  <li><div class="genre r0" id="dgenre3">Demons</div></li>
+                  <li><div class="genre r0" id="dgenre4">Drama</div></li>
+                  <li><div class="genre r0" id="dgenre5">Ecchi</div></li>
+                  <li><div class="genre r0" id="dgenre6">Fantasy</div></li>
+                  <li>
+                    <div class="genre r0" id="dgenre7">Gender Bender</div>
+                  </li>
+                  <li><div class="genre r0" id="dgenre8">Harem</div></li>
+                  <li><div class="genre r0" id="dgenre9">Historical</div></li>
+                  <li><div class="genre r0" id="dgenre10">Horror</div></li>
+                  <li><div class="genre r0" id="dgenre11">Josei</div></li>
+                  <li><div class="genre r0" id="dgenre12">Magic</div></li>
+                  <li>
+                    <div class="genre r0" id="dgenre13">Martial Arts</div>
+                  </li>
+                  <li><div class="genre r0" id="dgenre14">Mature</div></li>
+                  <li><div class="genre r0" id="dgenre15">Mecha</div></li>
+                  <li><div class="genre r0" id="dgenre16">Military</div></li>
+                  <li><div class="genre r0" id="dgenre17">Mystery</div></li>
+                  <li><div class="genre r0" id="dgenre18">One Shot</div></li>
+                  <li>
+                    <div class="genre r0" id="dgenre19">Psychological</div>
+                  </li>
+                  <li><div class="genre r0" id="dgenre20">Romance</div></li>
+                  <li><div class="genre r0" id="dgenre21">School Life</div></li>
+                  <li><div class="genre r0" id="dgenre22">Sci-Fi</div></li>
+                  <li><div class="genre r0" id="dgenre23">Seinen</div></li>
+                  <li><div class="genre r0" id="dgenre24">Shoujo</div></li>
+                  <li><div class="genre r0" id="dgenre25">Shoujoai</div></li>
+                  <li><div class="genre r0" id="dgenre26">Shounen</div></li>
+                  <li><div class="genre r0" id="dgenre27">Shounenai</div></li>
+                  <li>
+                    <div class="genre r0" id="dgenre28">Slice of Life</div>
+                  </li>
+                  <li><div class="genre r0" id="dgenre29">Smut</div></li>
+                  <li><div class="genre r0" id="dgenre30">Sports</div></li>
+                  <li><div class="genre r0" id="dgenre31">Super Power</div></li>
+                  <li>
+                    <div class="genre r0" id="dgenre32">Supernatural</div>
+                  </li>
+                  <li><div class="genre r0" id="dgenre33">Tragedy</div></li>
+                  <li><div class="genre r0" id="dgenre34">Vampire</div></li>
+                  <li><div class="genre r0" id="dgenre35">Yaoi</div></li>
+                  <li><div class="genre r0" id="dgenre36">Yuri</div></li>
+                </ul>
+              </div>
+              <div class="d45">
+                <div class="d46" id="infodgenre">
+                  <b>Click to include a genre to your search</b>. If you include
+                  Comedy, it will filter only mangas with comedy genre.<br />(You
+                  can include multiple genres)<br /><b
+                    >Double Click to exclude a genre.</b
+                  >
+                  If you include Comedy, Romance but exclude Ecchi, it will
+                  filter all mangas with Comedy and Romance but Ecchi.
+                </div>
+                <div class="d47" id="infodgenre0">
+                  <h2>Action</h2>
+                  <br />
+                  <p>
+                    One or more heroes is thrust into a series of challenges
+                    that require physical feats, extended fights and frenetic
+                    chases.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre1">
+                  <h2>Adventure</h2>
+                  <br />
+                  <p>
+                    Exciting stories, with new experiences or exotic locales.
+                    Adventure manga are very similar to the action genre, in
+                    that they are designed to provide an action-filled,
+                    energetic experience for the manga reader.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre2">
+                  <h2>Comedy</h2>
+                  <br />
+                  <p>
+                    Main emphasis is on humour Also, mangas in this style
+                    typically have a happy ending.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre3">
+                  <h2>Demons</h2>
+                  <br />
+                  <p>Manga sets story on demonic beings.</p>
+                </div>
+                <div class="d47" id="infodgenre4">
+                  <h2>Drama</h2>
+                  <br />
+                  <p>
+                    Depends mostly on in-depth development of realistic
+                    characters dealing with emotional themes.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre5">
+                  <h2>Ecchi</h2>
+                  <br />
+                  <p>
+                    Manga including nudity. Usually it is used in works that
+                    have a focus on comedy and is often described as its own
+                    genre, depicting the typical elements.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre6">
+                  <h2>Fantasy</h2>
+                  <br />
+                  <p>
+                    Involving magic, supernatural events, make-believe
+                    creatures, or exotic fantasy worlds. The genre is considered
+                    to be distinct from Sci-fi and Horror, although the genres
+                    do overlap.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre7">
+                  <h2>Gender Bender</h2>
+                  <br />
+                  <p>
+                    Dressing in the opposite sex, wearing make-ups, or even
+                    switching bodies in some cases.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre8">
+                  <h2>Harem</h2>
+                  <br />
+                  <p>
+                    The most common and practically tantamount scenario is a
+                    male surrounded by a group of females; when this is reversed
+                    it is informally referred to as a reverse harem.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre9">
+                  <h2>Historical</h2>
+                  <br />
+                  <p>
+                    Tells a story that is set in the past. That setting is
+                    usually real and drawn from history, and often contains
+                    actual historical persons, but the principal characters tend
+                    to be fictional.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre10">
+                  <h2>Horror</h2>
+                  <br />
+                  <p>
+                    Horror manga are unsettling mangas that strive to elicit the
+                    emotions of fear, disgust and horror from readers.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre11">
+                  <h2>Josei</h2>
+                  <br />
+                  <p>
+                    Target demographic of manga created mostly by women for late
+                    teenage and adult female audiences. The male equivalent to
+                    Josei is seinen.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre12">
+                  <h2>Magic</h2>
+                  <br />
+                  <p>
+                    Manga includes elements such as wizards or characters with
+                    magic ability.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre13">
+                  <h2>Martial Arts</h2>
+                  <br />
+                  <p>
+                    Manga including martial arts such as Kung-fu, Karate, Judo
+                    etc.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre14">
+                  <h2>Mature</h2>
+                  <br />
+                  <p>
+                    May be too extreme for people under the age of 17. Titles in
+                    this category may contain intense violence, blood and gore,
+                    sexual content and/or strong language.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre15">
+                  <h2>Mecha</h2>
+                  <br />
+                  <p>
+                    Mecha manga cover all series that revolve around the use of
+                    piloted robotic armors in battle.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre16">
+                  <h2>Military</h2>
+                  <br />
+                  <p>
+                    Contain elements from army. Story may be set in future or
+                    past.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre17">
+                  <h2>Mystery</h2>
+                  <br />
+                  <p>
+                    Mysterious circumstances of a crime by means of clues,
+                    investigation, and clever deduction.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre18">
+                  <h2>One Shot</h2>
+                  <br />
+                  <p>Manga usually consisting of one chapter or very short.</p>
+                </div>
+                <div class="d47" id="infodgenre19">
+                  <h2>Psychological</h2>
+                  <br />
+                  <p>
+                    Relies on character fears, guilt, beliefs, and emotional
+                    instability to build tension and further the plot. May
+                    contain some disturbing contents.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre20">
+                  <h2>Romance</h2>
+                  <br />
+                  <p>Manga have some aspect of romance between characters.</p>
+                </div>
+                <div class="d47" id="infodgenre21">
+                  <h2>School Life</h2>
+                  <br />
+                  <p>
+                    School Life manga are set in a school or university campus,
+                    and deals primarily with the life of students.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre22">
+                  <h2>Sci-fi</h2>
+                  <br />
+                  <p>
+                    Science fiction: based depictions of phenomena that are not
+                    necessarily accepted by mainstream science, such as
+                    extraterrestrial life forms, alien worlds, extrasensory
+                    perception, and time travel.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre23">
+                  <h2>Seinen</h2>
+                  <br />
+                  <p>
+                    Seinen manga is a subset of manga that is generally targeted
+                    at an 18–30 year old male audience.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre24">
+                  <h2>Shoujo</h2>
+                  <br />
+                  <p>
+                    Refers to manga marketed to a female audience roughly
+                    between the ages of 10 and 18.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre25">
+                  <h2>Shoujo Ai</h2>
+                  <br />
+                  <p>Soft version of Yuri (Girls Love)</p>
+                </div>
+                <div class="d47" id="infodgenre26">
+                  <h2>Shounen</h2>
+                  <br />
+                  <p>
+                    Refers to manga marketed to a male audience roughly between
+                    the ages of 10 and 18.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre27">
+                  <h2>Shounen Ai</h2>
+                  <br />
+                  <p>Soft version of Yaoi (Boys Love)</p>
+                </div>
+                <div class="d47" id="infodgenre28">
+                  <h2>Slice of Life</h2>
+                  <br />
+                  <p>
+                    A slice of life story is a category for a story that
+                    portrays a "cut-out" sequence of events in a character's
+                    life.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre29">
+                  <h2>Smut</h2>
+                  <br />
+                  <p>
+                    Contain offensive contents, especially sexually profane
+                    materials.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre30">
+                  <h2>Sports</h2>
+                  <br />
+                  <p>
+                    Story centers around sports such as baseball, basketball
+                    etc.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre31">
+                  <h2>Superpower</h2>
+                  <br />
+                  <p>
+                    A very likely genre to supernatural. Character's skills are
+                    against the nature.
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre32">
+                  <h2>Supernatural</h2>
+                  <br />
+                  <p>Powers or things that do not happen in nature.</p>
+                </div>
+                <div class="d47" id="infodgenre33">
+                  <h2>Tragedy</h2>
+                  <br />
+                  <p>Form of drama based on human suffering.</p>
+                </div>
+                <div class="d47" id="infodgenre34">
+                  <h2>Vampire</h2>
+                  <br />
+                  <p>
+                    Manga set on the story about vampire myths (Blood sucking
+                    supernatural beings).
+                  </p>
+                </div>
+                <div class="d47" id="infodgenre35">
+                  <h2>Yaoi</h2>
+                  <br />
+                  <p>Boys Love</p>
+                </div>
+                <div class="d47" id="infodgenre36">
+                  <h2>Yuri</h2>
+                  <br />
+                  <p>Girls Love</p>
+                </div>
+              </div>
+              <div class="d48">
+                <table>
+                  <tr>
+                    <td>Manga Type:</td>
+                    <td>
+                      <select
+                        aria-label="Manga Type"
+                        class="d49"
+                        id="rd"
+                        name="rd"
+                        ><option selected="selected" value="0"
+                          >Both (Manga and Manhwa)</option
+                        ><option value="1"
+                          >Manhwa (Reading Left to Right)</option
+                        ><option value="2"
+                          >Manga (Reading Right to Left)</option
+                        ></select
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Manga Status:</td>
+                    <td>
+                      <select
+                        aria-label="Manga Status"
+                        class="d49"
+                        id="status"
+                        name="status"
+                        ><option selected="selected" value="0"
+                          >Both (Ongoing and Complete)</option
+                        ><option value="1">Ongoing</option
+                        ><option value="2">Complete</option></select
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Sorting Order :</td>
+                    <td>
+                      <select
+                        aria-label="Sorting Order"
+                        class="d49"
+                        id="order"
+                        name="order"
+                        ><option selected="selected" value="0"
+                          >Similarity</option
+                        ><option value="1">Alphabetical</option
+                        ><option value="2">Popularity</option></select
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>
+                      <input id="genre" name="genre" type="hidden" /><input
+                        id="p"
+                        name="p"
+                        type="hidden"
+                        value="0"
+                      /><button class="d50" type="submit">
+                        <i class="d16 d29"></i> Search</button
+                      ><button class="d50" id="rbut" type="button">
+                        <i class="d16 d51"></i> Reset
+                      </button>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </form>
+          </div>
+          <a id="results"></a>
+          <div class="d52" id="ares">
+            <div class="d53">Manga/Manwha Results</div>
+            <div class="d54">
+              <table>
+                <tr>
+                  <td><div class="d55">1.</div></td>
+                  <td>
+                    <div
+                      class="d56 dlz"
+                      data-src="//s1.mangareader.net/cover/dragon-ball-episode-of-bardock/dragon-ball-episode-of-bardock-r0.jpg"
+                    ></div>
+                  </td>
+                  <td>
+                    <div class="d57">
+                      <a href="/dragon-ball-episode-of-bardock"
+                        >Dragon Ball: Episode of Bardock</a
+                      >
+                    </div>
+                    <div class="d58">3 Chapters Published. (Ongoing)</div>
+                    <div class="d59">Manga (Read Right to Left)</div>
+                    <div class="d60">
+                      Action, Adventure, Fantasy, Sci-Fi, Shounen
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="d54">
+              <table>
+                <tr>
+                  <td><div class="d55">2.</div></td>
+                  <td>
+                    <div
+                      class="d56 dlz"
+                      data-src="//s1.mangareader.net/cover/dragon-ball-sd/dragon-ball-sd-r0.jpg"
+                    ></div>
+                  </td>
+                  <td>
+                    <div class="d57">
+                      <a href="/dragon-ball-sd">Dragon Ball SD</a>
+                    </div>
+                    <div class="d58">35 Chapters Published. (Ongoing)</div>
+                    <div class="d59">Manga (Read Right to Left)</div>
+                    <div class="d60">
+                      Action, Adventure, Martial Arts, Sci-Fi, Shounen,
+                      Supernatural
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="d54">
+              <table>
+                <tr>
+                  <td><div class="d55">3.</div></td>
+                  <td>
+                    <div
+                      class="d56 dlz"
+                      data-src="//s1.mangareader.net/cover/dragonball-next-gen/dragonball-next-gen-r0.jpg"
+                    ></div>
+                  </td>
+                  <td>
+                    <div class="d57">
+                      <a href="/dragonball-next-gen">DragonBall Next Gen</a>
+                    </div>
+                    <div class="d58">4 Chapters Published. (Ongoing)</div>
+                    <div class="d59">Manga (Read Right to Left)</div>
+                    <div class="d60">
+                      Action, Adventure, Comedy, Fantasy, Martial Arts, Mystery,
+                      Sci-Fi
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="d54">
+              <table>
+                <tr>
+                  <td><div class="d55">4.</div></td>
+                  <td>
+                    <div
+                      class="d56 dlz"
+                      data-src="//s2.mangareader.net/cover/dragon-ball/dragon-ball-r0.jpg"
+                    ></div>
+                  </td>
+                  <td>
+                    <div class="d57">
+                      <a href="/dragon-ball">Dragon Ball</a>
+                    </div>
+                    <div class="d58">520 Chapters Published. (Completed)</div>
+                    <div class="d59">Manga (Read Right to Left)</div>
+                    <div class="d60">
+                      Action, Adventure, Comedy, Fantasy, Historical, Martial
+                      Arts, Shounen, Supernatural
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="d54">
+              <table>
+                <tr>
+                  <td><div class="d55">5.</div></td>
+                  <td>
+                    <div
+                      class="d56 dlz"
+                      data-src="//s2.mangareader.net/cover/dragon-ball-z-rebirth-of-f/dragon-ball-z-rebirth-of-f-r0.jpg"
+                    ></div>
+                  </td>
+                  <td>
+                    <div class="d57">
+                      <a href="/dragon-ball-z-rebirth-of-f"
+                        >Dragon Ball Z - Rebirth of F</a
+                      >
+                    </div>
+                    <div class="d58">3 Chapters Published. (Ongoing)</div>
+                    <div class="d59">Manga (Read Right to Left)</div>
+                    <div class="d60">
+                      Action, Adventure, Comedy, Fantasy, Sci-Fi, Shounen
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="d54">
+              <table>
+                <tr>
+                  <td><div class="d55">6.</div></td>
+                  <td>
+                    <div
+                      class="d56 dlz"
+                      data-src="//s2.mangareader.net/cover/dragon-ball-super/dragon-ball-super-r0.jpg"
+                    ></div>
+                  </td>
+                  <td>
+                    <div class="d57">
+                      <a href="/dragon-ball-super">Dragon Ball Super</a>
+                    </div>
+                    <div class="d58">62 Chapters Published. (Ongoing)</div>
+                    <div class="d59">Manga (Read Right to Left)</div>
+                    <div class="d60">Shounen</div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+          <div class="d52 d61">
+            <div class="d53">Author/Artist Results</div>
+          </div>
+          <div class="d69">
+            <div class="d70"><ul class="d71"></ul></div>
+          </div>
+        </div>
+      </div>
+      <div id="aa1"></div>
+      <div id="aa2"></div>
+      <div id="aa3"></div>
+    </div>
+    <script>
+      var d = document,
+        f = window;
+      function n() {
+        this.a = !1;
+        Element.prototype.matches ||
+          (Element.prototype.matches =
+            Element.prototype.msMatchesSelector ||
+            Element.prototype.webkitMatchesSelector);
+        q() && (this.a = !0);
+      }
+      function q() {
+        var b = !1;
+        try {
+          var c = Object.defineProperty({}, "passive", {
+            get: function () {
+              b = !0;
+            },
+          });
+          f.addEventListener("at1", null, c);
+          f.removeEventListener("at1", null, c);
+        } catch (e) {}
+        return b;
+      }
+      function r(b) {
+        return "string" == typeof b ? d.getElementById(b) : b;
+      }
+      function t(b) {
+        b = r(b);
+        b.dts || (b.dts = {});
+        return b.dts;
+      }
+      n.prototype.f = function (b) {
+        v(this, b, "pc");
+      };
+      n.prototype.g = function (b) {
+        v(this, b, "p");
+      };
+      n.prototype.c = function (b) {
+        v(this, b, "c");
+      };
+      n.prototype.b = function (b) {
+        v(this, b, "");
+      };
+      function v(b, c, e) {
+        if ((e = t(b)["ev" + e][c.type]))
+          for (var l = 0; l < e.length; l++) {
+            var g = e[l],
+              p = g.selector,
+              h = g.handler,
+              k = c.target;
+            if (p)
+              for (; k && k !== b; )
+                k.matches(p) && h.call(b, c, k, g.data), (k = k.parentNode);
+            else h.call(b, c, k, g.data);
+          }
+      }
+      function w(b, c, e, l, g, p) {
+        var h = x;
+        b = r(b);
+        var k = t(b),
+          m = "",
+          u = c;
+        if (g || !h.a) m += "p";
+        p && (m += "c");
+        "pc" == m
+          ? ((g = !0), (h = h.f))
+          : "p" == m
+          ? ((g = !1), (h = h.g))
+          : "c" == m
+          ? ((g = { passive: !0, capture: !0 }), (h = h.c))
+          : ((g = { passive: !0 }), (h = h.b));
+        c && (u = c.split(".", 2)[0]);
+        k["ev" + m] || (k["ev" + m] = []);
+        k["ev" + m][u] || ((k["ev" + m][u] = []), b.addEventListener(u, h, g));
+        k["ev" + m][u].push({ handler: e, selector: l, data: void 0, ns: c });
+      }
+      function y(b, c) {
+        r(b).classList.remove(c);
+      }
+      var x = new n();
+      function z(b) {
+        this.b = null;
+        this.h = [];
+        if (b) {
+          if (this.b) {
+            var c = this.b,
+              e = c.h.indexOf(this);
+            -1 !== e && c.h.splice(e, 1);
+          }
+          b.h.push(this);
+          this.b = b;
+        }
+      }
+      function A(b, c) {
+        void 0 === c && (c = "");
+        z.call(this, b, c);
+        b = { rootMargin: "50% 0px 110% 0px" };
+        this.a = "IntersectionObserver" in f;
+        this.f = !0 === "loading" in HTMLImageElement.prototype;
+        this.a && (this.c = new IntersectionObserver(this.i, b));
+        B(this);
+      }
+      (function (b, c) {
+        function e() {
+          this.constructor = b;
+        }
+        for (var l in c) c.hasOwnProperty(l) && (b[l] = c[l]);
+        b.prototype =
+          null === c
+            ? Object.create(c)
+            : ((e.prototype = c.prototype), new e());
+      })(A, z);
+      function C(b, c) {
+        var e = c.getAttribute("data-src");
+        "IMG" == c.tagName
+          ? (c.src = e)
+          : (c.style.backgroundImage = 'url("' + e + '")');
+        y(c, "dlz");
+        b.a && b.c.unobserve(c);
+      }
+      function B(b) {
+        b.g = d.querySelectorAll(".dlz");
+        b.g.forEach(function (c) {
+          if (b.a) {
+            var e = c.getBoundingClientRect();
+            0 <= e.top &&
+            0 <= e.left &&
+            e.top <=
+              (window.innerHeight || document.documentElement.clientHeight)
+              ? C(b, c)
+              : "IMG" == c.tagName && b.f
+              ? ((e = c.getAttribute("data-src")),
+                c.setAttribute("loading", "lazy"),
+                (c.src = e),
+                y(c, "dlz"),
+                b.a && b.c.unobserve(c))
+              : b.c.observe(c);
+          } else C(b, c);
+        });
+      }
+      A.prototype.i = function (b) {
+        var c = this;
+        b.forEach(function (e) {
+          e.isIntersecting && C(c, e.target);
+        });
+      };
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function (b) {
+        for (var c = 0; c < arguments.length; c++);
+        window.dataLayer.push(arguments);
+      };
+      window.gtag("js", new Date());
+      window.gtag("config", "UA-174220552-2");
+      var D = d.createElement("script"),
+        E = d.getElementsByTagName("script")[0];
+      D.async = !0;
+      D.src = "https://www.googletagmanager.com/gtag/js?id=UA-174220552-2";
+      E.parentNode.insertBefore(D, E);
+      function F(b) {
+        if (null === r("bbscr")) {
+          var c = d.createElement("script");
+          c.setAttribute("id", "bbscr");
+          c.src = "https://st.bebi.com/bebi_v3.js";
+          c.async = !0;
+          w(c, "load", b);
+          d.body.appendChild(c);
+        }
+      }
+      function G(b) {
+        for (; b.b.length; ) {
+          var c = b.b.shift();
+          b.a++;
+          f.BB.getAds(c[0], c[1], b.a, c[2]);
+        }
+      }
+      function H(b) {
+        for (; b.f.length; ) {
+          var c = b.f.shift();
+          b.a++;
+          c.index = b.a;
+          f.BB.requestAds(c);
+        }
+      }
+      function I(b, c) {
+        var e = J;
+        e.b.push([b, c, !0]);
+        e.c ? (G(e), H(e)) : F(e.g);
+      }
+      var J = new (function () {
+        var b = this;
+        this.c = !1;
+        this.b = [];
+        this.f = [];
+        this.a = 0;
+        this.g = function () {
+          b.c = !0;
+          G(b);
+          H(b);
+        };
+      })();
+      w("mmt", "click", function () {
+        r("dhr").classList.toggle("show");
+      });
+      w(
+        "dhr",
+        "click",
+        function (b, c) {
+          c == r("dhr") && r("dhr").classList.toggle("show");
+        },
+        "",
+        !0,
+        !0
+      );
+      var K, L, M, N, O;
+      K = r("sinp");
+      L = r("rd");
+      N = r("status");
+      M = r("order");
+      O = r("infodgenre");
+      w(
+        "genreselect",
+        "click",
+        function (b) {
+          b = b.target;
+          r(b).classList.contains("r0")
+            ? (y(b, "r0"), r(b).classList.add("r1"))
+            : r(b).classList.contains("r1")
+            ? (y(b, "r1"), r(b).classList.add("r2"))
+            : r(b).classList.contains("r2") &&
+              (y(b, "r2"), r(b).classList.add("r0"));
+        },
+        ".genre"
+      );
+      w("rbut", "click", function () {
+        for (var b = 0, c; (c = r("dgenre" + b)); )
+          r(c).classList.add("r0"), y(c, "r1"), y(c, "r2"), b++;
+        K.value = "";
+        L.selectedIndex = 0;
+        M.selectedIndex = 0;
+        N.selectedIndex = 0;
+      });
+      w(
+        "genreselect",
+        "mouseover",
+        function (b, c) {
+          O.style.display = "none";
+          r("info" + c.id).style.display = "inline";
+        },
+        ".genre"
+      );
+      w(
+        "genreselect",
+        "mouseout",
+        function (b, c) {
+          r("info" + c.id).style.removeProperty("display");
+          O.style.display = "block";
+        },
+        ".genre"
+      );
+      w("searchform", "submit", function () {
+        for (var b = 0, c, e = ""; (c = r("dgenre" + b)); )
+          (e += c.className.split(" ")[1].substr(1)), b++;
+        r("genre").value = e;
+      });
+      new A(null);
+      "" != r("sinp").value &&
+        setTimeout(function () {
+          r("ares").scrollIntoView();
+        }, 400);
+      I("aa1", 41734);
+      I("aa2", 2013703);
+      I("aa3", 2013704);
+      var P = J;
+      P.f.push({
+        centerWidth: 950,
+        centerDomId: "",
+        deferLoading: !0,
+        adjustSkinOnDynamicCenter: !0,
+        leftOffset: 5,
+        rightOffset: 5,
+        fixed: !0,
+        topPos: 35,
         zIndex: 0,
-        leftFrameId: '',
-        rightFrameId: '',
-        pl: 7,
-        index: BB_ind
-    };
-</script>
-<script type="text/javascript" async src="//st.bebi.com/bebi_v3.js"></script>
-<!-- END TAG -->
-<div id="wrapper_body">
-<div id="bodyust">
-<form id="searchform" action="/search/" method="get">
-<div id="searchcontainer"><input type="text" id="searchinput" name="w" value="dragonball" /> <input type="submit" class="submitbutton" value="" /></div>
-<div id="genreselect">
-<div id="genrebox"><div class="genre r" id="dgenre0">Action</div>
-<div class="genre r" id="dgenre1">Adventure</div>
-<div class="genre r" id="dgenre2">Comedy</div>
-<div class="genre r" id="dgenre3">Demons</div>
-<div class="genre r" id="dgenre4">Drama</div>
-<div class="genre r" id="dgenre5">Ecchi</div>
-<div class="genre r" id="dgenre6">Fantasy</div>
-<div class="genre r" id="dgenre7">Gender Bender</div>
-<div class="genre r" id="dgenre8">Harem</div>
-<div class="genre r" id="dgenre9">Historical</div>
-<div class="genre r" id="dgenre10">Horror</div>
-<div class="genre r" id="dgenre11">Josei</div>
-<div class="genre r" id="dgenre12">Magic</div>
-<div class="genre r" id="dgenre13">Martial Arts</div>
-<div class="genre r" id="dgenre14">Mature</div>
-<div class="genre r" id="dgenre15">Mecha</div>
-<div class="genre r" id="dgenre16">Military</div>
-<div class="genre r" id="dgenre17">Mystery</div>
-<div class="genre r" id="dgenre18">One Shot</div>
-<div class="genre r" id="dgenre19">Psychological</div>
-<div class="genre r" id="dgenre20">Romance</div>
-<div class="genre r" id="dgenre21">School Life</div>
-<div class="genre r" id="dgenre22">Sci-Fi</div>
-<div class="genre r" id="dgenre23">Seinen</div>
-<div class="genre r" id="dgenre24">Shoujo</div>
-<div class="genre r" id="dgenre25">Shoujoai</div>
-<div class="genre r" id="dgenre26">Shounen</div>
-<div class="genre r" id="dgenre27">Shounenai</div>
-<div class="genre r" id="dgenre28">Slice of Life</div>
-<div class="genre r" id="dgenre29">Smut</div>
-<div class="genre r" id="dgenre30">Sports</div>
-<div class="genre r" id="dgenre31">Super Power</div>
-<div class="genre r" id="dgenre32">Supernatural</div>
-<div class="genre r" id="dgenre33">Tragedy</div>
-<div class="genre r" id="dgenre34">Vampire</div>
-<div class="genre r" id="dgenre35">Yaoi</div>
-<div class="genre r" id="dgenre36">Yuri</div>
-</div>
-<div id="genreinfodiv">
-<div id="genreinfotext">
-<div id="infodgenre"><b>Click to include a genre to your search</b>. If you include Comedy, it will filter only mangas with comedy genre.<br />
-(You can include multiple genres)<br />
-<b>Double Click to exclude a genre.</b> If you include Comedy, Romance but exclude Ecchi, it will filter all mangas with Comedy and Romance but Ecchi.</div>
-<div id="infodgenre0" class="c2">
-<h2>Action</h2>
-<br />
-<p>One or more heroes is thrust into a series of challenges that require physical feats, extended fights and frenetic chases.</p>
-</div>
-<div id="infodgenre1" class="c2">
-<h2>Adventure</h2>
-<br />
-<p>Exciting stories, with new experiences or exotic locales. Adventure manga are very similar to the action genre, in that they are designed to provide an action-filled, energetic experience for the manga reader.</p>
-</div>
-<div id="infodgenre2" class="c2">
-<h2>Comedy</h2>
-<br />
-<p>Main emphasis is on humour Also, mangas in this style typically have a happy ending.</p>
-</div>
-<div id="infodgenre3" class="c2">
-<h2>Demons</h2>
-<br />
-<p>Manga sets story on demonic beings.</p>
-</div>
-<div id="infodgenre4" class="c2">
-<h2>Drama</h2>
-<br />
-<p>Depends mostly on in-depth development of realistic characters dealing with emotional themes.</p>
-</div>
-<div id="infodgenre5" class="c2">
-<h2>Ecchi</h2>
-<br />
-<p>Manga including nudity. Usually it is used in works that have a focus on comedy and is often described as its own genre, depicting the typical elements.</p>
-</div>
-<div id="infodgenre6" class="c2">
-<h2>Fantasy</h2>
-<br />
-<p>Involving magic, supernatural events, make-believe creatures, or exotic fantasy worlds. The genre is considered to be distinct from Sci-fi and Horror, although the genres do overlap.</p>
-</div>
-<div id="infodgenre7" class="c2">
-<h2>Gender Bender</h2>
-<br />
-<p>Dressing in the opposite sex, wearing make-ups, or even switching bodies in some cases.</p>
-</div>
-<div id="infodgenre8" class="c2">
-<h2>Harem</h2>
-<br />
-<p>The most common and practically tantamount scenario is a male surrounded by a group of females; when this is reversed it is informally referred to as a reverse harem.</p>
-</div>
-<div id="infodgenre9" class="c2">
-<h2>Historical</h2>
-<br />
-<p>Tells a story that is set in the past. That setting is usually real and drawn from history, and often contains actual historical persons, but the principal characters tend to be fictional.</p>
-</div>
-<div id="infodgenre10" class="c2">
-<h2>Horror</h2>
-<br />
-<p>Horror manga are unsettling mangas that strive to elicit the emotions of fear, disgust and horror from readers.</p>
-</div>
-<div id="infodgenre11" class="c2">
-<h2>Josei</h2>
-<br />
-<p>Target demographic of manga created mostly by women for late teenage and adult female audiences. The male equivalent to Josei is seinen.</p>
-</div>
-<div id="infodgenre12" class="c2">
-<h2>Magic</h2>
-<br />
-<p>Manga includes elements such as wizards or characters with magic ability.</p>
-</div>
-<div id="infodgenre13" class="c2">
-<h2>Martial Arts</h2>
-<br />
-<p>Manga including martial arts such as Kung-fu, Karate, Judo etc.</p>
-</div>
-<div id="infodgenre14" class="c2">
-<h2>Mature</h2>
-<br />
-<p>May be too extreme for people under the age of 17. Titles in this category may contain intense violence, blood and gore, sexual content and/or strong language.</p>
-</div>
-<div id="infodgenre15" class="c2">
-<h2>Mecha</h2>
-<br />
-<p>Mecha manga cover all series that revolve around the use of piloted robotic armors in battle.</p>
-</div>
-<div id="infodgenre16" class="c2">
-<h2>Military</h2>
-<br />
-<p>Contain elements from army. Story may be set in future or past.</p>
-</div>
-<div id="infodgenre17" class="c2">
-<h2>Mystery</h2>
-<br />
-<p>Mysterious circumstances of a crime by means of clues, investigation, and clever deduction.</p>
-</div>
-<div id="infodgenre18" class="c2">
-<h2>One Shot</h2>
-<br />
-<p>Manga usually consisting of one chapter or very short.</p>
-</div>
-<div id="infodgenre19" class="c2">
-<h2>Psychological</h2>
-<br />
-<p>Relies on character fears, guilt, beliefs, and emotional instability to build tension and further the plot. May contain some disturbing contents.</p>
-</div>
-<div id="infodgenre20" class="c2">
-<h2>Romance</h2>
-<br />
-<p>Manga have some aspect of romance between characters.</p>
-</div>
-<div id="infodgenre21" class="c2">
-<h2>School Life</h2>
-<br />
-<p>School Life manga are set in a school or university campus, and deals primarily with the life of students.</p>
-</div>
-<div id="infodgenre22" class="c2">
-<h2>Sci-fi</h2>
-<br />
-<p>Science fiction: based depictions of phenomena that are not necessarily accepted by mainstream science, such as extraterrestrial life forms, alien worlds, extrasensory perception, and time travel.</p>
-</div>
-<div id="infodgenre23" class="c2">
-<h2>Seinen</h2>
-<br />
-<p>Seinen manga is a subset of manga that is generally targeted at an 18–30 year old male audience.</p>
-</div>
-<div id="infodgenre24" class="c2">
-<h2>Shoujo</h2>
-<br />
-<p>Refers to manga marketed to a female audience roughly between the ages of 10 and 18.</p>
-</div>
-<div id="infodgenre25" class="c2">
-<h2>Shoujo Ai</h2>
-<br />
-<p>Soft version of Yuri (Girls Love)</p>
-</div>
-<div id="infodgenre26" class="c2">
-<h2>Shounen</h2>
-<br />
-<p>Refers to manga marketed to a male audience roughly between the ages of 10 and 18.</p>
-</div>
-<div id="infodgenre27" class="c2">
-<h2>Shounen Ai</h2>
-<br />
-<p>Soft version of Yaoi (Boys Love)</p>
-</div>
-<div id="infodgenre28" class="c2">
-<h2>Slice of Life</h2>
-<br />
-<p>A slice of life story is a category for a story that portrays a "cut-out" sequence of events in a character's life.</p>
-</div>
-<div id="infodgenre29" class="c2">
-<h2>Smut</h2>
-<br />
-<p>Contain offensive contents, especially sexually profane materials.</p>
-</div>
-<div id="infodgenre30" class="c2">
-<h2>Sports</h2>
-<br />
-<p>Story centers around sports such as baseball, basketball etc.</p>
-</div>
-<div id="infodgenre31" class="c2">
-<h2>Superpower</h2>
-<br />
-<p>A very likely genre to supernatural. Character's skills are against the nature.</p>
-</div>
-<div id="infodgenre32" class="c2">
-<h2>Supernatural</h2>
-<br />
-<p>Powers or things that do not happen in nature.</p>
-</div>
-<div id="infodgenre33" class="c2">
-<h2>Tragedy</h2>
-<br />
-<p>Form of drama based on human suffering.</p>
-</div>
-<div id="infodgenre34" class="c2">
-<h2>Vampire</h2>
-<br />
-<p>Manga set on the story about vampire myths (Blood sucking supernatural beings).</p>
-</div>
-<div id="infodgenre35" class="c2">
-<h2>Yaoi</h2>
-<br />
-<p>Boys Love</p>
-</div>
-<div id="infodgenre36" class="c2">
-<h2>Yuri</h2>
-<br />
-<p>Girls Love</p>
-</div>
-</div>
-</div>
-<div class="clear"></div>
-</div>
-<div id="options">
-<table id="optiontable">
-<tr>
-<td class="c3"><label for="rd">Manga Type:</label></td>
-<td><select id="rd" name="rd">
-<option value="0">Both (Manga and Manhwa)</option>
-<option value="1">Manhwa (Reading Left to Right)</option>
-<option value="2">Manga (Reading Right to Left)</option>
-</select></td>
-</tr>
-<tr>
-<td><label for="status">Manga Status:</label></td>
-<td><select id="status" name="status">
-<option value="0">Both (Ongoing and Complete)</option>
-<option value="1">Ongoing</option>
-<option value="2">Complete</option>
-</select></td>
-</tr>
-<tr>
-<td><label for="order">Sorting Order:</label></td>
-<td><select id="order" name="order">
-<option value="0">Similarity</option>
-<option value="1">Alphabetical</option>
-<option value="2">Popularity</option>
-</select></td>
-</tr>
-</table>
-<input type="hidden" name="genre" id="genre" /> <input type="hidden" name="p" id="p" value="0" />
-<div id="submitbox"><input type="submit" class="submitbutton" value="" /></div>
-<div id="resetbox"><input type="button" class="resetbutton" value="" /></div>
-<div class="clear"></div>
-</div>
-</form>
-</div>
-<div id="bodyalt">
-<div id="mangaresults">
-<h2>Manga/Manhwa Results</h2>
-<div class="mangaresultitem">
-<div class="mangaresultinner">
-<div class="c4">1.</div>
-<div class="imgsearchresults" style="background-image:url('https://s5.mangareader.net/cover/dragon-ball/dragon-ball-r0.jpg')"></div><div class="result_info c5">
-<div class="manga_name">
-<div>
-<h3><a href="/dragon-ball">Dragon Ball</a></h3>
-</div>
-</div>
-<div class="chapter_count">520&nbsp;Chapters Published. (Completed)</div>
-<div class="manga_type">Manga (Read Right to Left)</div>
-<div class="manga_genre">Action, Adventure, Comedy, Fantasy, Historical, Martial Arts, Shounen, Supernatural</div>
-</div>
-<div class="clear"></div>
-</div>
-</div>
-<div class="mangaresultitem">
-<div class="mangaresultinner">
-<div class="c4">2.</div>
-<div class="imgsearchresults" style="background-image:url('https://s5.mangareader.net/cover/dragon-ball-sd/dragon-ball-sd-r0.jpg')"></div><div class="result_info c5">
-<div class="manga_name">
-<div>
-<h3><a href="/dragon-ball-sd">Dragon Ball SD</a></h3>
-</div>
-</div>
-<div class="chapter_count">34&nbsp;Chapters Published. (Ongoing)</div>
-<div class="manga_type">Manga (Read Right to Left)</div>
-<div class="manga_genre">Action, Adventure, Martial Arts, Sci-Fi, Shounen, Supernatural</div>
-</div>
-<div class="clear"></div>
-</div>
-</div>
-<div class="mangaresultitem">
-<div class="mangaresultinner">
-<div class="c4">3.</div>
-<div class="imgsearchresults" style="background-image:url('https://s5.mangareader.net/cover/dragon-ball-episode-of-bardock/dragon-ball-episode-of-bardock-r0.jpg')"></div><div class="result_info c5">
-<div class="manga_name">
-<div>
-<h3><a href="/dragon-ball-episode-of-bardock">Dragon Ball: Episode of Bardock</a></h3>
-</div>
-</div>
-<div class="chapter_count">3&nbsp;Chapters Published. (Ongoing)</div>
-<div class="manga_type">Manga (Read Right to Left)</div>
-<div class="manga_genre">Action, Adventure, Fantasy, Sci-Fi, Shounen</div>
-</div>
-<div class="clear"></div>
-</div>
-</div>
-<div class="mangaresultitem">
-<div class="mangaresultinner">
-<div class="c4">4.</div>
-<div class="imgsearchresults" style="background-image:url('https://s1.mangareader.net/cover/dragonball-next-gen/dragonball-next-gen-r0.jpg')"></div><div class="result_info c5">
-<div class="manga_name">
-<div>
-<h3><a href="/dragonball-next-gen">DragonBall Next Gen</a></h3>
-</div>
-</div>
-<div class="chapter_count">4&nbsp;Chapters Published. (Ongoing)</div>
-<div class="manga_type">Manga (Read Right to Left)</div>
-<div class="manga_genre">Action, Adventure, Comedy, Fantasy, Martial Arts, Mystery, Sci-Fi</div>
-</div>
-<div class="clear"></div>
-</div>
-</div>
-<div class="mangaresultitem">
-<div class="mangaresultinner">
-<div class="c4">5.</div>
-<div class="imgsearchresults" style="background-image:url('https://s1.mangareader.net/cover/dragon-ball-z-rebirth-of-f/dragon-ball-z-rebirth-of-f-r0.jpg')"></div><div class="result_info c5">
-<div class="manga_name">
-<div>
-<h3><a href="/dragon-ball-z-rebirth-of-f">Dragon Ball Z - Rebirth of F</a></h3>
-</div>
-</div>
-<div class="chapter_count">3&nbsp;Chapters Published. (Ongoing)</div>
-<div class="manga_type">Manga (Read Right to Left)</div>
-<div class="manga_genre">Action, Adventure, Comedy, Fantasy, Sci-Fi, Shounen</div>
-</div>
-<div class="clear"></div>
-</div>
-</div>
-<div class="mangaresultitem">
-<div class="mangaresultinner">
-<div class="c4">6.</div>
-<div class="imgsearchresults" style="background-image:url('https://s1.mangareader.net/cover/dragon-ball-super/dragon-ball-super-r0.jpg')"></div><div class="result_info c5">
-<div class="manga_name">
-<div>
-<h3><a href="/dragon-ball-super">Dragon Ball Super</a></h3>
-</div>
-</div>
-<div class="chapter_count">54&nbsp;Chapters Published. (Ongoing)</div>
-<div class="manga_type">Manga (Read Right to Left)</div>
-<div class="manga_genre">Shounen</div>
-</div>
-<div class="clear"></div>
-</div>
-</div>
-</div>
-<div id="authorresults">
-<h2>Author/Artist Results</h2>
-</div>
-<div class="clear"></div>
-</div>
-</div>
-<div class="clear"></div>
-<div id="adfooter">
-<div id="adbottomleft" name="adbottomleft">
-<script type="text/javascript">
-  if(!window.BB_a) { BB_a = [];} if(!window.BB_ind) { BB_ind = 0; } if(!window.BB_vrsa) { BB_vrsa = 'v3'; }if(!window.BB_r) { BB_r = Math.floor(Math.random()*1000000000)} BB_ind++; BB_a.push({ "pl" : 42259, "index": BB_ind});
-</script>
-<script type="text/javascript">
-  document.write('<scr'+'ipt async id="BB_SLOT_'+BB_r+'_'+BB_ind+'" src="//st.bebi.com/bebi_'+BB_vrsa+'.js"></scr'+'ipt>');
-</script>
-</div>
-<div id="adbottomright" name="adbottomright">
-<script type="text/javascript">
-  if(!window.BB_a) { BB_a = [];} if(!window.BB_ind) { BB_ind = 0; } if(!window.BB_vrsa) { BB_vrsa = 'v3'; }if(!window.BB_r) { BB_r = Math.floor(Math.random()*1000000000)} BB_ind++; BB_a.push({ "pl" : 42260, "index": BB_ind});
-</script>
-<script type="text/javascript">
-  document.write('<scr'+'ipt async id="BB_SLOT_'+BB_r+'_'+BB_ind+'" src="//st.bebi.com/bebi_'+BB_vrsa+'.js"></scr'+'ipt>');
-</script>
-</div>
-</div>
-<div id="wrapper_footer">
-<table cellspacing="0">
-<tbody>
-<tr>
-<td class="footer-column bold c9" align="left" valign="top">2016 AFTV Network</td>
-<td class="footer-column" valign="top" width="20%">
-<ul>
-<li><b>Network</b></li>
-<li><a href="http://www.animefreak.tv" target="_blank">Anime</a></li>
-<li><a href="http://www.animepremium.net" target="_blank">Anime Downloads</a></li>
-<li><a href="/">Manga</a></li>
-<li><a href="/privacy">Privacy Statements</a></li>
-</ul>
-</td>
-<td class="footer-column" align="left" valign="top" width="20%">
-<ul>
-<li><b>Partners</b></li>
-<li><a href="http://www.upload2.com" target="_blank">Free File Hosting</a></li>
-<li><a href="http://www.watchcartoons.com" target="_blank">Watch Cartoons Online</a></li>
-<li><a href="http://www.animemobile.com/MangaApp/" target="_blank">Android Manga App</a></li>
-<li><a href="http://www.animemobile.com/apk/" target="_blank">Android Anime App</a></li>
-<li><a href="https://www.memecenter.com" target="_blank">Memes</a></li>
-</ul>
-</td>
-<td class="footer-column" align="left" valign="top" width="1%"></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-
-<script type="text/javascript" src="//ad.mangareader.net/js/ads.js"></script>
-
-<script language="JavaScript" type="text/javascript">
-        var bebi_acc = '1';
-        var bebi_campaign = '150';
+        leftFrameId: "",
+        rightFrameId: "",
+        pl: 6,
+      });
+      P.c ? (G(P), H(P)) : F(P.g);
+      "serviceWorker" in navigator &&
+        w(f, "load", function () {
+          navigator.serviceWorker.register("/swc.js").catch();
+        });
+      new (function () {
+        var b = this;
+        this.f = function () {
+          null !== b.a &&
+            (b.a.prompt(),
+            (r("dinsPWA").style.display = "none"),
+            r("minsPWA").classList.remove("asho"),
+            r("sboa").classList.remove("aso"),
+            b.a.userChoice.then(function () {}),
+            (b.a = null));
+        };
+        this.g = function (p) {
+          p.preventDefault();
+          b.a = p;
+          r("dinsPWA").style.display = "block";
+          w("dinsPWA", "click", b.f);
+          r("sboa").classList.add("aso");
+          r("minsPWA").classList.add("asho");
+          w("minsPWA", "click", b.f);
+        };
+        this.c = function () {
+          r("mmod1").style.display = "block";
+        };
+        this.b = function () {
+          r("mmod1").style.display = "none";
+        };
+        var c = !1,
+          e = !1,
+          l = !1,
+          g = !1;
+        navigator.standalone && (l = !0);
+        window.matchMedia("(display-mode: standalone)").matches && (g = !0);
+        c = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.a;
+        (e = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/)) && c
+          ? l ||
+            ((r("dinsPWA").style.display = "block"),
+            r("sboa").classList.add("aso"),
+            r("minsPWA").classList.add("asho"),
+            w("dinsPWA", "click", this.c),
+            w("minsPWA", "click", this.c),
+            w("mmod1", "click", this.b),
+            w("modcls", "click", this.b))
+          : g || ((this.a = null), w(f, "beforeinstallprompt", this.g));
+      })();
     </script>
-    <script type="text/javascript" src="https://srv.aftv-serving.bid/public/js/aftv_v1.js"></script>
-<script language="JavaScript" type="text/javascript">
-        var bebi_acc = '1';
-        var bebi_campaign = '180';
-    </script>
-    <script type="text/javascript" src="https://srv.aftv-serving.bid/public/js/aftv_v1.js"></script>
-</body>
+  </body>
 </html>

@@ -25,21 +25,86 @@ def test_page_urls(mangareader_volume_html):
         parser = MangaReaderMangaParser("dragon-ball")
         page_urls = parser.page_urls(1)
         expected = [
-            "http://mangareader.net/dragon-ball-episode-of-bardock/2",
-            "http://mangareader.net/dragon-ball-episode-of-bardock/2/2",
-            "http://mangareader.net/dragon-ball-episode-of-bardock/2/3",
-            "http://mangareader.net/dragon-ball-episode-of-bardock/2/4",
-            "http://mangareader.net/dragon-ball-episode-of-bardock/2/5",
-            "http://mangareader.net/dragon-ball-episode-of-bardock/2/6",
-            "http://mangareader.net/dragon-ball-episode-of-bardock/2/7",
-            "http://mangareader.net/dragon-ball-episode-of-bardock/2/8",
-            "http://mangareader.net/dragon-ball-episode-of-bardock/2/9",
-            "http://mangareader.net/dragon-ball-episode-of-bardock/2/10",
-            "http://mangareader.net/dragon-ball-episode-of-bardock/2/11",
-            "http://mangareader.net/dragon-ball-episode-of-bardock/2/12",
-            "http://mangareader.net/dragon-ball-episode-of-bardock/2/13",
-            "http://mangareader.net/dragon-ball-episode-of-bardock/2/14",
-            "http://mangareader.net/dragon-ball-episode-of-bardock/2/15",
+            (
+                1,
+                "https://i10.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552925.jpg",
+            ),
+            (
+                2,
+                "https://i8.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552927.jpg",
+            ),
+            (
+                3,
+                "https://i1.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552929.jpg",
+            ),
+            (
+                4,
+                "https://i9.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552931.jpg",
+            ),
+            (
+                5,
+                "https://i7.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552933.jpg",
+            ),
+            (
+                6,
+                "https://i1.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552935.jpg",
+            ),
+            (
+                7,
+                "https://i5.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552937.jpg",
+            ),
+            (
+                8,
+                "https://i8.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552939.jpg",
+            ),
+            (
+                9,
+                "https://i3.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552941.jpg",
+            ),
+            (
+                10,
+                "https://i9.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552943.jpg",
+            ),
+            (
+                11,
+                "https://i9.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552945.jpg",
+            ),
+            (
+                12,
+                "https://i7.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552947.jpg",
+            ),
+            (
+                13,
+                "https://i10.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552949.jpg",
+            ),
+            (
+                14,
+                "https://i2.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552951.jpg",
+            ),
+            (
+                15,
+                "https://i8.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552953.jpg",
+            ),
+            (
+                16,
+                "https://i4.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552955.jpg",
+            ),
+            (
+                17,
+                "https://i4.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552957.jpg",
+            ),
+            (
+                18,
+                "https://i3.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552959.jpg",
+            ),
+            (
+                19,
+                "https://i8.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552961.jpg",
+            ),
+            (
+                20,
+                "https://i4.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552963.jpg",
+            ),
         ]
         assert page_urls == expected
 
@@ -53,17 +118,18 @@ def test_invalid_volume_parser(mangareader_invalid_volume_html):
 
 
 @mock.patch("scraper.parsers.mangakaka.requests.get")
-@pytest.mark.parametrize("url_suffix,expected_num", [("2/2", 2), ("2", 1)])
-def test_page_data(mocked_get, url_suffix, expected_num, mangareader_page_html):
+def test_page_data(mocked_get, mangareader_page_html):
     mocked_get.return_value = MockedImgResponse()
     with mock.patch("scraper.parsers.mangareader.get_html_from_url") as mocked_func:
         mocked_func.return_value = mangareader_page_html
         parser = MangaReaderMangaParser("dragon-ball")
-        page_data = parser.page_data(
-            f"http://mangareader.net/dragon-ball-episode-of-bardock/{url_suffix}"
+        page_url = (
+            20,
+            "https://i4.imggur.net/dragon-ball-episode-of-bardock/1/dragon-ball-episode-of-bardock-2552963.jpg",
         )
+        page_data = parser.page_data(page_url)
         page_num, img_data = page_data
-        assert page_num == expected_num
+        assert page_num == 20
         # ensure it is an JPEG
         assert "JFIF" in str(img_data[:15])
 

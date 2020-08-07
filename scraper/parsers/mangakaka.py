@@ -42,7 +42,7 @@ class MangaKakaMangaParser(BaseMangaParser):
             if e.response.status_code == 404:
                 raise MangaDoesNotExist(f"Manga {self.name} does not exist")
 
-    def page_urls(self, volume: int) -> List[str]:
+    def page_urls(self, volume: int) -> List[Tuple[int, str]]:
         """
         Return a list of urls for every page in a given volume
         """
@@ -50,16 +50,18 @@ class MangaKakaMangaParser(BaseMangaParser):
         container = volume_html.find("div", {"class": "container-chapter-reader"})
         all_img_tags = container.find_all("img")
         all_page_urls = [img.get("src") for img in all_img_tags]
-        return all_page_urls
+        return [(int(Path(page_url).stem), page_url) for page_url in all_page_urls]
 
-    def page_data(self, page_url: str, retries=1, max_retries=5) -> Tuple[int, bytes]:
+    def page_data(
+        self, page_url: Tuple[int, str], retries=1, max_retries=5
+    ) -> Tuple[int, bytes]:
         """
         Extracts a manga pages data
         """
         try:
-            page_num = Path(page_url).stem
-            img_data = requests.get(page_url).content
-            return (int(page_num), img_data)
+            page_num, img_url = page_url
+            img_data = requests.get(img_url).content
+            return (page_num, img_data)
         except requests.exceptions.ConnectionError as e:
             if retries < max_retries:
                 logger.info(f"Retrying to re-establish connection to {page_url}")

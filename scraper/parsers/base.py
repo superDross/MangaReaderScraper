@@ -20,14 +20,14 @@ class BaseMangaParser:
         self.base_url = base_url
 
     @abc.abstractmethod
-    def page_urls(self, volume: int) -> List[str]:
+    def page_urls(self, volume: int) -> List[Tuple[int, str]]:
         """
         Return a list of urls for every page in a given volume
         """
         pass
 
     @abc.abstractmethod
-    def page_data(self, page_url: str) -> Tuple[int, bytes]:
+    def page_data(self, page_url: Tuple[int, str]) -> Tuple[int, bytes]:
         """
         Extracts a manga pages data
         """

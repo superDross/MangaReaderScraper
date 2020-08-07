@@ -106,7 +106,7 @@ SEARCH_PARAMETERS = [
         ["--search", "dragon", "ball"],
         ["1", "5"],
         {
-            "manga": "dragon-ball",
+            "manga": "dragon-ball-episode-of-bardock",
             "search": ["dragon", "ball"],
             "source": "mangareader",
             "volumes": [5],
