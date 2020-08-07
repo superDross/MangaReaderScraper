@@ -162,6 +162,8 @@ def cli_entry() -> None:
 
 
 def get_parser() -> argparse.ArgumentParser:
+    with open("VERSION", "r") as version_file:
+        version = version_file.read().strip()
 
     parser = argparse.ArgumentParser(
         description="downloads and converts manga volumes to pdf or cbz format"
@@ -213,7 +215,7 @@ def get_parser() -> argparse.ArgumentParser:
         "--version",
         "-v",
         action="version",
-        version="v0.4",
+        version=f"v{version}",
         help="display the installed version number of the application",
     )
     return parser

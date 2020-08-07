@@ -21,12 +21,12 @@ repos:
         # TODO: fix non-working --recursive flag
         args: ['--remove-all-unused-imports', '--in-place', '--remove-unused-variable', '--exclude', 'base.py', '--recursive', '.']
 
--   repo: https://github.com/timothycrosley/isort
-    rev: 4.3.21-2
-    hooks:
-    -   id: isort
-        # third-party libs are not being recognised as third party
-        args: [--check-only, --diff, --ignore-whitespace, --settings-path 'pyproject.toml']
+# -   repo: https://github.com/timothycrosley/isort
+#     rev: 4.3.21-2
+#     hooks:
+#     -   id: isort
+#         # third-party libs are not being recognised as third party
+#         args: [--check-only, --diff, --ignore-whitespace, --settings-path 'pyproject.toml']
 
 -   repo: https://github.com/psf/black
     rev: 19.10b0

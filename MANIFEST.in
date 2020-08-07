@@ -9,3 +9,4 @@ include LICENSE
 
 # exclude tests dir and contents
 prune tests/
+prune docs/
