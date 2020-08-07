@@ -2,6 +2,7 @@
 HTML parsers that scrape and parse data from MangaReader.net
 """
 
+import json
 import logging
 import re
 import sys
@@ -37,7 +38,7 @@ class MangaReaderMangaParser(BaseMangaParser):
             volume_html = get_html_from_url(f"{self.base_url}/{self.name}/{volume}")
             if not volume_html.text:
                 raise MangaDoesNotExist(self.name)
-            string = re.compile(".*not published.*")
+            string = re.compile(".*not released yet.*")
             matches = volume_html.find_all(string=string, recursive=True)
             if matches:
                 raise VolumeDoesntExist(f"Manga volume {volume} does not exist")
@@ -46,24 +47,27 @@ class MangaReaderMangaParser(BaseMangaParser):
             if e.response.status_code == 404:
                 raise MangaDoesNotExist(f"Manga {self.name} does not exist")
 
-    def page_urls(self, volume: int) -> List[str]:
+    def page_urls(self, volume: int) -> List[Tuple[int, str]]:
         """
         Return a list of urls for every page in a given volume
         """
         volume_html = self._scrape_volume(volume)
-        all_volume_links = volume_html.find_all("option")
-        all_page_urls = [self.base_url + page.get("value") for page in all_volume_links]
-        return all_page_urls
+        scripts = volume_html.find_all("script")
+        script = scripts[1]
+        clean_script = (
+            script.text.replace("\n", "")
+            .replace(" ", "")
+            .replace('document["mj"]=', "")
+        )
+        page_metadata = json.loads(clean_script)
+        image_urls = [(int(x["p"]), "https:" + x["u"]) for x in page_metadata["im"]]
+        return image_urls
 
-    def page_data(self, page_url: str) -> Tuple[int, bytes]:
+    def page_data(self, page_url: Tuple[int, str]) -> Tuple[int, bytes]:
         """
         Extracts a manga pages data
         """
-        volume_num, page_num = page_url.split("/")[-2:]
-        if not volume_num.isdigit():
-            page_num = "1"
-        page_html = get_html_from_url(page_url)
-        img_url = page_html.find("img").get("src")
+        page_num, img_url = page_url
         img_data = requests.get(img_url).content
         return (int(page_num), img_data)
 
@@ -108,7 +112,7 @@ class MangaReaderSearch(BaseSearchParser):
             f"&status={self.manga_status}&order=0&genre={self.genre}&p=0"
         )
         html_response = get_html_from_url(url)
-        search_results = html_response.find_all("div", {"class": "mangaresultitem"})
+        search_results = html_response.find_all("div", {"class": "d54"})
         if not search_results:
             logging.warning(f"No search results found for {self.query}\nExiting...")
             sys.exit()
@@ -120,10 +124,10 @@ class MangaReaderSearch(BaseSearchParser):
         """
         Extract the desired text from a HTML search result
         """
-        manga_name = result.find("div", {"class": "manga_name"})
+        manga_name = result.find("div", {"class": "d57"})
         title = manga_name.text
         manga_url = manga_name.find("a").get("href")
-        chapters = result.find("div", {"class": "chapter_count"}).text
+        chapters = result.find("div", {"class": "d58"}).text
         return {
             "title": title.replace("\n", ""),
             "manga_url": manga_url[1:],

@@ -121,7 +121,7 @@ def mangareader_page_html() -> BeautifulSoup:
     """
     Returns the HTML to a specfic manga volume page
     """
-    html_path = "tests/test_files/mangareader/dragonball_bardock_volume_2_page.html"
+    html_path = "tests/test_files/mangareader/dragonball_bardock_volume_1_page.html"
     html = get_bs4_tree(html_path)
     return html
 
@@ -145,7 +145,7 @@ def mangareader_volume_html() -> BeautifulSoup:
     """
     Returns the HTML to a specfic manga volume
     """
-    html_path = "tests/test_files/mangareader/dragonball_bardock_volume_2.html"
+    html_path = "tests/test_files/mangareader/dragonball_bardock_volume_1.html"
     html = get_bs4_tree(html_path)
     return html
 

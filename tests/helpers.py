@@ -2,46 +2,45 @@ from pathlib import Path
 from unittest import mock
 
 from bs4 import BeautifulSoup
-
 from scraper.parsers.base import BaseSiteParser
 
 # used as a mocked output for MangaReaderSearch.metadata()
 METADATA = {
     "1": {
-        "title": "Dragon Ball",
-        "manga_url": "dragon-ball",
-        "chapters": "520",
+        "chapters": "3",
+        "manga_url": "dragon-ball-episode-of-bardock",
         "source": "mangareader",
+        "title": "Dragon Ball: Episode of Bardock",
     },
     "2": {
-        "title": "Dragon Ball SD",
+        "chapters": "35",
         "manga_url": "dragon-ball-sd",
-        "chapters": "34",
         "source": "mangareader",
+        "title": "Dragon Ball SD",
     },
     "3": {
-        "title": "Dragon Ball: Episode of Bardock",
-        "manga_url": "dragon-ball-episode-of-bardock",
-        "chapters": "3",
+        "chapters": "4",
+        "manga_url": "dragonball-next-gen",
         "source": "mangareader",
+        "title": "DragonBall Next Gen",
     },
     "4": {
-        "title": "DragonBall Next Gen",
-        "manga_url": "dragonball-next-gen",
-        "chapters": "4",
+        "chapters": "520",
+        "manga_url": "dragon-ball",
         "source": "mangareader",
+        "title": "Dragon Ball",
     },
     "5": {
-        "title": "Dragon Ball Z - Rebirth of F",
-        "manga_url": "dragon-ball-z-rebirth-of-f",
         "chapters": "3",
+        "manga_url": "dragon-ball-z-rebirth-of-f",
         "source": "mangareader",
+        "title": "Dragon Ball Z - Rebirth of F",
     },
     "6": {
-        "title": "Dragon Ball Super",
+        "chapters": "62",
         "manga_url": "dragon-ball-super",
-        "chapters": "54",
         "source": "mangareader",
+        "title": "Dragon Ball Super",
     },
 }
 
@@ -50,12 +49,12 @@ TABLE = (
     "+----+---------------------------------+-----------+-------------+\n"
     "|    | Title                           |   Volumes | Source      |\n"
     "|----+---------------------------------+-----------+-------------|\n"
-    "|  1 | Dragon Ball                     |       520 | mangareader |\n"
-    "|  2 | Dragon Ball SD                  |        34 | mangareader |\n"
-    "|  3 | Dragon Ball: Episode of Bardock |         3 | mangareader |\n"
-    "|  4 | DragonBall Next Gen             |         4 | mangareader |\n"
+    "|  1 | Dragon Ball: Episode of Bardock |         3 | mangareader |\n"
+    "|  2 | Dragon Ball SD                  |        35 | mangareader |\n"
+    "|  3 | DragonBall Next Gen             |         4 | mangareader |\n"
+    "|  4 | Dragon Ball                     |       520 | mangareader |\n"
     "|  5 | Dragon Ball Z - Rebirth of F    |         3 | mangareader |\n"
-    "|  6 | Dragon Ball Super               |        54 | mangareader |\n"
+    "|  6 | Dragon Ball Super               |        62 | mangareader |\n"
     "+----+---------------------------------+-----------+-------------+"
 )
 
