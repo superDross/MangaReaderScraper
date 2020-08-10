@@ -29,7 +29,7 @@ export PYTHONPATH=$PYTHONPATH:/path/to/MangaReaderScraper/
 `--volumes` Manga series volume number to download. <br />
 `--filetype` Format to store manga as {PDF/CBZ}. <br />
 `--output` Directory to save downloads (defaults to `~/Downloads`) <br />
-`--source` Website to scrape from <br />
+`--source` Website to scrape from - __mangakaka not longer works__<br />
 `--upload` Upload mangas to a cloud storage service <br />
 `--override_name` Change manga name used to store volume(s) locally or in the cloud <br />
 `--remove` Delete the manga(s) after they have downloaded & uploaded <br />

@@ -1,6 +1,7 @@
 import configparser
 import functools
 import logging
+import pdb
 import re
 import sys
 import time
@@ -155,3 +156,17 @@ def menu_input(msg="", prompt=">> "):
     except KeyboardInterrupt:
         print("\nExiting...\n")
         sys.exit()
+
+
+class ForkedPdb(pdb.Pdb):
+    """
+    A Pdb subclass that may be used from a forked multiprocessing child
+    """
+
+    def interaction(self, *args, **kwargs) -> None:
+        _stdin = sys.stdin
+        try:
+            sys.stdin = open("/dev/stdin")
+            pdb.Pdb.interaction(self, *args, **kwargs)  # type: ignore
+        finally:
+            sys.stdin = _stdin
