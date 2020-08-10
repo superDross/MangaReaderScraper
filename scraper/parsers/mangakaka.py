@@ -106,7 +106,7 @@ class MangaKakaSearch(BaseSearchParser):
         """
         Scrape and return HTML list with search results
         """
-        url = f"{self.base_url}/search/{self.query.replace(' ', '_')}"
+        url = f"{self.base_url}/search/story/{self.query.replace(' ', '_')}"
         html_response = get_html_from_url(url)
         search_results = html_response.find_all("div", {"class": "story_item"})
         if not search_results:
