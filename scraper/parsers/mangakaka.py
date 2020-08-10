@@ -19,6 +19,9 @@ logger = logging.getLogger(__name__)
 class MangaKakaMangaParser(BaseMangaParser):
     """
     Scrapes & parses a specific manga page on mangakakalot.com
+
+    WARNING: this no longer works due to mangakakalot integating
+             cloudflare blocking
     """
 
     def __init__(

@@ -1,6 +1,7 @@
 import argparse
 import logging
 import sys
+import time
 from typing import Dict, List, Optional, Tuple, Type
 
 from scraper.download import Download
@@ -60,6 +61,9 @@ def get_manga_parser(source: str) -> SiteParserClass:
     parser = sources.get(source)
     if not parser:
         raise ValueError(f"{source} is not supported try {', '.join(sources.keys())}")
+    elif source == "mangakaka":
+        logging.warning("Mangakaka no longer works due to cloud flare intergration")
+        time.sleep(1)
     return parser
 
 
