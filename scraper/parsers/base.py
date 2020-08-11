@@ -1,6 +1,9 @@
 """
 Abstract base classes for all parsers
 """
+from scraper.utils import get_html_from_url
+import sys
+import logging
 
 import abc
 from functools import lru_cache
@@ -8,6 +11,10 @@ from typing import Iterable, List, Optional, Tuple, Type
 
 from scraper.exceptions import MangaParserNotSet
 from scraper.new_types import SearchResults
+
+from bs4.element import Tag
+
+logger = logging.getLogger(__name__)
 
 
 class BaseMangaParser:
@@ -49,6 +56,18 @@ class BaseSearchParser:
     def __init__(self, query: str, base_url: str) -> None:
         self.query: str = query
         self.base_url: str = base_url
+
+    def _scrape_results(self, url: str, div_class: str) -> List[Tag]:
+        """
+        Scrape and return HTML list with search results
+        """
+        html_response = get_html_from_url(url)
+        search_results = html_response.find_all("div", {"class": div_class})
+        if not search_results:
+            logging.warning(f"No search results found for {self.query}\nExiting...")
+            sys.exit()
+        self.results = search_results
+        return search_results
 
     @abc.abstractmethod
     def search(self, start: int = 1) -> SearchResults:

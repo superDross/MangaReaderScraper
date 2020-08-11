@@ -152,7 +152,7 @@ def test_get_search_results_with_invalid_query(caplog, mangareader_invalid_searc
 
 
 def test_mangareader_test_search_parser(mangareader_search_html):
-    with mock.patch("scraper.parsers.mangareader.get_html_from_url") as mocked_func:
+    with mock.patch("scraper.parsers.base.get_html_from_url") as mocked_func:
         mocked_func.return_value = mangareader_search_html
         mr = MangaReader()
         results = mr.search("a query")

@@ -248,7 +248,7 @@ def test_page_data(mocked_get, mangakaka_volume_html):
 
 
 def test_get_search_results(mangakaka_search_html):
-    with mock.patch("scraper.parsers.mangakaka.get_html_from_url") as mocked_func:
+    with mock.patch("scraper.parsers.base.get_html_from_url") as mocked_func:
         mocked_func.return_value = mangakaka_search_html
         mangasearch = MangaKakaSearch("Dragon Ball")
         results = mangasearch.search()
@@ -265,7 +265,7 @@ def test_get_search_results_with_invalid_query(caplog, mangakaka_invalid_search_
 
 
 def test_mangakaka_test_search_parser(mangakaka_search_html):
-    with mock.patch("scraper.parsers.mangakaka.get_html_from_url") as mocked_func:
+    with mock.patch("scraper.parsers.base.get_html_from_url") as mocked_func:
         mocked_func.return_value = mangakaka_search_html
         mr = MangaKaka()
         results = mr.search("a query")

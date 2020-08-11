@@ -1,6 +1,5 @@
 import logging
 import re
-import sys
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Tuple
 
@@ -105,20 +104,6 @@ class MangaKakaSearch(BaseSearchParser):
     def __init__(self, query: str, base_url: str = "https://mangakakalot.com") -> None:
         super().__init__(query, base_url)
 
-    def _scrape_results(self) -> List[Tag]:
-        """
-        Scrape and return HTML list with search results
-        """
-        url = f"{self.base_url}/search/story/{self.query.replace(' ', '_')}"
-        html_response = get_html_from_url(url)
-        search_results = html_response.find_all("div", {"class": "story_item"})
-        if not search_results:
-            logging.warning(f"No search results found for {self.query}\nExiting...")
-            sys.exit()
-
-        self.results = search_results
-        return search_results
-
     def _extract_text(self, result: Tag) -> Dict[str, str]:
         """
         Extract the desired text from a HTML search result
@@ -138,7 +123,8 @@ class MangaKakaSearch(BaseSearchParser):
         """
         Extract each mangas metadata from the search results
         """
-        results = self._scrape_results()
+        url = f"{self.base_url}/search/story/{self.query.replace(' ', '_')}"
+        results = self._scrape_results(url, div_class="story_item")
         metadata = {}
         for key, result in enumerate(results, start=start):
             manga_metadata = self._extract_text(result)
