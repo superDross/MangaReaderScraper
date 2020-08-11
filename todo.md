@@ -1,21 +1,17 @@
 # TODO
 
-## 0.43
+## Async?
 
 - async/await instead of multithreading
 
-## 0.45
+## Multi Search Parser
 
 - allow `--source all` to search all sources
-- parser `multi` for multiple parser
 
-## ???
+## Add more sources
 
-- support Windows (will need to fix windows boot partition first)
-- support a comic website
-- support uploading to Google Drive
-
-## Run On Mobile
-
-1- SSH into vero and run it from there
-2- rent space on digital ocean
+### MangaFast
+- unit tests for search
+- move all the common code in BaseSearchParser childrens methods to base (a lot of code duplication)
+- create parser
+- unit tests for parser

@@ -10,6 +10,7 @@ from scraper.manga import Manga
 from scraper.menu import SearchMenu
 from scraper.parsers.mangakaka import MangaKaka
 from scraper.parsers.mangareader import MangaReader
+from scraper.parsers.mangafast import MangaFast
 from scraper.parsers.types import SiteParserClass
 from scraper.uploaders.types import Uploader
 from scraper.uploaders.uploaders import DropboxUploader, MegaUploader, PcloudUploader
@@ -57,6 +58,7 @@ def get_manga_parser(source: str) -> SiteParserClass:
     sources: Dict[str, SiteParserClass] = {
         "mangareader": MangaReader,
         "mangakaka": MangaKaka,
+        "mangafast": MangaFast,
     }
     parser = sources.get(source)
     if not parser:
@@ -192,7 +194,7 @@ def get_parser() -> argparse.ArgumentParser:
         "--source",
         "-z",
         type=str,
-        choices={"mangareader", "mangakaka"},
+        choices={"mangareader", "mangakaka", "mangafast"},
         default=CONFIG["source"],
         help="website to scrape data from",
     )
