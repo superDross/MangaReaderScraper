@@ -44,6 +44,7 @@ class MangaReaderMangaParser(BaseMangaParser):
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 404:
                 raise MangaDoesNotExist(f"Manga {self.name} does not exist")
+            raise e
 
     def page_urls(self, volume: int) -> List[Tuple[int, str]]:
         """
@@ -57,13 +58,13 @@ class MangaReaderMangaParser(BaseMangaParser):
         image_urls = [(int(x["p"]), "https:" + x["u"]) for x in page_metadata["im"]]
         return image_urls
 
-    def page_data(self, page_url: Tuple[int, str]) -> Tuple[int, bytes]:
-        """
-        Extracts a manga pages data
-        """
-        page_num, img_url = page_url
-        img_data = requests.get(img_url).content
-        return (int(page_num), img_data)
+    #     def page_data(self, page_url: Tuple[int, str]) -> Tuple[int, bytes]:
+    #         """
+    #         Extracts a manga pages data
+    #         """
+    #         page_num, img_url = page_url
+    #         img_data = requests.get(img_url).content
+    #         return (int(page_num), img_data)
 
     def all_volume_numbers(self) -> Iterable[int]:
         """

@@ -1,18 +1,18 @@
 """
 Abstract base classes for all parsers
 """
-from scraper.utils import get_html_from_url
-import sys
-import logging
-
 import abc
+import logging
+import sys
 from functools import lru_cache
 from typing import Iterable, List, Optional, Tuple, Type
 
+import requests
+from bs4.element import Tag
+
 from scraper.exceptions import MangaParserNotSet
 from scraper.new_types import SearchResults
-
-from bs4.element import Tag
+from scraper.utils import get_html_from_url
 
 logger = logging.getLogger(__name__)
 
@@ -33,12 +33,13 @@ class BaseMangaParser:
         """
         pass
 
-    @abc.abstractmethod
     def page_data(self, page_url: Tuple[int, str]) -> Tuple[int, bytes]:
         """
         Extracts a manga pages data
         """
-        pass
+        page_num, img_url = page_url
+        img_data = requests.get(img_url).content
+        return (int(page_num), img_data)
 
     @abc.abstractmethod
     def all_volume_numbers(self) -> Iterable[int]:

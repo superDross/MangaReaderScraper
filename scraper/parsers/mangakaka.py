@@ -54,22 +54,6 @@ class MangaKakaMangaParser(BaseMangaParser):
         all_page_urls = [img.get("src") for img in all_img_tags]
         return [(int(Path(page_url).stem), page_url) for page_url in all_page_urls]
 
-    def page_data(
-        self, page_url: Tuple[int, str], retries=1, max_retries=5
-    ) -> Tuple[int, bytes]:
-        """
-        Extracts a manga pages data
-        """
-        try:
-            page_num, img_url = page_url
-            img_data = requests.get(img_url).content
-            return (page_num, img_data)
-        except requests.exceptions.ConnectionError as e:
-            if retries < max_retries:
-                logger.info(f"Retrying to re-establish connection to {page_url}")
-                return self.page_data(page_url, retries + 1, max_retries)
-            raise e
-
     def _extract_number(self, vol_tag: Tag) -> int:
         """
         Sanitises a number from scraped chapter tag
