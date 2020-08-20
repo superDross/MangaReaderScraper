@@ -4,12 +4,12 @@ from unittest import mock
 from bs4 import BeautifulSoup
 
 from scraper.parsers.base import BaseSiteParser
-from scraper.parsers.mangafast import MangaFast, MangaFastParser
+from scraper.parsers.mangafast import MangaFast, MangaFastMangaParser
 from scraper.parsers.mangakaka import MangaKaka, MangaKakaMangaParser
 from scraper.parsers.mangareader import MangaReader, MangaReaderMangaParser
 
 ALL_SCRAPERS = [MangaReader, MangaKaka, MangaFast]
-ALL_PARSERS = [MangaReaderMangaParser, MangaKakaMangaParser, MangaFastParser]
+ALL_PARSERS = [MangaReaderMangaParser, MangaKakaMangaParser, MangaFastMangaParser]
 ALL_SCRAPERS_AND_PARSERS = [
     (scraper, parser) for scraper, parser in zip(ALL_SCRAPERS, ALL_PARSERS)
 ]

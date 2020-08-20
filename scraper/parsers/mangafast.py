@@ -14,7 +14,7 @@ from scraper.utils import get_html_from_url
 logger = logging.getLogger(__name__)
 
 
-class MangaFastParser(BaseMangaParser):
+class MangaFastMangaParser(BaseMangaParser):
     def __init__(self, manga_name: str, base_url: str = "http://mangafast.net") -> None:
         super().__init__(manga_name, base_url)
 
@@ -93,6 +93,6 @@ class MangaFast(BaseSiteParser):
         super().__init__(
             manga_name=manga_name,
             base_url="http://mangafast.net",
-            manga_parser=MangaFastParser,
+            manga_parser=MangaFastMangaParser,
             search_parser=MangaFastSearch,
         )

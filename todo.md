@@ -12,5 +12,4 @@
 
 ### MangaFast
 - unit tests for search
-- create parser
 - unit tests for parser
