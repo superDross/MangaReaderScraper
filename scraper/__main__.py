@@ -214,7 +214,7 @@ def get_parser() -> argparse.ArgumentParser:
         "--version",
         "-v",
         action="version",
-        version=f"v0.50",
+        version="v0.50",
         help="display the installed version number of the application",
     )
     return parser
