@@ -4,11 +4,10 @@ import pytest
 import requests
 
 from scraper.exceptions import MangaDoesNotExist, MangaParserNotSet
-from scraper.parsers.mangakaka import MangaKaka, MangaKakaMangaParser
-from scraper.parsers.mangareader import MangaReader, MangaReaderMangaParser
+from tests.helpers import ALL_PARSERS, ALL_SCRAPERS, ALL_SCRAPERS_AND_PARSERS
 
 
-@pytest.mark.parametrize("siteparser", [MangaKaka, MangaReader])
+@pytest.mark.parametrize("siteparser", ALL_SCRAPERS)
 def test_manga_not_set_error(siteparser):
     mr = siteparser()
     with pytest.raises(MangaParserNotSet):
@@ -16,8 +15,7 @@ def test_manga_not_set_error(siteparser):
 
 
 @pytest.mark.parametrize(
-    "siteparser,mangaparser",
-    [(MangaKaka, MangaKakaMangaParser), (MangaReader, MangaReaderMangaParser)],
+    "siteparser,mangaparser", ALL_SCRAPERS_AND_PARSERS,
 )
 def test_initialises_manga_parser(siteparser, mangaparser):
     mr = siteparser("dragon-ball")
@@ -26,10 +24,7 @@ def test_initialises_manga_parser(siteparser, mangaparser):
     assert manga_parser.name == "dragon-ball"
 
 
-@pytest.mark.parametrize(
-    "siteparser,mangaparser",
-    [(MangaKaka, MangaKakaMangaParser), (MangaReader, MangaReaderMangaParser)],
-)
+@pytest.mark.parametrize("siteparser,mangaparser", ALL_SCRAPERS_AND_PARSERS)
 def test_set_manga_parser(siteparser, mangaparser):
     mr = siteparser()
     mr.manga = "dragon-ball"
@@ -38,7 +33,7 @@ def test_set_manga_parser(siteparser, mangaparser):
     assert manga_parser.name == "dragon-ball"
 
 
-@pytest.mark.parametrize("mangaparser", [MangaKakaMangaParser, MangaReaderMangaParser])
+@pytest.mark.parametrize("mangaparser", ALL_PARSERS)
 @mock.patch("scraper.utils.requests.get")
 def test_404_errors(mock_request, mangaparser):
     mock_resp = requests.models.Response()
@@ -51,7 +46,7 @@ def test_404_errors(mock_request, mangaparser):
         parser.page_urls(1)
 
 
-@pytest.mark.parametrize("mangaparser", [MangaKakaMangaParser, MangaReaderMangaParser])
+@pytest.mark.parametrize("mangaparser", ALL_PARSERS)
 @mock.patch("scraper.utils.requests.get")
 def test_non_404_errors(mock_request, mangaparser):
     mock_resp = requests.models.Response()

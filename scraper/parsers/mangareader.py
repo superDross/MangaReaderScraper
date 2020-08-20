@@ -5,7 +5,6 @@ HTML parsers that scrape and parse data from MangaReader.net
 import json
 import logging
 import re
-import sys
 from typing import Dict, Iterable, List, Optional, Tuple
 
 import requests
@@ -45,6 +44,7 @@ class MangaReaderMangaParser(BaseMangaParser):
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 404:
                 raise MangaDoesNotExist(f"Manga {self.name} does not exist")
+            raise e
 
     def page_urls(self, volume: int) -> List[Tuple[int, str]]:
         """
@@ -57,14 +57,6 @@ class MangaReaderMangaParser(BaseMangaParser):
         page_metadata = json.loads(clean_script)
         image_urls = [(int(x["p"]), "https:" + x["u"]) for x in page_metadata["im"]]
         return image_urls
-
-    def page_data(self, page_url: Tuple[int, str]) -> Tuple[int, bytes]:
-        """
-        Extracts a manga pages data
-        """
-        page_num, img_url = page_url
-        img_data = requests.get(img_url).content
-        return (int(page_num), img_data)
 
     def all_volume_numbers(self) -> Iterable[int]:
         """
@@ -96,25 +88,6 @@ class MangaReaderSearch(BaseSearchParser):
         self.order: int = 0
         self.genre: str = "0000000000000000000000000000000000000"
 
-        self.results: List[Tag] = []
-
-    def _scrape_results(self) -> List[Tag]:
-        """
-        Scrape and return HTML list with search results
-        """
-        url = (
-            f"{self.base_url}/search/?w={self.query}&rd={self.manga_type}"
-            f"&status={self.manga_status}&order=0&genre={self.genre}&p=0"
-        )
-        html_response = get_html_from_url(url)
-        search_results = html_response.find_all("div", {"class": "d54"})
-        if not search_results:
-            logging.warning(f"No search results found for {self.query}\nExiting...")
-            sys.exit()
-
-        self.results += search_results
-        return search_results
-
     def _extract_text(self, result: Tag) -> Dict[str, str]:
         """
         Extract the desired text from a HTML search result
@@ -134,7 +107,11 @@ class MangaReaderSearch(BaseSearchParser):
         """
         Extract each mangas metadata from the search results
         """
-        results = self._scrape_results()
+        url = (
+            f"{self.base_url}/search/?w={self.query}&rd={self.manga_type}"
+            f"&status={self.manga_status}&order=0&genre={self.genre}&p=0"
+        )
+        results = self._scrape_results(url, div_class="d54")
         metadata: Dict[str, Dict[str, str]] = {}
         for key, result in enumerate(results, start=start):
             manga_metadata = self._extract_text(result)

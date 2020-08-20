@@ -117,7 +117,7 @@ def test_invalid_volume_parser(mangareader_invalid_volume_html):
             parser.page_urls(2000)
 
 
-@mock.patch("scraper.parsers.mangakaka.requests.get")
+@mock.patch("scraper.parsers.mangareader.requests.get")
 def test_page_data(mocked_get, mangareader_page_html):
     mocked_get.return_value = MockedImgResponse()
     with mock.patch("scraper.parsers.mangareader.get_html_from_url") as mocked_func:
@@ -135,7 +135,7 @@ def test_page_data(mocked_get, mangareader_page_html):
 
 
 def test_get_search_results(mangareader_search_html):
-    with mock.patch("scraper.parsers.mangareader.get_html_from_url") as mocked_func:
+    with mock.patch("scraper.parsers.base.get_html_from_url") as mocked_func:
         mocked_func.return_value = mangareader_search_html
         mangasearch = MangaReaderSearch("Dragon Ball")
         results = mangasearch.search()
@@ -143,7 +143,7 @@ def test_get_search_results(mangareader_search_html):
 
 
 def test_get_search_results_with_invalid_query(caplog, mangareader_invalid_search_html):
-    with mock.patch("scraper.parsers.mangareader.get_html_from_url") as mocked_func:
+    with mock.patch("scraper.parsers.base.get_html_from_url") as mocked_func:
         mocked_func.return_value = mangareader_invalid_search_html
         with pytest.raises(SystemExit):
             mangasearch = MangaReaderSearch("gibbersish")
@@ -152,7 +152,7 @@ def test_get_search_results_with_invalid_query(caplog, mangareader_invalid_searc
 
 
 def test_mangareader_test_search_parser(mangareader_search_html):
-    with mock.patch("scraper.parsers.mangareader.get_html_from_url") as mocked_func:
+    with mock.patch("scraper.parsers.base.get_html_from_url") as mocked_func:
         mocked_func.return_value = mangareader_search_html
         mr = MangaReader()
         results = mr.search("a query")

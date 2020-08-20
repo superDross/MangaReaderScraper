@@ -1,0 +1,200 @@
+
+
+
+
+
+
+
+  Search Results    dhjfhslfkhjsdfhaksdlf - Mangafast
+
+
+
+
+
+
+
+
+
+
+
+
+
+a.ch:visited, .ls4 a:visited h3, .ls5 a:visited h3,.jds a:visited, li.ranking1 a:visited h4 {text-shadow: -1px 0 var(--shadow-color),0 1px var(--shadow-color),1px 0 var(--shadow-color),0 -1px var(--shadow-color);color: #ff7330;}.ls2 p, .ls3 p, .ls4 p {text-overflow: ellipsis;white-space: nowrap;overflow: hidden;}.ls2 span.lf, .ls4 span.lf, .ls5 span.lf {background-image: linear-gradient(to left,#ff7330,#c80000);color: #fff;}a.ch{width: calc(100% - 23px);}.ls1 h3, .ls2 h3, .ls3 h3, .ls4 h3, .ls5 h3{text-align:left}
+
+    function setCookie(cname, cvalue,exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires="+d.toUTCString();
+        document.cookie = cname + "=" + cvalue + "; " + expires +"; path=/";
+    }
+
+    function readCookie(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') {
+                c = c.substring(1,c.length);
+            }
+            if (c.indexOf(nameEQ) == 0) {
+                return c.substring(nameEQ.length,c.length);
+            }
+        }
+        return null;
+    }
+
+
+    let fastread = readCookie('g09p5a0');
+    if(fastread != null){
+        if(fastread >= 3 || fastread == 4){
+            console.log(fastread);
+            setCookie('g09p5a0', 1, 10);
+        }else {
+            setCookie('g09p5a0', Number(fastread)+1, 10);
+        }
+    }else{
+        setCookie('g09p5a0', 1, 10);
+    }
+
+    let cookieIndex = readCookie('g09p5a0');
+
+
+
+
+	document.addEventListener("DOMContentLoaded", function() {
+	  var lazyImages = [].slice.call(document.querySelectorAll(".lazy"));
+
+	  if ("IntersectionObserver" in window) {
+		let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+		  entries.forEach(function(entry) {
+			if (entry.isIntersecting) {
+			  let lazyImage = entry.target;
+			  lazyImage.src = lazyImage.dataset.src;
+			  lazyImage.classList.remove("img.lazy");
+			  lazyImageObserver.unobserve(lazyImage);
+			}
+		  });
+		});
+
+		lazyImages.forEach(function(lazyImage) {
+		  lazyImageObserver.observe(lazyImage);
+		});
+	  }
+	});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Latest Manga
+List Manga
+Bookmark
+Isekai
+Completed
+One Piece
+KnY
+Apotheosis
+Boruto
+
+
+
+
+
+
+
+
+Enable Dark Mode!
+
+
+				  Search Results    dhjfhslfkhjsdfhaksdlf
+
+			Read   Search Results    dhjfhslfkhjsdfhaksdlf Manga Online for free at Mangafast. You can filter the list below as well.
+
+
+
+
+All
+ Manga (Japanese)
+ Manhua (China)
+ Manhwa (Korean)
+
+
+
+
+			None
+
+
+
+
+
+			 Mangafast is a platform intended for hosting the contribution from the users and for the users and not for commerical profit, rather it is intended for the sake of enjoyment.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Contact Us
+DMCA
+TOS
+Privacy Policy
+
+
+
+			@2020 Mangafast.net - Website Manga Online
+
+
+
+
+
+
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-164010119-1');
+
+
+const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
+const currentTheme = localStorage.getItem('theme');
+
+if (currentTheme) {
+    document.documentElement.setAttribute('data-theme', currentTheme);
+
+    if (currentTheme === 'dark') {
+        toggleSwitch.checked = true;
+    }
+}
+
+function switchTheme(e) {
+    if (e.target.checked) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+    }
+    else {        document.documentElement.setAttribute('data-theme', 'light');
+          localStorage.setItem('theme', 'light');
+    }
+}
+
+toggleSwitch.addEventListener('change', switchTheme, false);
