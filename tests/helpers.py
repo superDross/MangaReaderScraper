@@ -2,7 +2,17 @@ from pathlib import Path
 from unittest import mock
 
 from bs4 import BeautifulSoup
+
 from scraper.parsers.base import BaseSiteParser
+from scraper.parsers.mangafast import MangaFast, MangaFastParser
+from scraper.parsers.mangakaka import MangaKaka, MangaKakaMangaParser
+from scraper.parsers.mangareader import MangaReader, MangaReaderMangaParser
+
+ALL_SCRAPERS = [MangaReader, MangaKaka, MangaFast]
+ALL_PARSERS = [MangaReaderMangaParser, MangaKakaMangaParser, MangaFastParser]
+ALL_SCRAPERS_AND_PARSERS = [
+    (scraper, parser) for scraper, parser in zip(ALL_SCRAPERS, ALL_PARSERS)
+]
 
 # used as a mocked output for MangaReaderSearch.metadata()
 METADATA = {
