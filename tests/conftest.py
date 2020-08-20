@@ -97,6 +97,16 @@ def mangakaka_search_html() -> BeautifulSoup:
 
 
 @pytest.fixture
+def mangafast_search_html() -> BeautifulSoup:
+    """
+    HTML result after searching for query 'dragonball'
+    """
+    html_path = "tests/test_files/mangafast/dragonball_super_search.html"
+    html = get_bs4_tree(html_path)
+    return html
+
+
+@pytest.fixture
 def mangareader_invalid_search_html() -> BeautifulSoup:
     """
     HTML result after searching for something that has no matches
@@ -112,6 +122,16 @@ def mangakaka_invalid_search_html() -> BeautifulSoup:
     HTML result after searching for something that has no matches
     """
     html_path = "tests/test_files/mangakaka/no_search_results_found.html"
+    html = get_bs4_tree(html_path)
+    return html
+
+
+@pytest.fixture
+def mangafast_invalid_search_html() -> BeautifulSoup:
+    """
+    HTML result after searching for something that has no matches
+    """
+    html_path = "tests/test_files/mangafast/no_search_results_found.html"
     html = get_bs4_tree(html_path)
     return html
 
@@ -141,6 +161,13 @@ def mangakaka_manga_title_page_html() -> BeautifulSoup:
 
 
 @pytest.fixture
+def mangafast_manga_title_page_html() -> BeautifulSoup:
+    html_path = f"tests/test_files/mangafast/dragonball_super_page.html"
+    html = get_bs4_tree(html_path)
+    return html
+
+
+@pytest.fixture
 def mangareader_volume_html() -> BeautifulSoup:
     """
     Returns the HTML to a specfic manga volume
@@ -156,6 +183,16 @@ def mangakaka_volume_html() -> BeautifulSoup:
     Returns the HTML to a specfic manga volume
     """
     html_path = "tests/test_files/mangakaka/dragonball_super_volume_1.html"
+    html = get_bs4_tree(html_path)
+    return html
+
+
+@pytest.fixture
+def mangafast_volume_html() -> BeautifulSoup:
+    """
+    Returns the HTML to a specfic manga volume
+    """
+    html_path = "tests/test_files/mangafast/dragonball_super_volume_1.html"
     html = get_bs4_tree(html_path)
     return html
 

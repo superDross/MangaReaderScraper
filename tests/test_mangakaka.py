@@ -256,7 +256,7 @@ def test_get_search_results(mangakaka_search_html):
 
 
 def test_get_search_results_with_invalid_query(caplog, mangakaka_invalid_search_html):
-    with mock.patch("scraper.parsers.mangakaka.get_html_from_url") as mocked_func:
+    with mock.patch("scraper.parsers.base.get_html_from_url") as mocked_func:
         mocked_func.return_value = mangakaka_invalid_search_html
         with pytest.raises(SystemExit):
             mangasearch = MangaKakaSearch("gibbersish")

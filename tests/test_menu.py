@@ -1,7 +1,7 @@
 import pytest
+
 from scraper.exceptions import InvalidOption
 from scraper.menu import Menu, SearchMenu
-
 from tests.helpers import TABLE, MockedSearch
 
 

@@ -60,7 +60,7 @@ def get_manga_parser(source: str) -> SiteParserClass:
     parser = sources.get(source)
     if not parser:
         if source == "mangakaka":
-            raise ValueError(f"Mangakaka is not longer supported")
+            raise ValueError("Mangakaka is not longer supported")
         raise ValueError(f"{source} is not supported try {', '.join(sources.keys())}")
     return parser
 
