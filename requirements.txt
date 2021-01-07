@@ -1,6 +1,6 @@
 beautifulsoup4==4.8.1
 dropbox==9.4.0
-lxml==4.2.5
+lxml==4.6.2
 mega.py==1.0.5
 pcloud==1.0a6
 Pillow>=7.1.0
