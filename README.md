@@ -1,5 +1,7 @@
 # MangaReaderScraper
 
+**Deprecated project, do not use**
+
 Search & download mangas from the command line.
 
 ![](docs/demo.gif)
