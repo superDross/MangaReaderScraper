@@ -21,7 +21,7 @@ sources: <manga-sources>    LIST[STR]
 
 Response:
 
-```json
+```
 [
   {
     'title': 'dragonball',
@@ -48,7 +48,7 @@ source:  <name-source-to-download-from>  STR
 
 Using pre-signed S3 URLS allows us to keep the S3 bucket private and time limit the URLs access
 
-```json
+```
 [
   {
     'title': 'dragonball',
@@ -67,7 +67,7 @@ As we have no relational data we can just store the information in a NoSQL datab
 
 One database, one collection (`mangas`) with all documents:
 
-```json
+```
   {
     'title': 'dragonball',
     'volume': 98,
@@ -98,7 +98,7 @@ Save password hashes to DB
 
 - Response:
 
-```json
+```
 {
   "success": true,
   "message": "successfully registered"
@@ -120,7 +120,7 @@ POST /v1/login
 
 - Response:
 
-```json
+```
 {
   'token': <token>
 }
