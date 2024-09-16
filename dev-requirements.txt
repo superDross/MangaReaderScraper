@@ -8,3 +8,5 @@ pyflakes>=2.2.0
 pytest>=5.3.1
 pytest-cov>=2.8.1
 tox>=3.14.3
+remote-pdb>=2.1.0
+pdbpp>=0.10.3
